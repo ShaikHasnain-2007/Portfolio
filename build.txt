@@ -1,0 +1,181 @@
+# Prompt: Build Hero + Bento Grid Sections
+
+Create a new React application with a **fullscreen scroll-triggered video Hero section** and a **Bento Grid "About" section**.
+
+---
+
+## **1. Pre-requisite: Frame Generation**
+**IMPORTANT:** The `public` folder currently contains a video file `hero-video.mp4`. You must first convert this video into a sequence of optimized WebP frames to ensure smooth playback and fast loading.
+
+**Run this FFmpeg command in your terminal before building:**
+```bash
+mkdir -p public/frames
+ffmpeg -i public/hero-video.mp4 -vf "scale=1920:1080" -c:v libwebp -quality 85 -compression_level 6 -start_number 1 public/frames/frame_%04d.webp
+```
+*Note: This generates 1080p frames with quality 85. This visual standard balances high quality (~70KB/frame) with performance, preventing the "heavy load" stuttering issues.*
+
+---
+
+## **2. Tech Stack**
+- React 18 + Vite
+- Tailwind CSS
+- GSAP (with ScrollTrigger)
+- Framer Motion
+- Lenis (smooth scroll)
+
+---
+
+## **3. Assets in `/public` folder**
+```
+/hero-video.mp4                             (SOURCE VIDEO for frames)
+/frames/frame_0001.webp to ...              (Generated via FFmpeg above)
+/video-poster.webp                          (Generate this from frame 1)
+/mine_pic.webp                              (profile photo)
+/songpic.webp                               (album art)
+/carchase.mp4                               (looping video for bento card)
+/NEFFEX_-_Best_of_Me_(mp3.pm).mp3           (audio file)
+/wall1.webp to wall7.webp                   (wallpaper gallery images)
+/framer_logo_icon_169149.webp               (tool logo)
+/spline_logo.webp                           (tool logo)
+/antigravity.webp                           (tool logo)
+/ollama-icon.webp                           (tool logo)
+/groq_logo.webp                             (tool logo)
+```
+
+---
+
+## **4. SECTION 1: Hero (Fullscreen Scroll-Triggered Video)**
+
+### **Behavior:**
+- Container height: `800vh` (creates scroll space)
+- Sticky viewport: `100vh` fixed canvas inside
+- On scroll: Animate through the **generated sequence of WebP frames** drawn on a `<canvas>` element using GSAP ScrollTrigger.
+- **Progressive Batch Loading:**
+  - **CRITICAL:** Do NOT wait for all frames to load.
+  - Load the first **30 frames** immediately.
+  - Once 30 are loaded,fade out the poster and unlock the scroll animation.
+  - Load the remaining frames in background batches (e.g., chunks of 30) to prevent UI freezing.
+- On mobile: Ignore height-only resize events (address bar toggle) to prevent jitter.
+
+### **Visual Design:**
+- Black background
+- Poster image visible until first batch loads.
+- Overlay layers:
+  - Global darken: `bg-black/10`
+  - Vignette: `radial-gradient(circle, transparent 50%, rgba(0,0,0,0.4) 100%)`
+  - Bottom gradient: `from-black/40`
+- CSS filter on canvas container: `saturate(1.25)`
+
+### **Content:**
+- Top-right: LinkedIn and Email links (vertical stack)
+- Bottom-left: Large title "AI/ML Engineer" (responsive text size)
+- Bottom-right: Short description + animated scroll indicator (mouse icon on mobile, arrow on desktop)
+- All text white, Syne/Satoshi fonts
+
+### **Responsive:**
+- Mobile: Single column, centered text, smaller fonts
+- Desktop: Flex layout with `justify-between`
+
+---
+
+## **5. SECTION 2: Bento Grid (About Section)**
+
+### **Layout:** CSS Grid with 12 columns
+```
+Row 1-2: [Wallpaper Gallery 5col] [Intro Card 7col]
+Row 3:   [Tools Marquee 6col] [Profile Picture 2col] [Video Card 4col]
+Row 4:   [Music Player 6col] [Profile cont.] [Video cont.]
+```
+
+### **Cards:**
+
+#### 1. Wallpaper Gallery (5 cols, 2 rows)
+- Horizontal infinite scroll animation (CSS `animate-slide-horizontal`)
+- Images: wall1-wall7.webp, duplicated for seamless loop
+- Gradient overlay on top/bottom
+
+#### 2. Intro Card (7 cols, 2 rows)
+- Title: "Hi, I'm Nishant"
+- Description text
+- Message input form (text input + send button)
+- Submit animation: Slide success message from left
+
+#### 3. Tools Marquee (6 cols, 1 row)
+- Horizontal scrolling tool logos (CSS `animate-marquee`)
+- Mix of CDN logos and local images
+- Invert filter for dark logos (Ollama, GitHub, Unreal Engine)
+
+#### 4. Profile Picture (2 cols, 2 rows)
+- Full-height image with `object-cover`
+- Dark overlay + vignette effect
+- Hover: Additional gradient reveal
+
+#### 5. Video Card (4 cols, 2 rows)
+- Autoplay, loop, muted `carchase.mp4`
+- Mute/unmute toggle button (bottom-right)
+- Gradient overlay
+
+#### 6. Music Player (6 cols, 1 row)
+- Album art (songpic.webp) with blurred background
+- Song title + artist
+- Animated music bars (12-20 bars, CSS animation)
+- Play/pause toggle
+
+### **Card Styling:**
+- Glass morphism: `bg-white/5`, `backdrop-blur-md`, `border border-white/10`
+- Rounded corners: `rounded-3xl`
+- Box shadow: `shadow-lg hover:shadow-blue-500/20`
+- GSAP entry animation: Fade up with stagger
+
+### **Responsive:**
+- Mobile: Stack cards vertically, adjust heights
+- Desktop: Full grid layout
+
+---
+
+## **6. CSS Animations Required (in index.css)**
+
+```css
+@keyframes slide-horizontal {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-slide-horizontal {
+  animation: slide-horizontal 30s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+@keyframes music-bar-1 { 0%,100%{height:4px} 50%{height:20px} }
+@keyframes music-bar-2 { 0%,100%{height:8px} 50%{height:28px} }
+@keyframes music-bar-3 { 0%,100%{height:12px} 50%{height:24px} }
+.animate-music-bar-1 { animation: music-bar-1 0.6s ease-in-out infinite; }
+.animate-music-bar-2 { animation: music-bar-2 0.7s ease-in-out infinite; }
+.animate-music-bar-3 { animation: music-bar-3 0.5s ease-in-out infinite; }
+```
+
+---
+
+## **7. Fonts**
+- Syne (headings) - Google Fonts
+- Satoshi (body) - fontshare.com
+
+---
+
+## **8. Key Implementation Notes**
+1. **Frame Generation**: Ensure the `ffmpeg` command (Step 1) is run first. The app depends on `public/frames/frame_XXXX.webp`.
+2. **Performance**: Use the optimized 1080p frames. Do NOT use the raw video file directly in the canvas.
+3. **Smooth Scroll**: Implement Lenis at the App level.
+4. **GSAP**: Use `useLayoutEffect` or `useEffect` with cleaning up ScrollTriggers.
+5. **Caching**: Append `?v=1` to frame URLs to prevent caching of old assets if you regenerate them.
+6. **Bento Grid Layout**: Use standard CSS Grid properties (`col-span`, `row-span`) for all scaling and positioning. **Do NOT use negative margins** (e.g., `-mt-`) to force overlaps or position cards, as this breaks responsiveness.
+7. **Animation Robustness**:
+   - Use `ScrollTrigger.batch()` for grid items to ensure they animate even if rapid scrolling occurs or layout shifts.
+   - Sync **Lenis** with **ScrollTrigger** by adding `lenis.on('scroll', ScrollTrigger.update)` and hooking `lenis.raf` into `gsap.ticker`.
+   - Always ensure initial state (`opacity: 0`) is set via `gsap.set()` before animation to prevent FOUC or "black screen" issues.
