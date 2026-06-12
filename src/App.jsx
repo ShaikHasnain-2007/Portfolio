@@ -22,7 +22,6 @@ const ProjectsShowcase = lazy(() => import('./components/ProjectsShowcase'));
 const TestimonialsSection = lazy(() => import('./components/TestimonialsSection'));
 const InteractiveTimeline = lazy(() => import('./components/InteractiveTimeline'));
 const CertificationsSection = lazy(() => import('./components/CertificationsSection'));
-const FloatingResumeButton = lazy(() => import('./components/FloatingResumeButton'));
 const Footer = lazy(() => import('./components/Footer'));
 
 // Minimal Error Boundary
@@ -165,9 +164,6 @@ export default function App() {
         
         <ScrollProgress />
         <AIChatWidget />
-        <Suspense fallback={null}>
-          <FloatingResumeButton />
-        </Suspense>
 
         {/* Page Content */}
         <main id="main-content" className="w-full">
