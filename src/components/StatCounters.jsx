@@ -22,7 +22,7 @@ const stats = [
     glow: 'rgba(var(--fuchsia-rgb), 0.15)'
   },
   {
-    value: 8.4,
+    value: 8.5,
     suffix: '',
     label: 'Academic Standing (CGPA)',
     desc: 'Solid first semester at SRM AP University',

@@ -426,7 +426,7 @@ export default function BentoGrid() {
               </p>
               <div className="flex items-center gap-3 mt-3">
                 <span className="text-[9px] font-bold font-syne text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 rounded-full px-3 py-1 uppercase tracking-wider">
-                  8.4 CGPA
+                  8.5 CGPA
                 </span>
                 <span className="text-[9px] font-bold font-syne text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1 uppercase tracking-wider">
                   2025 — Present

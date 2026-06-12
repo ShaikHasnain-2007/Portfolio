@@ -47,7 +47,7 @@ const certifications = [
     icon: BookOpen,
     color: 'cyan',
     year: '2025–29',
-    description: 'Computer Science & Engineering with AI/ML specialization — 8.4 CGPA',
+    description: 'Computer Science & Engineering with AI/ML specialization — 8.5 CGPA',
   },
 ];
 

@@ -26,7 +26,7 @@ const milestones = [
     date: 'January 2026',
     title: 'First Semester Milestone',
     location: 'Academic Standing',
-    description: 'Completed the initial university term with a strong academic foundation, achieving an 8.4 CGPA in core computer science curriculum.',
+    description: 'Completed the initial university term with a strong academic foundation, achieving an 8.5 CGPA in core computer science curriculum.',
     icon: Award,
     glow: 'rgba(16, 185, 129, 0.2)'
   },

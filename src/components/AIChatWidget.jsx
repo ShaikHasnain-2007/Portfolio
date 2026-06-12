@@ -60,7 +60,7 @@ export default function AIChatWidget() {
       } else if (query.includes('contact') || query.includes('email') || query.includes('linkedin') || query.includes('github') || query.includes('social')) {
         botResponse = PRESETS[3].a;
       } else if (query.includes('cgpa') || query.includes('grades') || query.includes('gpa') || query.includes('semester')) {
-        botResponse = "Shaik Hasnain completed his first semester at SRM University AP with a solid academic GPA of 8.4.";
+        botResponse = "Shaik Hasnain completed his first semester at SRM University AP with a solid academic GPA of 8.5.";
       } else if (hiRegex.test(query)) {
         botResponse = "Hi there! 👋 It's wonderful to meet you. I'm Shaik's AI assistant. I can tell you all about his projects (like CampusX and the Unity Zombie FPS), his hackathons at SRM AP, his technical stack, or how to contact him. What would you like to explore?";
       } else if (query.includes('skills') || query.includes('tools') || query.includes('stack') || query.includes('languages') || query.includes('tech')) {
