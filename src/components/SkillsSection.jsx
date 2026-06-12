@@ -135,16 +135,20 @@ export default function SkillsSection() {
         </div>
 
         {/* Categories Tab Selector */}
-        <div className="category-tabs flex flex-wrap gap-2 mb-10 pb-2 border-b border-white/5 text-left">
+        <div role="tablist" aria-label="Skill Categories" className="category-tabs flex flex-wrap gap-2 mb-10 pb-2 border-b border-white/5 text-left">
           {skillCategories.map((cat) => {
             const isActive = cat.id === activeTab;
             return (
               <button
                 key={cat.id}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls="skills-panel"
+                id={`tab-${cat.id}`}
                 onClick={() => setActiveTab(cat.id)}
                 className={`font-syne text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border transition-all duration-300 relative ${
                   isActive 
-                    ? 'border-cyan-400/50 text-white bg-cyan-500/5 font-bold shadow-[0_0_15px_rgba(34,211,238,0.15)]' 
+                    ? 'border-cyan-400/50 text-white bg-cyan-500/5 font-bold shadow-[0_0_15px_rgba(var(--cyan-rgb),0.15)]' 
                     : 'border-white/5 text-white/40 hover:text-white hover:border-white/20 bg-transparent'
                 }`}
               >
@@ -155,13 +159,18 @@ export default function SkillsSection() {
         </div>
 
         {/* Skill Tag Cloud */}
-        <div className="skills-cloud flex flex-wrap gap-4 justify-start w-full min-h-[180px]">
+        <div 
+          id="skills-panel" 
+          role="tabpanel" 
+          aria-labelledby={`tab-${activeTab}`} 
+          className="skills-cloud flex flex-wrap gap-4 justify-start w-full min-h-[180px]"
+        >
           <AnimatePresence mode="wait">
             {activeSkills.map((skill, idx) => {
               const borderGlowClass = 
                 skill.color === 'cyan' 
-                  ? 'hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(34,211,238,0.15)] hover:text-cyan-400' 
-                  : 'hover:border-fuchsia-400/50 hover:shadow-[0_0_15px_rgba(217,70,239,0.15)] hover:text-fuchsia-400';
+                  ? 'hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.15)] hover:text-cyan-400' 
+                  : 'hover:border-fuchsia-400/50 hover:shadow-[0_0_15px_rgba(var(--fuchsia-rgb),0.15)] hover:text-fuchsia-400';
 
               return (
                 <motion.div

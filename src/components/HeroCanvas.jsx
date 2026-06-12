@@ -95,7 +95,7 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
 
         for (let i = start; i <= end; i++) {
           const img = new Image();
-          img.src = `/frames/frame_${String(i).padStart(3, '0')}_delay-0.042s.webp?v=1`;
+          img.src = `/frames/frame_${String(i).padStart(3, '0')}_delay-0.042s.webp`;
           img.onload = () => {
             imagesRef.current[i] = img;
             loadedInBatch++;
@@ -294,6 +294,7 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
 
   return (
     <div
+      id="hero"
       ref={containerRef}
       className={`relative w-full ${startAnimations ? 'h-[800vh]' : 'h-screen overflow-hidden'}`}
     >
@@ -302,7 +303,12 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
 
         {/* Canvas for sequence rendering */}
         <div className="absolute inset-0 w-full h-full saturate-[1.25]">
-          <canvas ref={canvasRef} className="block w-full h-full object-cover" aria-hidden="true" />
+          <canvas 
+            ref={canvasRef} 
+            className="block w-full h-full object-cover" 
+            role="img"
+            aria-label="3D background animation rendering sequence of a computer workspace"
+          />
         </div>
 
         {/* Poster Image Overlay */}

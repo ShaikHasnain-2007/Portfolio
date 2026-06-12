@@ -12,7 +12,7 @@ const milestones = [
     location: 'SRM University AP',
     description: 'Enrolled in B.Tech Computer Science & Engineering, specializing in Artificial Intelligence and Machine Learning to build the foundation of algorithmic logic and complex computing systems.',
     icon: GraduationCap,
-    glow: 'rgba(34, 211, 238, 0.2)'
+    glow: 'rgba(var(--cyan-rgb), 0.2)'
   },
   {
     date: 'December 2025',
@@ -20,7 +20,7 @@ const milestones = [
     location: 'Hackathon Initiative',
     description: 'Led team "Stark Industries" to engineer VOCA, an innovative AI-powered language learning platform, during the Hack The Winter hackathon.',
     icon: Code2,
-    glow: 'rgba(217, 70, 239, 0.2)'
+    glow: 'rgba(var(--fuchsia-rgb), 0.2)'
   },
   {
     date: 'January 2026',
@@ -44,7 +44,7 @@ const milestones = [
     location: 'Research & Innovation Hack',
     description: 'Selected to participate in the prestigious QC² Quantum Computing Conclave hackathon, exploring quantum gates, superpositions, and molecular simulations.',
     icon: Compass,
-    glow: 'rgba(34, 211, 238, 0.2)'
+    glow: 'rgba(var(--cyan-rgb), 0.2)'
   }
 ];
 
@@ -113,7 +113,7 @@ export default function InteractiveTimeline() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full bg-black py-24 px-4 md:px-12 flex flex-col items-center overflow-hidden">
+    <section id="timeline" ref={containerRef} className="relative w-full bg-black py-24 px-4 md:px-12 flex flex-col items-center overflow-hidden">
       {/* Background radial soft light */}
       <div className="absolute bottom-1/4 left-10 w-[400px] h-[400px] bg-fuchsia-500/5 rounded-full blur-[100px] pointer-events-none" />
 
@@ -151,7 +151,7 @@ export default function InteractiveTimeline() {
                 <div key={i} className="timeline-item relative flex flex-col items-start text-left">
                   
                   {/* Glowing Node Dot */}
-                  <div className="timeline-node absolute left-[-26px] md:left-[-42px] top-1.5 w-6 h-6 rounded-full bg-black border-2 border-cyan-400 flex items-center justify-center z-20 shadow-[0_0_10px_rgba(34,211,238,0.5)]">
+                  <div className="timeline-node absolute left-[-28px] md:left-[-44px] top-1.5 w-6 h-6 rounded-full bg-black border-2 border-cyan-400 flex items-center justify-center z-20 shadow-[0_0_10px_rgba(34,211,238,0.5)]">
                     <div className="w-2 h-2 rounded-full bg-cyan-400" />
                   </div>
 

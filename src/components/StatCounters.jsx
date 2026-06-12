@@ -11,7 +11,7 @@ const stats = [
     label: 'Hackathons Competed',
     desc: 'HackSRM, Code to Connect, and regional hackathons',
     color: 'from-cyan-400 to-blue-500',
-    glow: 'rgba(34, 211, 238, 0.15)'
+    glow: 'rgba(var(--cyan-rgb), 0.15)'
   },
   {
     value: 6,
@@ -19,7 +19,7 @@ const stats = [
     label: 'Projects Shipped',
     desc: 'AI systems, game simulations, and production web apps',
     color: 'from-fuchsia-500 to-purple-600',
-    glow: 'rgba(217, 70, 239, 0.15)'
+    glow: 'rgba(var(--fuchsia-rgb), 0.15)'
   },
   {
     value: 8.4,

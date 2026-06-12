@@ -1,18 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, X, Send, Bot, User, CornerDownLeft } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const PRESETS = [
   { q: "Tell me about CampusX", a: "CampusX is an advanced AI consensus engine built during the HackSRM hackathon. It uses python frameworks and APIs to dynamically aggregate, evaluate, and rank multiple LLM outputs to yield more accurate answers." },
   { q: "Tell me about your Unity Zombie FPS", a: "It's a high-octane 3D first-person shooter game featuring custom-coded smart zombie AI (using state machines and navigation paths), dynamic weapon handling, and fluid physics-based player movement written in C# inside Unity." },
-  { q: "What did you build at SRM University AP?", a: "As a CS student at SRM University AP, I've built CampusX (AI consensus), VOCA (AI language platform), SafeEcho (mental health analysis app), and a localized edition of Flappy Bird called Flappy Bhai with real-time Firebase high scores!" },
+  { q: "What technical skills do you have?", a: "Shaik has a versatile tech stack. In AI/ML: Python, LLM integration, Consensus models, and Groq/Ollama APIs. In Web: React.js, Next.js, Vite, GSAP, and Firebase. In Game Dev: Unity Engine (C#) and Unreal Engine." },
   { q: "How can I contact you?", a: "You can email me directly at shaikhasnain2007@gmail.com, or check out my LinkedIn (linkedin.com/in/shaik-hasnain-55a072396) and GitHub (github.com/ShaikHasnain-2007) profiles." },
 ];
 
 export default function AIChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasOpened, setHasOpened] = useState(false);
   const [messages, setMessages] = useState([
     {
+      id: 1,
       sender: 'bot',
       text: "Hi! I'm Shaik's AI Portfolio Assistant. Ask me anything about his projects, skills, or hackathon timeline!",
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -22,11 +24,17 @@ export default function AIChatWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
 
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+    setHasOpened(true);
+  };
+
   const handleSendMessage = (text) => {
     if (!text.trim()) return;
 
     // Add user message
     const userMsg = {
+      id: Date.now() - 1,
       sender: 'user',
       text: text,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -40,8 +48,9 @@ export default function AIChatWidget() {
       let botResponse = "I'm sorry, I don't have that specific detail on record. You can try asking about 'CampusX', 'Unity Zombie FPS', 'SRM AP projects', or 'Contact details'!";
       
       const query = text.toLowerCase();
+      const hiRegex = /\b(hi|hello|hey|greetings|yo)\b/i;
 
-      // Simple keyword routing
+      // Routing logic
       if (query.includes('campusx') || query.includes('consensus')) {
         botResponse = PRESETS[0].a;
       } else if (query.includes('unity') || query.includes('zombie') || query.includes('fps') || query.includes('game')) {
@@ -52,20 +61,45 @@ export default function AIChatWidget() {
         botResponse = PRESETS[3].a;
       } else if (query.includes('cgpa') || query.includes('grades') || query.includes('gpa') || query.includes('semester')) {
         botResponse = "Shaik Hasnain completed his first semester at SRM University AP with a solid academic GPA of 8.4.";
-      } else if (query.includes('hello') || query.includes('hi ') || query.includes('hey')) {
-        botResponse = "Hello! Nice to meet you. Ask me about Shaik's AI consensus engine (CampusX), Unity zombie FPS, or his hackathon history!";
+      } else if (hiRegex.test(query)) {
+        botResponse = "Hi there! 👋 It's wonderful to meet you. I'm Shaik's AI assistant. I can tell you all about his projects (like CampusX and the Unity Zombie FPS), his hackathons at SRM AP, his technical stack, or how to contact him. What would you like to explore?";
+      } else if (query.includes('skills') || query.includes('tools') || query.includes('stack') || query.includes('languages') || query.includes('tech')) {
+        botResponse = "Shaik has a versatile technical arsenal! In AI/ML: Python, LLM integration, Consensus models, and Groq/Ollama APIs. In Web: React.js, Next.js, Vite, GSAP, and Firebase. In Game Dev: Unity Engine (C#) and Unreal Engine.";
+      } else if (query.includes('resume') || query.includes('cv')) {
+        botResponse = "Shaik doesn't have a public resume linked here at the moment. However, you can see all of his detailed project records and academic progression directly on this website, or contact him via email at shaikhasnain2007@gmail.com!";
       }
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: 'bot',
-          text: botResponse,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-      ]);
       setIsTyping(false);
-    }, 1200); // Realistic AI thinking delay
+
+      const botMsgId = Date.now();
+      const newBotMsg = {
+        id: botMsgId,
+        sender: 'bot',
+        text: '',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      setMessages((prev) => [...prev, newBotMsg]);
+
+      let currentText = '';
+      let charIndex = 0;
+      const speed = 15; // ms per character typewriter effect
+
+      const typeInterval = setInterval(() => {
+        if (charIndex < botResponse.length) {
+          currentText += botResponse[charIndex];
+          setMessages((prev) => 
+            prev.map((msg) => 
+              msg.id === botMsgId ? { ...msg, text: currentText } : msg
+            )
+          );
+          charIndex++;
+        } else {
+          clearInterval(typeInterval);
+        }
+      }, speed);
+
+    }, 800); // Realistic thinking delay
   };
 
   useEffect(() => {
@@ -107,11 +141,11 @@ export default function AIChatWidget() {
 
             {/* Messages Stream */}
             <div className="flex-grow p-5 overflow-y-auto flex flex-col gap-4 select-text">
-              {messages.map((m, i) => {
+              {messages.map((m) => {
                 const isBot = m.sender === 'bot';
                 return (
                   <div 
-                    key={i} 
+                    key={m.id} 
                     className={`flex gap-3 max-w-[85%] ${isBot ? 'self-start' : 'self-end flex-row-reverse'}`}
                   >
                     {/* Mini Icon */}
@@ -158,7 +192,7 @@ export default function AIChatWidget() {
                   onClick={() => handleSendMessage(preset.q)}
                   className="shrink-0 bg-white/5 border border-white/10 hover:border-cyan-400/40 hover:bg-cyan-500/5 text-white/70 hover:text-white px-3 py-1.5 rounded-full text-[10px] uppercase font-bold tracking-wider transition-all duration-300"
                 >
-                  {preset.q.replace('Tell me about ', '')}
+                  {preset.q.replace('Tell me about ', '').replace('What ', '').replace(' skills do you have?', 'Skills')}
                 </button>
               ))}
             </div>
@@ -176,7 +210,7 @@ export default function AIChatWidget() {
                 placeholder="Ask Hasnain's AI..."
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                className="flex-grow bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-white/30 focus:border-cyan-400 focus:shadow-[0_0_12px_rgba(34,211,238,0.2)] outline-none transition-all duration-300"
+                 className="flex-grow bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-white/30 focus:border-cyan-400 focus:shadow-[0_0_12px_rgba(var(--cyan-rgb),0.2)] outline-none transition-all duration-300"
               />
               <button
                 type="submit"
@@ -191,10 +225,10 @@ export default function AIChatWidget() {
 
       {/* Floating Trigger Button */}
       <motion.button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="w-14 h-14 rounded-full bg-gradient-to-tr from-cyan-400 to-fuchsia-500 flex items-center justify-center text-white shadow-[0_10px_30px_rgba(34,211,238,0.4)] border border-white/10 hover:shadow-[0_10px_35px_rgba(217,70,239,0.5)] transition-shadow duration-500 relative"
+        className="w-14 h-14 rounded-full bg-gradient-to-tr from-cyan-400 to-fuchsia-500 flex items-center justify-center text-white shadow-[0_10px_30px_rgba(var(--cyan-rgb),0.4)] border border-white/10 hover:shadow-[0_10px_35px_rgba(var(--fuchsia-rgb),0.5)] transition-shadow duration-500 relative"
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
@@ -222,6 +256,14 @@ export default function AIChatWidget() {
         
         {/* Glow pulsing ring around bubble */}
         <div className="absolute inset-[-4px] rounded-full border border-cyan-400/30 animate-pulse pointer-events-none" />
+
+        {/* Pulsing notification badge if never opened */}
+        {!isOpen && !hasOpened && (
+          <span className="absolute -top-1 -right-1 flex h-4 w-4">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-cyan-500 text-[9px] font-bold text-black items-center justify-center">1</span>
+          </span>
+        )}
       </motion.button>
     </div>
   );

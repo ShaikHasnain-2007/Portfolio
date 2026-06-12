@@ -5,15 +5,23 @@ export default function Footer() {
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      if (window.lenis) {
+        window.lenis.scrollTo(el);
+      } else {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    if (window.lenis) {
+      window.lenis.scrollTo(0);
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
@@ -80,7 +88,7 @@ export default function Footer() {
               GitHub
             </a>
             <a
-              href="https://www.instagram.com/shaik_hasnain99?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              href="https://www.instagram.com/shaik_hasnain99"
               target="_blank"
               rel="noopener noreferrer"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300"

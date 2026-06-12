@@ -5,6 +5,22 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
+    <!-- Canonical Link -->
+    <link rel="canonical" href="https://shaikhasnain0709.web.app/" />
+
+    <!-- Preconnect for external resources -->
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Font stylesheets (moved from CSS @import for non-blocking load) -->
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" />
+
+    <!-- Preload LCP elements -->
+    <link rel="preload" href="/frames/frame_000_delay-0.042s.webp" as="image" type="image/webp" />
+    <link rel="preload" href="/video-poster.webp" as="image" type="image/webp" />
+    
     <!-- SEO Meta Tags -->
     <title>Shaik Hasnain | AI/ML & Game Dev Engineer</title>
     <meta name="description" content="Portfolio of Shaik Hasnain - Computer Science student at SRM University AP specialized in AI/ML engineering, game development in Unity/C#, and intelligent web interfaces." />
@@ -25,8 +41,38 @@
     <meta property="twitter:title" content="Shaik Hasnain | AI/ML & Game Dev Engineer" />
     <meta property="twitter:description" content="Computer Science student at SRM University AP specialized in AI/ML engineering, game development, and intelligent web interfaces." />
     <meta property="twitter:image" content="https://shaikhasnain0709.web.app/mine_pic.webp" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Shaik Hasnain",
+        "url": "https://shaikhasnain0709.web.app/",
+        "image": "https://shaikhasnain0709.web.app/mine_pic.webp",
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "SRM University AP"
+        },
+        "knowsAbout": [
+          "Artificial Intelligence",
+          "Machine Learning",
+          "Game Development",
+          "Unity Engine",
+          "React.js",
+          "Web Development"
+        ],
+        "sameAs": [
+          "https://github.com/ShaikHasnain-2007",
+          "https://linkedin.com/in/shaik-hasnain-55a072396",
+          "https://www.instagram.com/shaik_hasnain99"
+        ]
+      }
+    </script>
   </head>
   <body>
+    <!-- Skip navigation for keyboard/screen-reader users -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[10000] focus:bg-cyan-400 focus:text-black focus:px-4 focus:py-2 focus:rounded-lg focus:font-bold focus:text-sm">Skip to content</a>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

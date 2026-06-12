@@ -1,25 +1,71 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, Suspense, lazy } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Components
+// Critical above-fold components (loaded immediately)
 import HeroCanvas from './components/HeroCanvas';
-import BentoGrid from './components/BentoGrid';
-import SkillsSection from './components/SkillsSection';
-import StatCounters from './components/StatCounters';
-import ProjectsShowcase from './components/ProjectsShowcase';
-import InteractiveTimeline from './components/InteractiveTimeline';
-import Footer from './components/Footer';
+import NetworkPreloader from './components/NetworkPreloader';
 
-// Overlays & Dividers
+// Overlays (loaded immediately for UX)
+import Navbar from './components/Navbar';
 import CustomCursor from './components/CustomCursor';
 import ScrollProgress from './components/ScrollProgress';
 import AIChatWidget from './components/AIChatWidget';
 import MarqueeStrip from './components/MarqueeStrip';
-import NetworkPreloader from './components/NetworkPreloader';
 
-gsap.registerPlugin(ScrollTrigger);
+// Below-fold components (lazy loaded for performance / code splitting)
+const BentoGrid = lazy(() => import('./components/BentoGrid'));
+const SkillsSection = lazy(() => import('./components/SkillsSection'));
+const StatCounters = lazy(() => import('./components/StatCounters'));
+const ProjectsShowcase = lazy(() => import('./components/ProjectsShowcase'));
+const TestimonialsSection = lazy(() => import('./components/TestimonialsSection'));
+const InteractiveTimeline = lazy(() => import('./components/InteractiveTimeline'));
+const CertificationsSection = lazy(() => import('./components/CertificationsSection'));
+const FloatingResumeButton = lazy(() => import('./components/FloatingResumeButton'));
+const Footer = lazy(() => import('./components/Footer'));
+
+// Minimal Error Boundary
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error, info) {
+    console.error('Portfolio Error Boundary caught:', error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="w-full h-screen bg-black flex items-center justify-center text-center px-6">
+          <div>
+            <h2 className="font-syne text-2xl font-bold text-white mb-3">Something went wrong</h2>
+            <p className="font-satoshi text-sm text-white/50 mb-6">An unexpected error occurred while rendering this section.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-white font-syne text-xs uppercase font-bold tracking-widest hover:scale-105 transition-transform"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// Suspense fallback for lazy sections
+function SectionLoader() {
+  return (
+    <div className="w-full py-20 flex items-center justify-center">
+      <div className="w-6 h-6 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin" />
+    </div>
+  );
+}
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
@@ -27,6 +73,12 @@ export default function App() {
   const [preloaderFinished, setPreloaderFinished] = useState(false);
   const [isWindowLoaded, setIsWindowLoaded] = useState(false);
   const lenisRef = useRef(null);
+
+  // Initialize theme from localStorage instantly on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('portfolio-theme') || 'cyberpunk';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
 
   useEffect(() => {
     // Initialize Lenis smooth scroll
@@ -40,6 +92,7 @@ export default function App() {
       touchMultiplier: 1.5,
     });
     lenisRef.current = lenis;
+    window.lenis = lenis;
 
     // Lock scrolling initially
     lenis.stop();
@@ -91,61 +144,88 @@ export default function App() {
   const isPreloaderReady = isReady && isWindowLoaded;
 
   return (
-    <div className="w-full bg-black text-white relative min-h-screen">
-      {/* Premium Network Preloader */}
-      {!preloaderFinished && (
-        <NetworkPreloader
-          progress={loadingProgress}
-          isReady={isPreloaderReady}
-          onDismissed={() => setPreloaderFinished(true)}
-        />
-      )}
+    <ErrorBoundary>
+      <div className="w-full bg-black text-white relative min-h-screen">
+        {/* Premium Network Preloader */}
+        {!preloaderFinished && (
+          <NetworkPreloader
+            progress={loadingProgress}
+            isReady={isPreloaderReady}
+            onDismissed={() => setPreloaderFinished(true)}
+          />
+        )}
 
-      {/* Global Interactive Systems - mounted only after preloader for performance */}
-      {preloaderFinished && (
-        <>
-          <CustomCursor />
-        </>
-      )}
-      
-      <ScrollProgress />
-      <AIChatWidget />
-
-      {/* Page Content */}
-      <div className="w-full">
-        {/* Hero Section (Contains canvas sequence) */}
-        <HeroCanvas
-          onProgress={setLoadingProgress}
-          onReady={() => setIsReady(true)}
-          startAnimations={preloaderFinished}
-        />
+        {/* Global Interactive Systems - mounted only after preloader for performance */}
+        {preloaderFinished && (
+          <>
+            <Navbar />
+            <CustomCursor />
+          </>
+        )}
         
-        {/* Infinite Neon Marquee Divider */}
-        <MarqueeStrip 
-          texts={[
-            'AI/ML ENGINEER', 
-            'GAME DEVELOPER', 
-            'SRM UNIVERSITY AP', 
-            'HACKATHON WINNER', 
-            'CREATIVE CODER', 
-            'IMMERSIVE DESIGNS'
-          ]}
-          speed="medium"
-          color="cyan"
-        />
-        
-        {/* Static content sections */}
-        <BentoGrid />
-        <SkillsSection />
-        
-        <StatCounters />
+        <ScrollProgress />
+        <AIChatWidget />
+        <Suspense fallback={null}>
+          <FloatingResumeButton />
+        </Suspense>
 
-        {/* Projects Showcase */}
-        <ProjectsShowcase />
+        {/* Page Content */}
+        <main id="main-content" className="w-full">
+          {/* Hero Section (Contains canvas sequence) */}
+          <HeroCanvas
+            onProgress={setLoadingProgress}
+            onReady={() => setIsReady(true)}
+            startAnimations={preloaderFinished}
+          />
+          
+          {/* Infinite Neon Marquee Divider */}
+          <MarqueeStrip 
+            texts={[
+              'AI/ML ENGINEER', 
+              'GAME DEVELOPER', 
+              'SRM UNIVERSITY AP', 
+              'HACKATHON WINNER', 
+              'CREATIVE CODER', 
+              'IMMERSIVE DESIGNS'
+            ]}
+            speed="medium"
+            color="cyan"
+          />
+          
+          {/* Lazy-loaded below-fold sections */}
+          <Suspense fallback={<SectionLoader />}>
+            <BentoGrid />
+          </Suspense>
 
-        <InteractiveTimeline />
-        <Footer />
+          <Suspense fallback={<SectionLoader />}>
+            <SkillsSection />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoader />}>
+            <StatCounters />
+          </Suspense>
+
+          <Suspense fallback={<SectionLoader />}>
+            <ProjectsShowcase />
+          </Suspense>
+
+          <Suspense fallback={<SectionLoader />}>
+            <TestimonialsSection />
+          </Suspense>
+
+          <Suspense fallback={<SectionLoader />}>
+            <InteractiveTimeline />
+          </Suspense>
+
+          <Suspense fallback={<SectionLoader />}>
+            <CertificationsSection />
+          </Suspense>
+
+          <Suspense fallback={<SectionLoader />}>
+            <Footer />
+          </Suspense>
+        </main>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 }

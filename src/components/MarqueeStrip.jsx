@@ -13,8 +13,8 @@ export default function MarqueeStrip({ texts, speed = 'medium', color = 'cyan', 
     { animationDuration: '25s' };
 
   const glowColorClass = 
-    color === 'cyan' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]' :
-    color === 'fuchsia' ? 'text-fuchsia-500 drop-shadow-[0_0_8px_rgba(217,70,239,0.4)]' :
+    color === 'cyan' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(var(--cyan-rgb),0.4)]' :
+    color === 'fuchsia' ? 'text-fuchsia-500 drop-shadow-[0_0_8px_rgba(var(--fuchsia-rgb),0.4)]' :
     'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]';
 
   return (

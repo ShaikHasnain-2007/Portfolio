@@ -1,138 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Play, Pause, Volume2, VolumeX, Send, Music } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Send, MapPin, GraduationCap } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import BentoCard from './BentoCard';
+import MagneticElement from './MagneticElement';
 
 gsap.registerPlugin(ScrollTrigger);
-
-// Reusable BentoCard with 3D Tilt and Spotlight Cursor Follower
-function BentoCard({ children, className = '', style = {}, speed = 0, ...props }) {
-  const cardRef = useRef(null);
-
-  const handleMouseMove = (e) => {
-    // Disable 3D tilt on touch devices to avoid page jitter
-    const isTouch = window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
-    if (isTouch) return;
-
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    // Calculate rotation angles based on mouse pointer position relative to center
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -5; // Limit to 5 deg tilt
-    const rotateY = ((x - centerX) / centerX) * 5;
-
-    card.style.setProperty('--mouse-x', `${x}px`);
-    card.style.setProperty('--mouse-y', `${y}px`);
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
-  };
-
-  const handleMouseLeave = () => {
-    const card = cardRef.current;
-    if (!card) return;
-    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-  };
-
-  return (
-    <div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={`bento-card spotlight-card border border-white/10 rounded-3xl bg-white/5 backdrop-blur-md shadow-lg overflow-hidden relative group transition-all duration-300 ${className}`}
-      style={style}
-      data-speed={speed}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-}
-
-// Reusable Magnetic Container for buttons
-function MagneticElement({ children, className = '', range = 35, ...props }) {
-  const ref = useRef(null);
-
-  const handleMouseMove = (e) => {
-    const isTouch = window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
-    if (isTouch) return;
-
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-
-    const distance = Math.sqrt(x * x + y * y);
-    if (distance < range) {
-      // Attract element slightly
-      gsap.to(el, {
-        x: x * 0.35,
-        y: y * 0.35,
-        duration: 0.3,
-        ease: 'power2.out'
-      });
-    } else {
-      // Elastic snapback
-      gsap.to(el, {
-        x: 0,
-        y: 0,
-        duration: 0.5,
-        ease: 'elastic.out(1.1, 0.4)'
-      });
-    }
-  };
-
-  const handleMouseLeave = () => {
-    const el = ref.current;
-    if (!el) return;
-    gsap.to(el, {
-      x: 0,
-      y: 0,
-      duration: 0.5,
-      ease: 'elastic.out(1.1, 0.4)'
-    });
-  };
-
-  return (
-    <div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={`inline-block ${className}`}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-}
 
 export default function BentoGrid() {
   const gridRef = useRef(null);
 
   // States for interactive components
   const [formText, setFormText] = useState('');
+  const [formName, setFormName] = useState('');
+  const [formEmail, setFormEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isVideoMuted, setIsVideoMuted] = useState(true);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [formError, setFormError] = useState('');
+  
 
-  // Web Audio Context & Analyser States
-  const [audioCtx, setAudioCtx] = useState(null);
-  const [analyser, setAnalyser] = useState(null);
-
-  const videoRef = useRef(null);
-  const audioRef = useRef(null);
-  const canvasRefMusic = useRef(null);
 
   // GSAP scroll trigger edge-assembly scroll-scrub animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       const wrappers = gridRef.current.querySelectorAll('.bento-wrapper');
-      if (wrappers.length < 7) return;
+      if (wrappers.length < 6) return;
 
       const isMobile = window.innerWidth < 768;
       const shiftX = isMobile ? window.innerWidth : 800;
@@ -184,15 +77,8 @@ export default function BentoGrid() {
         0.15
       );
 
-      // Card 6 (Music) -> Left Edge
+      // Card 6 (Heatmap) -> Bottom Edge
       tl.fromTo(wrappers[5],
-        { x: -shiftX, opacity: 0, scale: 0.8 },
-        { x: 0, opacity: 1, scale: 1, ease: 'power2.out' },
-        0.2
-      );
-
-      // Card 7 (Heatmap) -> Bottom Edge
-      tl.fromTo(wrappers[6],
         { y: shiftY, opacity: 0, scale: 0.9 },
         { y: 0, opacity: 1, scale: 1, ease: 'power2.out' },
         0.2
@@ -202,58 +88,13 @@ export default function BentoGrid() {
     return () => ctx.revert();
   }, []);
 
-  // Web Audio Visualizer Drawing Loop
-  useEffect(() => {
-    if (!isMusicPlaying || !analyser || !canvasRefMusic.current) return;
-    const canvas = canvasRefMusic.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animId;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-
-    const draw = () => {
-      animId = requestAnimationFrame(draw);
-      analyser.getByteFrequencyData(dataArray);
-
-      const w = canvas.width;
-      const h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
-
-      // Render 16 responsive bars
-      const barWidth = (w / 16);
-      let x = 0;
-
-      for (let i = 0; i < 16; i++) {
-        // Read and scale frequency data
-        const val = dataArray[i * 2] || 0;
-        const barHeight = Math.max(3, (val / 255) * h * 0.9);
-
-        const grad = ctx.createLinearGradient(0, h, 0, h - barHeight);
-        grad.addColorStop(0, 'rgba(34, 211, 238, 0.4)'); // Cyan bottom
-        grad.addColorStop(1, '#d946ef'); // Fuchsia top
-
-        ctx.fillStyle = grad;
-        ctx.fillRect(x, h - barHeight, barWidth - 1.5, barHeight);
-
-        x += barWidth;
-      }
-    };
-
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animId);
-    };
-  }, [isMusicPlaying, analyser]);
-
   // Form submit handler to submit messages using Web3Forms
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formText.trim()) return;
     
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setFormError('');
 
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -263,72 +104,34 @@ export default function BentoGrid() {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          access_key: '0289a0fa-c81b-4b2a-bad8-d069a7c376bb', // Public-facing access key
-          name: 'Anonymous Portfolio Visitor',
-          email: 'no-reply@portfolio.com',
-          message: formText,
+          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
+          name: formName.trim() || 'Anonymous Portfolio Visitor',
+          email: formEmail.trim() || 'no-reply@portfolio.com',
+          message: formText.trim(),
           subject: 'New Message from Shaik Hasnain Portfolio'
         })
       });
       const data = await response.json();
       if (data.success) {
-        console.log("Message successfully transmitted to Web3Forms.");
+        setIsSubmitted(true);
+        setFormText('');
+        setFormName('');
+        setFormEmail('');
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 4000);
+      } else {
+        setFormError(data.message || 'Failed to send message. Please try again.');
       }
     } catch (err) {
       console.error("Web3Forms submission failed:", err);
-    }
-
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormText('');
-    }, 4000);
-  };
-
-  // Music Player play/pause toggle & Web Audio initializer
-  const toggleMusic = () => {
-    if (!audioRef.current) return;
-
-    let activeCtx = audioCtx;
-    if (!activeCtx) {
-      try {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioContextClass();
-        const analyserNode = ctx.createAnalyser();
-        analyserNode.fftSize = 64; // Yields 32 bins
-
-        const source = ctx.createMediaElementSource(audioRef.current);
-        source.connect(analyserNode);
-        analyserNode.connect(ctx.destination);
-
-        setAudioCtx(ctx);
-        setAnalyser(analyserNode);
-        activeCtx = ctx;
-      } catch (err) {
-        console.warn("Web Audio Context initialization blocked or unsupported:", err);
-      }
-    }
-
-    if (isMusicPlaying) {
-      audioRef.current.pause();
-      setIsMusicPlaying(false);
-    } else {
-      if (activeCtx && activeCtx.state === 'suspended') {
-        activeCtx.resume();
-      }
-      audioRef.current.play().then(() => {
-        setIsMusicPlaying(true);
-      }).catch(err => {
-        console.error("Audio playback blocked by browser settings.", err);
-      });
+      setFormError('Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // Video mute/unmute toggle
-  const toggleVideoMute = () => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = !videoRef.current.muted;
-    setIsVideoMuted(videoRef.current.muted);
-  };
+
 
   // Wallpaper list
   const wallpapers = [
@@ -351,15 +154,15 @@ export default function BentoGrid() {
     { name: 'Groq', src: '/groq_logo.webp', isInverted: false },
     { name: 'Hugging Face', src: '/huggingface-color.webp', isInverted: false },
     { name: 'Ollama', src: '/ollama-icon.webp', isInverted: true },
-    { name: 'GitHub', src: 'https://unpkg.com/simple-icons@v9/icons/github.svg', isInverted: true },
-    { name: 'Unreal Engine', src: 'https://unpkg.com/simple-icons@v9/icons/unrealengine.svg', isInverted: true },
+    { name: 'GitHub', src: '/github.svg', isInverted: true },
+    { name: 'Unreal Engine', src: '/unrealengine.svg', isInverted: true },
     { name: 'Framer', src: '/framer_logo_icon_169149.webp', isInverted: false },
     { name: 'Spline', src: '/spline_logo.webp', isInverted: false }
   ];
 
   const duplicatedTools = [...tools, ...tools];
 
-  // Simulated GitHub Contribution Grid data generator
+  // Simulated GitHub Contribution Grid data generator - Seeded for consistency
   const [activeCommits, setActiveCommits] = useState(null);
   const contributionGrid = useRef([]);
   
@@ -370,14 +173,23 @@ export default function BentoGrid() {
     for (let w = 0; w < weeks; w++) {
       const weekCols = [];
       for (let d = 0; d < days; d++) {
-        // Random activity weight
-        const val = Math.random() > 0.4 ? Math.floor(Math.random() * 8) : 0;
+        // Seeded pseudo-randomness for a consistent, realistic heatmap layout
+        const seed = (w * 7 + d) * 31;
+        const wave = Math.sin(w * 0.15) * 2 + Math.cos(d * 0.5) * 1.5;
+        let val = Math.floor(((seed % 9) + wave) / 2);
+        if (val < 0) val = 0;
+        if (val > 8) val = 8;
         weekCols.push(val);
       }
       list.push(weekCols);
     }
     contributionGrid.current = list;
   }
+
+  // Sum the contributions to get actual representative contributions count
+  const totalContributions = contributionGrid.current.reduce((acc, week) => {
+    return acc + week.reduce((wAcc, val) => wAcc + (val > 0 ? Math.floor(val * 1.3) : 0), 0);
+  }, 0);
 
   return (
     <section id="about" className="relative w-full bg-black py-20 px-4 md:px-12 flex justify-center overflow-hidden">
@@ -399,9 +211,7 @@ export default function BentoGrid() {
 
         {/* CARD 1: Wallpaper Gallery (5 cols, 2 rows) */}
         <div className="bento-wrapper col-span-12 md:col-span-5 row-span-2">
-          <BentoCard
-            className="w-full h-full flex flex-col justify-center"
-          >
+          <BentoCard className="w-full h-full flex flex-col justify-center">
             {/* Vertical fading gradients */}
             <div className="absolute top-0 left-0 w-full h-8 bg-gradient-to-b from-black/80 to-transparent z-10 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-black/80 to-transparent z-10 pointer-events-none" />
@@ -429,9 +239,7 @@ export default function BentoGrid() {
 
         {/* CARD 2: Intro Card (7 cols, 2 rows) */}
         <div className="bento-wrapper col-span-12 md:col-span-7 row-span-2">
-          <BentoCard
-            className="w-full h-full p-6 md:p-8 flex flex-col justify-between"
-          >
+          <BentoCard className="w-full h-full p-6 md:p-8 flex flex-col justify-between">
             {/* Content */}
             <div className="text-left relative z-10">
               <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase font-satoshi">WHO I AM</span>
@@ -444,23 +252,60 @@ export default function BentoGrid() {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleFormSubmit} className="relative z-20 w-full flex items-center gap-2 mt-6">
-              <input
-                type="text"
-                placeholder="Drop a quick message..."
-                value={formText}
-                onChange={(e) => setFormText(e.target.value)}
-                className="flex-grow bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(34,211,238,0.3)] outline-none transition-all duration-300"
-              />
-              <MagneticElement>
-                <button
-                  type="submit"
-                  className="bg-white text-black hover:bg-cyan-400 hover:text-black transition-all duration-300 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 text-sm shrink-0"
-                >
-                  <span className="hidden sm:inline">Send</span>
-                  <Send size={14} />
-                </button>
-              </MagneticElement>
+            <form onSubmit={handleFormSubmit} className="relative z-20 w-full flex flex-col gap-3 mt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex flex-col">
+                  <label htmlFor="contact-name" className="sr-only">Your Name</label>
+                  <input
+                    id="contact-name"
+                    type="text"
+                    placeholder="Your Name (Optional)"
+                    value={formName}
+                    onChange={(e) => setFormName(e.target.value)}
+                    className="bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.3)] outline-none transition-all duration-300"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="contact-email" className="sr-only">Your Email</label>
+                  <input
+                    id="contact-email"
+                    type="email"
+                    placeholder="Your Email (Optional)"
+                    value={formEmail}
+                    onChange={(e) => setFormEmail(e.target.value)}
+                    className="bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.3)] outline-none transition-all duration-300"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex-grow flex flex-col">
+                  <label htmlFor="contact-message" className="sr-only">Your Message</label>
+                  <input
+                    id="contact-message"
+                    type="text"
+                    required
+                    placeholder="Drop a quick message..."
+                    value={formText}
+                    onChange={(e) => setFormText(e.target.value)}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.3)] outline-none transition-all duration-300"
+                  />
+                </div>
+                <MagneticElement>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting || isSubmitted}
+                    className="bg-white text-black hover:bg-cyan-400 hover:text-black disabled:bg-white/20 disabled:text-white/40 disabled:pointer-events-none transition-all duration-300 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 text-sm shrink-0"
+                  >
+                    <span className="hidden sm:inline">Send</span>
+                    <Send size={14} />
+                  </button>
+                </MagneticElement>
+              </div>
+              {formError && (
+                <span className="text-rose-500 text-xs font-satoshi mt-1 block text-left">
+                  {formError}
+                </span>
+              )}
             </form>
 
             {/* Success Overlay Slide-in */}
@@ -485,11 +330,9 @@ export default function BentoGrid() {
           </BentoCard>
         </div>
 
-        {/* CARD 3: Tools Marquee (6 cols, 1 row) */}
-        <div className="bento-wrapper col-span-12 md:col-span-6 row-span-1">
-          <BentoCard
-            className="w-full h-full flex flex-col justify-center"
-          >
+        {/* CARD 3: Tools Marquee (12 cols, 1 row) - Expanded to full row width for maximum impact */}
+        <div className="bento-wrapper col-span-12 row-span-1">
+          <BentoCard className="w-full h-full flex flex-col justify-center">
             <div className="absolute top-0 left-0 w-8 h-full bg-gradient-to-r from-black/80 to-transparent z-10 pointer-events-none" />
             <div className="absolute top-0 right-0 w-8 h-full bg-gradient-to-l from-black/80 to-transparent z-10 pointer-events-none" />
 
@@ -519,11 +362,9 @@ export default function BentoGrid() {
           </BentoCard>
         </div>
 
-        {/* CARD 4: Profile Picture (2 cols, 2 rows) */}
-        <div className="bento-wrapper col-span-12 md:col-span-2 row-span-2">
-          <BentoCard
-            className="w-full h-full"
-          >
+        {/* CARD 4: Profile Picture (6 cols, 2 rows) - Expanded side-by-side layout */}
+        <div className="bento-wrapper col-span-12 md:col-span-6 row-span-2">
+          <BentoCard className="w-full h-full">
             <img
               src="/mine_pic.webp"
               alt="Shaik Hasnain Profile"
@@ -544,115 +385,60 @@ export default function BentoGrid() {
           </BentoCard>
         </div>
 
-        {/* CARD 5: Video Card (4 cols, 2 rows) */}
-        <div className="bento-wrapper col-span-12 md:col-span-4 row-span-2">
-          <BentoCard
-            className="w-full h-full"
-          >
-            <video
-              ref={videoRef}
-              src="/carchase.mp4"
-              loop
-              autoPlay
-              muted
-              playsInline
-              className="w-full h-full object-cover transition-transform duration-75"
-            />
-            <div className="absolute inset-0 bg-black/40 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+        {/* CARD 5: Location & Education Card (6 cols, 2 rows) */}
+        <div className="bento-wrapper col-span-12 md:col-span-6 row-span-2">
+          <BentoCard className="w-full h-full p-6 md:p-8 flex flex-col justify-between">
+            {/* Animated gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-fuchsia-500/5 pointer-events-none" />
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
 
-            {/* Mute/Unmute Control */}
-            <MagneticElement className="absolute bottom-4 right-4 z-20">
-              <button
-                onClick={toggleVideoMute}
-                className="bg-black/60 hover:bg-cyan-400 text-white hover:text-black p-3 rounded-full backdrop-blur-md border border-white/15 transition-all duration-300 hover:scale-110 active:scale-90"
-                aria-label={isVideoMuted ? 'Unmute video preview' : 'Mute video preview'}
-              >
-                {isVideoMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
-              </button>
-            </MagneticElement>
+            {/* Floating decorative orbs */}
+            <div className="absolute top-8 right-8 w-20 h-20 rounded-full bg-cyan-400/10 blur-xl pointer-events-none animate-pulse" />
+            <div className="absolute bottom-12 left-8 w-16 h-16 rounded-full bg-fuchsia-500/10 blur-xl pointer-events-none animate-pulse [animation-delay:1s]" />
 
-            <div className="absolute bottom-4 left-4 text-left pointer-events-none z-10">
-              <span className="text-[10px] font-bold tracking-widest text-cyan-400 uppercase">SIMULATION</span>
-              <h4 className="font-syne text-sm font-bold text-white tracking-tight">Looping Chase</h4>
-            </div>
-          </BentoCard>
-        </div>
-
-        {/* CARD 6: Music Player (6 cols, 1 row) */}
-        <div className="bento-wrapper col-span-12 md:col-span-6 row-span-1">
-          <BentoCard
-            className="w-full h-full p-4 flex items-center justify-between"
-          >
-            {/* Hidden HTML5 Audio Element */}
-            <audio ref={audioRef} src="/NEFFEX_-_Best_of_Me_(mp3.pm).mp3" loop crossOrigin="anonymous" />
-
-            {/* Blurred Background Art */}
-            <div
-              className="absolute inset-0 bg-cover bg-center filter blur-3xl opacity-20 pointer-events-none transition-transform duration-[10s] group-hover:scale-125"
-              style={{ backgroundImage: "url('/songpic.webp')" }}
-            />
-
-            <div className="flex items-center gap-4 relative z-10">
-              {/* Album Cover Art */}
-              <div className="w-16 h-16 rounded-2xl overflow-hidden shrink-0 border border-white/10 relative group/art shadow-md">
-                <img src="/songpic.webp" alt="Album Cover" className="w-full h-full object-cover" />
-                <MagneticElement className="absolute inset-0">
-                  <button
-                    onClick={toggleMusic}
-                    className="w-full h-full bg-black/60 flex items-center justify-center opacity-0 group-hover/art:opacity-100 transition-opacity duration-300"
-                    aria-label={isMusicPlaying ? 'Pause NEFFEX Soundtrack' : 'Play NEFFEX Soundtrack'}
-                  >
-                    {isMusicPlaying ? <Pause size={20} className="text-white" /> : <Play size={20} className="text-white" />}
-                  </button>
-                </MagneticElement>
-              </div>
-
-              {/* Title / Artist */}
-              <div className="text-left">
-                <h4 className="font-syne text-sm md:text-base font-bold text-white tracking-tight leading-tight">
-                  Best of Me
-                </h4>
-                <p className="font-satoshi text-xs text-white/50 mt-0.5">
-                  NEFFEX
-                </p>
-
-                <div className="flex items-center gap-1.5 mt-2 text-cyan-400 text-[10px] tracking-wider uppercase font-extrabold">
-                  <Music size={10} className={isMusicPlaying ? 'animate-spin' : ''} />
-                  <span>SOUNDTRACK</span>
+            <div className="relative z-10 text-left">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center">
+                  <MapPin size={14} className="text-cyan-400" />
                 </div>
+                <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase font-satoshi">LOCATION</span>
+              </div>
+              <h3 className="font-syne font-extrabold text-2xl md:text-3xl text-white mb-1">
+                Andhra Pradesh
+              </h3>
+              <p className="font-satoshi text-sm text-white/50">India 🇮🇳</p>
+            </div>
+
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent relative z-10" />
+
+            <div className="relative z-10 text-left">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-xl bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center">
+                  <GraduationCap size={14} className="text-fuchsia-400" />
+                </div>
+                <span className="text-fuchsia-400 text-xs font-bold tracking-widest uppercase font-satoshi">EDUCATION</span>
+              </div>
+              <h3 className="font-syne font-bold text-lg md:text-xl text-white mb-1">
+                SRM University AP
+              </h3>
+              <p className="font-satoshi text-xs text-white/50 leading-relaxed">
+                B.Tech CSE — AI & Machine Learning Specialization
+              </p>
+              <div className="flex items-center gap-3 mt-3">
+                <span className="text-[9px] font-bold font-syne text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 rounded-full px-3 py-1 uppercase tracking-wider">
+                  8.4 CGPA
+                </span>
+                <span className="text-[9px] font-bold font-syne text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1 uppercase tracking-wider">
+                  2025 — Present
+                </span>
               </div>
             </div>
-
-            {/* Equalizer Waveform Canvas (Web Audio interactive) */}
-            <div className="flex items-center justify-center h-8 px-4 relative z-10 shrink-0">
-              <canvas 
-                ref={canvasRefMusic} 
-                width={80} 
-                height={32} 
-                className="w-20 h-8 opacity-90 transition-opacity duration-300"
-                aria-label="Real-time frequency visualizer"
-              />
-            </div>
-
-            {/* Control Play Button */}
-            <MagneticElement className="mr-2 z-20 shrink-0">
-              <button
-                onClick={toggleMusic}
-                className="bg-white/10 hover:bg-white text-white hover:text-black p-3 rounded-full backdrop-blur-md border border-white/10 transition-all duration-300 hover:scale-105 active:scale-95"
-                aria-label={isMusicPlaying ? 'Pause Music' : 'Play Music'}
-              >
-                {isMusicPlaying ? <Pause size={14} /> : <Play size={14} />}
-              </button>
-            </MagneticElement>
           </BentoCard>
         </div>
 
-        {/* CARD 7: GitHub Heatmap Card (12 cols, 2 rows) */}
+        {/* CARD 6: GitHub Heatmap Card (12 cols, 2 rows) */}
         <div className="bento-wrapper col-span-12 row-span-2">
-          <BentoCard
-            className="w-full h-full p-6 md:p-8 flex flex-col justify-between"
-          >
+          <BentoCard className="w-full h-full p-6 md:p-8 flex flex-col justify-between">
             {/* Header Stats */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full z-10 text-left">
               <div>
@@ -665,7 +451,7 @@ export default function BentoGrid() {
               {/* Custom GitHub stats counter */}
               <div className="flex items-center gap-6 font-syne text-xs uppercase text-white/50">
                 <div>
-                  <span className="text-white block font-bold text-base">450+</span>
+                  <span className="text-white block font-bold text-base">{totalContributions}+</span>
                   <span>Contributions</span>
                 </div>
                 <div className="w-[1px] h-8 bg-white/10" />
@@ -677,10 +463,10 @@ export default function BentoGrid() {
             </div>
 
             {/* Contribution Heatmap Grid */}
-            <div className="relative w-full overflow-x-auto my-6 py-2 no-scrollbar z-10">
+            <div className="relative w-full overflow-x-auto my-6 py-2 no-scrollbar z-10" role="grid" aria-label="GitHub Contributions Heatmap">
               <div className="flex flex-col gap-[3px] min-w-[700px]">
                 {Array.from({ length: 7 }).map((_, dIdx) => (
-                  <div key={dIdx} className="flex gap-[3px]">
+                  <div key={dIdx} className="flex gap-[3px]" role="row">
                     {contributionGrid.current.map((week, wIdx) => {
                       const weight = week[dIdx];
                       // Map weight value to neon shades
@@ -688,7 +474,7 @@ export default function BentoGrid() {
                         weight === 0 ? 'bg-white/[0.04] border border-white/5' :
                         weight < 3 ? 'bg-cyan-500/25 border border-cyan-500/10' :
                         weight < 6 ? 'bg-cyan-500/60 border border-cyan-400/20' :
-                        'bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.7)]';
+                        'bg-cyan-400 shadow-[0_0_8px_rgba(var(--cyan-rgb),0.7)]';
                       
                       return (
                         <div
@@ -701,6 +487,8 @@ export default function BentoGrid() {
                           }}
                           onMouseLeave={() => setActiveCommits(null)}
                           className={`w-[11px] h-[11px] rounded-[2px] transition-all duration-300 hover:scale-125 cursor-crosshair ${colorClass}`}
+                          role="gridcell"
+                          aria-label={`${weight === 0 ? 'No' : weight * 2} contributions on week ${wIdx + 1}, day ${dIdx + 1}`}
                         />
                       );
                     })}

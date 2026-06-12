@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 export default function CustomCursor() {
   const dotRef = useRef(null);
   const ringRef = useRef(null);
+  const hiddenRef = useRef(true);
   const [hidden, setHidden] = useState(true);
   const [hovered, setHovered] = useState(false);
 
@@ -20,7 +21,10 @@ export default function CustomCursor() {
     const onMouseMove = (e) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
-      if (hidden) setHidden(false);
+      if (hiddenRef.current) {
+        hiddenRef.current = false;
+        setHidden(false);
+      }
 
       // Move immediate dot instantly
       gsap.to(dot, {
@@ -32,10 +36,12 @@ export default function CustomCursor() {
     };
 
     const onMouseLeave = () => {
+      hiddenRef.current = true;
       setHidden(true);
     };
 
     const onMouseEnter = () => {
+      hiddenRef.current = false;
       setHidden(false);
     };
 
@@ -78,26 +84,26 @@ export default function CustomCursor() {
         setHovered(true);
         gsap.to(ring, {
           scale: 1.6,
-          borderColor: '#d946ef', // Fuchsia on hover
-          backgroundColor: 'rgba(217, 70, 239, 0.05)',
+          borderColor: 'var(--color-fuchsia-hex)', // Fuchsia on hover
+          backgroundColor: 'var(--color-fuchsia-hover-bg)',
           duration: 0.3
         });
         gsap.to(dot, {
           scale: 1.5,
-          backgroundColor: '#22d3ee', // Cyan on hover
+          backgroundColor: 'var(--color-cyan-hex)', // Cyan on hover
           duration: 0.3
         });
       } else {
         setHovered(false);
         gsap.to(ring, {
           scale: 1.0,
-          borderColor: 'rgba(34, 211, 238, 0.5)', // Cyan border
+          borderColor: 'var(--color-cyan-ring-border)', // Cyan border
           backgroundColor: 'transparent',
           duration: 0.3
         });
         gsap.to(dot, {
           scale: 1.0,
-          backgroundColor: '#22d3ee',
+          backgroundColor: 'var(--color-cyan-hex)',
           duration: 0.3
         });
       }
@@ -113,7 +119,7 @@ export default function CustomCursor() {
       document.removeEventListener('mouseover', handleMouseOver);
       gsap.ticker.remove(tick);
     };
-  }, [hidden]);
+  }, []);
 
   // Don't render cursor on mobile touch devices
   const [isMobile, setIsMobile] = useState(false);
@@ -133,6 +139,7 @@ export default function CustomCursor() {
       {/* Outer Spring Ring */}
       <div
         ref={ringRef}
+        aria-hidden="true"
         className={`fixed top-0 left-0 w-8 h-8 rounded-full border border-cyan-400/50 pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 mix-blend-difference ${
           hidden ? 'opacity-0' : 'opacity-100'
         }`}
@@ -141,6 +148,7 @@ export default function CustomCursor() {
       {/* Inner Dot */}
       <div
         ref={dotRef}
+        aria-hidden="true"
         className={`fixed top-0 left-0 w-2 h-2 bg-cyan-400 rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 mix-blend-difference ${
           hidden ? 'opacity-0' : 'opacity-100'
         }`}

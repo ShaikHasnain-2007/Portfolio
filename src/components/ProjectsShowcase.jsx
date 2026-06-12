@@ -11,29 +11,29 @@ const projects = [
     title: 'CampusX',
     description: 'An advanced AI consensus engine engineered to evaluate, aggregate, and rank multiple LLM outputs dynamically. Built during the HackSRM hackathon.',
     tech: ['AI/ML', 'Python', 'LLM Consensus', 'React', 'Next.js'],
-    github: 'https://github.com/ShaikHasnain-2007',
+    github: 'https://github.com/ShaikHasnain-2007/CampusX',
     icon: Cpu,
     gradient: 'from-cyan-500/20 to-blue-500/20',
     borderColor: 'group-hover:border-cyan-400/50',
-    glowColor: 'rgba(34, 211, 238, 0.15)',
+    glowColor: 'rgba(var(--cyan-rgb), 0.15)',
     bannerText: 'AI Consensus Engine'
   },
   {
     title: 'Unity Zombie Apocalypse FPS',
     description: 'A high-octane 3D first-person shooter game featuring intelligent zombie AI behavior states, pathfinding systems, and physics-based player movement dynamics.',
     tech: ['Unity Engine', 'C#', 'AI Pathfinding', '3D Graphics'],
-    github: 'https://github.com/ShaikHasnain-2007',
+    github: 'https://github.com/ShaikHasnain-2007/Zombie-FPS-Unity',
     icon: Gamepad2,
     gradient: 'from-fuchsia-500/20 to-purple-500/20',
     borderColor: 'group-hover:border-fuchsia-400/50',
-    glowColor: 'rgba(217, 70, 239, 0.15)',
+    glowColor: 'rgba(var(--fuchsia-rgb), 0.15)',
     bannerText: '3D Physics FPS Game'
   },
   {
     title: 'SafeEcho',
     description: 'A specialized mental health web application engineered for the Code to Connect hackathon. Tailored around emotional intelligence, analysis, and responsive support.',
     tech: ['React.js', 'Tailwind CSS', 'Sentiment Logic', 'Framer Motion'],
-    github: 'https://github.com/ShaikHasnain-2007',
+    github: 'https://github.com/ShaikHasnain-2007/SafeEcho',
     icon: HeartHandshake,
     gradient: 'from-emerald-500/20 to-teal-500/20',
     borderColor: 'group-hover:border-emerald-400/50',
@@ -44,7 +44,7 @@ const projects = [
     title: 'Flappy Bhai - SRM AP Edition',
     description: 'A customized, high-contrast web game designed around the SRM University AP ecosystem, integrated with Firebase Realtime Database for cross-device high score tracking.',
     tech: ['Web Dev', 'Firebase DB', 'Game Physics', 'Realtime Sync'],
-    github: 'https://github.com/ShaikHasnain-2007',
+    github: 'https://github.com/ShaikHasnain-2007/Flappy-Bhai',
     icon: Award,
     gradient: 'from-amber-500/20 to-orange-500/20',
     borderColor: 'group-hover:border-amber-400/50',
@@ -229,7 +229,7 @@ export default function ProjectsShowcase() {
               {projects.map((proj, idx) => (
                 <div
                   key={idx}
-                  className="project-card-wrapper w-[85vw] sm:w-[420px] md:w-[480px] flex-shrink-0 h-[48vh] md:h-[50vh]"
+                  className="project-card-wrapper w-[85vw] sm:w-[420px] md:w-[480px] flex-shrink-0 h-[52vh] min-h-[420px] max-h-[500px]"
                 >
                   <ProjectCard project={proj} />
                 </div>
