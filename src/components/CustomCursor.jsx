@@ -143,7 +143,7 @@ export default function CustomCursor() {
         className={`fixed top-0 left-0 w-8 h-8 rounded-full border border-cyan-400/50 pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 mix-blend-difference ${
           hidden ? 'opacity-0' : 'opacity-100'
         }`}
-        style={{ willChange: 'transform' }}
+        style={{ willChange: 'transform', transform: 'translate3d(-100px, -100px, 0)' }}
       />
       {/* Inner Dot */}
       <div
@@ -152,7 +152,7 @@ export default function CustomCursor() {
         className={`fixed top-0 left-0 w-2 h-2 bg-cyan-400 rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 mix-blend-difference ${
           hidden ? 'opacity-0' : 'opacity-100'
         }`}
-        style={{ willChange: 'transform' }}
+        style={{ willChange: 'transform', transform: 'translate3d(-100px, -100px, 0)' }}
       />
     </>
   );

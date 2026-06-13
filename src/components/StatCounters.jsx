@@ -72,26 +72,27 @@ export default function StatCounters() {
         const targetVal = parseFloat(numEl.getAttribute('data-target'));
         const isFloat = numEl.getAttribute('data-float') === 'true';
 
-        gsap.fromTo(numEl,
-          { textContent: '0' },
-          {
-            textContent: targetVal,
-            duration: 2.0,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: numEl,
-              start: 'top 88%',
-              toggleActions: 'play none none none',
-            },
-            snap: { textContent: isFloat ? 0.1 : 1 },
-            onUpdate: function () {
-              const val = parseFloat(this.targets()[0].textContent);
-              numEl.textContent = isFloat ? val.toFixed(1) : Math.floor(val).toString();
-            }
+        const obj = { val: 0 };
+        gsap.to(obj, {
+          val: targetVal,
+          duration: 2.0,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: numEl,
+            start: 'top 88%',
+            toggleActions: 'play none none none',
+          },
+          onUpdate: () => {
+            numEl.textContent = isFloat ? obj.val.toFixed(1) : Math.floor(obj.val).toString();
           }
-        );
+        });
       });
     }, el);
+
+    // Recalculate scroll triggers since the section is lazy loaded
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
 
     return () => ctx.revert();
   }, []);

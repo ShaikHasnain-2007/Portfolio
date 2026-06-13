@@ -13,14 +13,18 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('hero');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const lastScrollYRef = useRef(0);
   const [theme, setTheme] = useState('cyberpunk');
 
-  // Load theme state on mount
+  // Load theme state and initial scroll state on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('portfolio-theme') || 'cyberpunk';
     setTheme(savedTheme);
+
+    const initialScrollY = window.scrollY;
+    setIsScrolled(initialScrollY > 50);
+    setIsVisible(initialScrollY > 50);
   }, []);
 
   const changeTheme = (newTheme) => {
@@ -38,7 +42,9 @@ export default function Navbar() {
       setIsScrolled(currentScrollY > 50);
 
       // Hide/Show logic
-      if (currentScrollY > lastScrollYRef.current && currentScrollY > 100) {
+      if (currentScrollY < 50) {
+        setIsVisible(false); // Hide at top of screen to prevent overlap with contact links
+      } else if (currentScrollY > lastScrollYRef.current && currentScrollY > 100) {
         setIsVisible(false); // Scrolling down
       } else {
         setIsVisible(true); // Scrolling up
@@ -97,15 +103,18 @@ export default function Navbar() {
   return (
     <>
       <motion.header
-        initial={{ y: -100, opacity: 0 }}
+        initial={{ y: -15, scale: 0.9, x: '-50%', opacity: 0 }}
         animate={{ 
-          y: isVisible ? 0 : -100, 
+          y: isVisible ? 0 : -15,
+          scale: isVisible ? 1 : 0.9,
+          x: '-50%',
           opacity: isVisible ? 1 : 0 
         }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-4 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-5xl rounded-full border border-white/5 bg-black/40 backdrop-blur-md transition-all duration-300 ${
+        style={{ transformOrigin: 'center' }}
+        className={`fixed top-4 left-1/2 z-[100] w-[92%] max-w-5xl rounded-full border border-white/5 bg-black/40 backdrop-blur-md transition-all duration-300 ${
           isScrolled ? 'shadow-[0_10px_30px_rgba(0,0,0,0.8)] border-white/10 bg-black/80' : ''
-        }`}
+        } ${isVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
       >
         <div className="flex h-16 items-center justify-between px-6 md:px-8">
           
