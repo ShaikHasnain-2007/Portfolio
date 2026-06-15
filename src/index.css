@@ -6,18 +6,18 @@
 
 /* Theme Accent Switcher Variables */
 :root {
-  --cyan-rgb: 34, 211, 238;
-  --fuchsia-rgb: 217, 70, 239;
+  --cyan-rgb: 59, 130, 246; /* Navy/Electric Blue */
+  --fuchsia-rgb: 249, 115, 22; /* Orangish */
   
-  --cyan-400: 34 211 238;
-  --cyan-500: 6 182 212;
-  --fuchsia-400: 232 121 249;
-  --fuchsia-500: 217 70 239;
+  --cyan-400: 96 165 250;
+  --cyan-500: 59 130 246;
+  --fuchsia-400: 251 146 60;
+  --fuchsia-500: 249 115 22;
   
-  --color-cyan-hex: #22d3ee;
-  --color-fuchsia-hex: #d946ef;
-  --color-fuchsia-hover-bg: rgba(217, 70, 239, 0.05);
-  --color-cyan-ring-border: rgba(34, 211, 238, 0.5);
+  --color-cyan-hex: #3b82f6;
+  --color-fuchsia-hex: #f97316;
+  --color-fuchsia-hover-bg: rgba(249, 115, 22, 0.05);
+  --color-cyan-ring-border: rgba(59, 130, 246, 0.5);
 }
 
 [data-theme='sunset'] {

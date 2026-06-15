@@ -160,8 +160,8 @@ export default function Navbar() {
                 className={`w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-cyan-400 to-fuchsia-500 relative transition-transform duration-300 hover:scale-125 cursor-pointer ${
                   theme === 'cyberpunk' ? 'ring-2 ring-white ring-offset-2 ring-offset-black' : 'opacity-60 hover:opacity-100'
                 }`}
-                title="Cyberpunk Theme"
-                aria-label="Switch to Cyberpunk theme"
+                title="Signature Theme"
+                aria-label="Switch to Signature theme"
               />
               <button
                 onClick={() => changeTheme('sunset')}
@@ -264,7 +264,7 @@ export default function Navbar() {
                     }`}
                   >
                     <span className="w-2 h-2 rounded-full bg-gradient-to-tr from-cyan-400 to-fuchsia-500" />
-                    Cyber
+                    Signature
                   </button>
                   <button
                     onClick={() => changeTheme('sunset')}
