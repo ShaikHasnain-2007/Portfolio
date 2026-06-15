@@ -113,7 +113,7 @@ export default function InteractiveTimeline() {
   }, []);
 
   return (
-    <section id="timeline" ref={containerRef} className="relative w-full bg-black py-24 px-4 md:px-12 flex flex-col items-center overflow-hidden">
+    <section id="timeline" ref={containerRef} className="relative w-full bg-transparent py-24 px-4 md:px-12 flex flex-col items-center overflow-hidden">
       {/* Background radial soft light */}
       <div className="absolute bottom-1/4 left-10 w-[400px] h-[400px] bg-fuchsia-500/5 rounded-full blur-[100px] pointer-events-none" />
 

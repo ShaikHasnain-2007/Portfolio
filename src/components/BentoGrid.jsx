@@ -192,7 +192,7 @@ export default function BentoGrid() {
   }, 0);
 
   return (
-    <section id="about" className="relative w-full bg-black py-20 px-4 md:px-12 flex justify-center overflow-hidden">
+    <section id="about" className="relative w-full bg-transparent py-20 px-4 md:px-12 flex justify-center overflow-hidden">
 
       {/* Background Accent Lights */}
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />

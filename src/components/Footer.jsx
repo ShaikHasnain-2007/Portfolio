@@ -25,7 +25,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative w-full bg-black border-t border-white/5 pt-20 pb-10 px-6 md:px-12 flex flex-col items-center z-10 select-text">
+    <footer className="relative w-full bg-transparent border-t border-white/5 pt-20 pb-10 px-6 md:px-12 flex flex-col items-center z-10 select-text">
       <div className="w-full max-w-7xl flex flex-col md:flex-row justify-between items-start gap-12 pb-12 border-b border-white/5">
         
         {/* Left Column: Branding */}

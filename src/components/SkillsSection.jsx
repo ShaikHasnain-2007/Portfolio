@@ -110,7 +110,7 @@ export default function SkillsSection() {
   const activeSkills = getActiveSkills();
 
   return (
-    <section id="skills" ref={containerRef} className="relative w-full bg-black py-20 px-4 md:px-12 flex flex-col items-center overflow-hidden">
+    <section id="skills" ref={containerRef} className="relative w-full bg-transparent py-20 px-4 md:px-12 flex flex-col items-center overflow-hidden">
       
       {/* Background glowing lights */}
       <div className="absolute -top-1/4 right-1/4 w-[400px] h-[400px] bg-fuchsia-500/5 rounded-full blur-[120px] pointer-events-none" />
@@ -163,7 +163,7 @@ export default function SkillsSection() {
           id="skills-panel" 
           role="tabpanel" 
           aria-labelledby={`tab-${activeTab}`} 
-          className="skills-cloud flex flex-wrap gap-4 justify-start w-full min-h-[180px]"
+          className="skills-cloud flex flex-wrap gap-4 justify-start items-start w-full min-h-[180px]"
         >
           <AnimatePresence mode="wait">
             {activeSkills.map((skill, idx) => {
