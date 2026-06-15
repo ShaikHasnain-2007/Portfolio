@@ -1,13 +1,10 @@
-/* Fonts loaded via <link> in index.html for non-blocking performance */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Theme Accent Switcher Variables */
 :root {
-  --cyan-rgb: 59, 130, 246; /* Navy/Electric Blue */
-  --fuchsia-rgb: 249, 115, 22; /* Orangish */
+  --cyan-rgb: 59, 130, 246;
+  --fuchsia-rgb: 249, 115, 22;
   
   --cyan-400: 96 165 250;
   --cyan-500: 59 130 246;
@@ -50,12 +47,10 @@
   --color-cyan-ring-border: rgba(74, 222, 128, 0.5);
 }
 
-/* Global color transition for theme swapping */
 body, button, a, span, h1, h2, h3, h4, div, section, svg, circle, path {
   transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, stroke 0.4s ease, fill 0.4s ease;
 }
 
-/* Respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -65,9 +60,6 @@ body, button, a, span, h1, h2, h3, h4, div, section, svg, circle, path {
   }
 }
 
-
-
-/* Custom CSS Animations */
 @keyframes slide-horizontal {
   0% {
     transform: translateX(0);
@@ -96,9 +88,6 @@ body, button, a, span, h1, h2, h3, h4, div, section, svg, circle, path {
   animation: marquee 20s linear infinite;
 }
 
-
-
-/* Custom Styles */
 body {
   margin: 0;
   padding: 0;
@@ -108,7 +97,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Lenis smooth scrolling config */
 html.lenis {
   height: auto;
 }
@@ -129,7 +117,6 @@ html.lenis {
   pointer-events: none;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -147,7 +134,6 @@ html.lenis {
   background: #333;
 }
 
-/* Glitch Effect Styles */
 .glitch-text {
   position: relative;
   text-shadow: 0.05em 0 0 rgba(255, 0, 80, 0.75),
@@ -186,7 +172,6 @@ html.lenis {
   }
 }
 
-/* 3D Parallax & Interactive Utilities */
 .perspective-1000 {
   perspective: 1000px;
   transform-style: preserve-3d;
@@ -239,7 +224,6 @@ html.lenis {
   opacity: 1;
 }
 
-/* Curtain Transitions */
 .curtain-panel-top {
   position: fixed;
   top: 0;
@@ -272,7 +256,6 @@ html.lenis {
   transform: translateY(100%);
 }
 
-/* Smooth zoom on image hovers */
 .zoom-image {
   transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
@@ -280,16 +263,14 @@ html.lenis {
   transform: scale(1.08);
 }
 
-/* Utilities to hide scrollbars */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE/Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Shifting Film Grain Noise Animation */
 @keyframes noise-shift {
   0% { transform: translate(0, 0); }
   10% { transform: translate(-5%, -5%); }
@@ -308,7 +289,6 @@ html.lenis {
   animation: noise-shift 0.15s steps(2) infinite;
 }
 
-/* Uiverse Preloader Upgraded Animation */
 .svg-frame {
   position: relative;
   width: 300px;
@@ -373,13 +353,11 @@ html.lenis {
   }
 }
 
-/* Dotted Cyber-Grid Background */
 .bg-cyber-dots {
   background-image: radial-gradient(rgba(255, 255, 255, 0.075) 1.2px, transparent 1.2px);
   background-size: 28px 28px;
 }
 
-/* Ambient Orbiting Glow Orbs */
 @keyframes float-orb-1 {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
   50% { transform: translate3d(6%, -10%, 0) scale(1.1); }

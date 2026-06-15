@@ -79,11 +79,9 @@ export default function CertificationsSection() {
 
   return (
     <section ref={containerRef} className="relative w-full bg-transparent py-20 px-4 md:px-12 flex flex-col items-center overflow-hidden">
-      {/* Background */}
       <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="w-full max-w-7xl relative z-10">
-        {/* Header */}
         <div className="text-left mb-12">
           <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase font-satoshi">ACHIEVEMENTS</span>
           <h2 className="font-syne font-extrabold text-4xl md:text-6xl text-white mt-2">
@@ -94,7 +92,6 @@ export default function CertificationsSection() {
           </p>
         </div>
 
-        {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {certifications.map((cert, i) => {
             const IconComp = cert.icon;
@@ -104,7 +101,6 @@ export default function CertificationsSection() {
                 key={i}
                 className="cert-card group relative border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-xl p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 hover:border-white/20 hover:bg-white/[0.05]"
               >
-                {/* Hover glow */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
@@ -113,7 +109,6 @@ export default function CertificationsSection() {
                 />
 
                 <div className="relative z-10">
-                  {/* Top row: Icon + Type badge */}
                   <div className="flex items-center justify-between mb-4">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isCyan ? 'bg-cyan-400/10 border border-cyan-400/20 text-cyan-400' : 'bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400'}`}>
                       <IconComp size={18} />
@@ -123,7 +118,6 @@ export default function CertificationsSection() {
                     </span>
                   </div>
 
-                  {/* Title */}
                   <h3 className={`font-syne font-bold text-lg text-white mb-1 transition-colors duration-300 ${isCyan ? 'group-hover:text-cyan-400' : 'group-hover:text-fuchsia-400'}`}>
                     {cert.title}
                   </h3>
@@ -133,7 +127,6 @@ export default function CertificationsSection() {
                   </p>
                 </div>
 
-                {/* Shimmer badge effect on hover */}
                 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
             );

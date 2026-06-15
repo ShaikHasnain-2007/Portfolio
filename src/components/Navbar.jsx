@@ -17,7 +17,6 @@ export default function Navbar() {
   const lastScrollYRef = useRef(0);
   const [theme, setTheme] = useState('cyberpunk');
 
-  // Load theme state and initial scroll state on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('portfolio-theme') || 'cyberpunk';
     setTheme(savedTheme);
@@ -33,21 +32,18 @@ export default function Navbar() {
     document.documentElement.setAttribute('data-theme', newTheme);
   };
 
-  // Monitor scroll for navbar visibility (hide on scroll down, show on scroll up) and bg changes
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // Add background blur/fill if scrolled
       setIsScrolled(currentScrollY > 50);
 
-      // Hide/Show logic
       if (currentScrollY < 50) {
-        setIsVisible(false); // Hide at top of screen to prevent overlap with contact links
+        setIsVisible(false);
       } else if (currentScrollY > lastScrollYRef.current && currentScrollY > 100) {
-        setIsVisible(false); // Scrolling down
+        setIsVisible(false);
       } else {
-        setIsVisible(true); // Scrolling up
+        setIsVisible(true);
       }
       lastScrollYRef.current = currentScrollY;
     };
@@ -56,11 +52,10 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Use IntersectionObserver to detect active section in viewport
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '-30% 0px -40% 0px', // Trigger when section occupies center of viewport
+      rootMargin: '-30% 0px -40% 0px',
       threshold: 0.1
     };
 
@@ -74,15 +69,13 @@ export default function Navbar() {
 
     const observer = new IntersectionObserver(handleIntersection, observerOptions);
 
-    // Watch sections
     const sections = ['about', 'skills', 'projects', 'timeline'];
     sections.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
 
-    // Also watch hero/top
-    const heroEl = document.querySelector('section'); // First section on page is hero
+    const heroEl = document.querySelector('section');
     if (heroEl) observer.observe(heroEl);
 
     return () => observer.disconnect();
@@ -118,7 +111,6 @@ export default function Navbar() {
       >
         <div className="flex h-16 items-center justify-between px-6 md:px-8">
           
-          {/* Logo / Brand */}
           <button 
             onClick={() => handleNavClick('about')}
             className="font-syne text-sm font-extrabold tracking-widest uppercase cursor-pointer text-left text-white hover:opacity-80 transition-opacity"
@@ -126,7 +118,6 @@ export default function Navbar() {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">SHAIK.</span>
           </button>
 
-          {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-8">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.target;
@@ -151,9 +142,7 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* CTA Contact Button + Theme Selector (Desktop) */}
           <div className="hidden md:flex items-center gap-4">
-            {/* Minimal Accent Theme Switcher */}
             <div className="flex items-center gap-2 border border-white/5 bg-white/[0.02] backdrop-blur-md rounded-full px-3 py-1.5">
               <button
                 onClick={() => changeTheme('cyberpunk')}
@@ -190,7 +179,6 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Mobile Menu Toggle Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden text-white hover:text-cyan-400 transition-colors p-2"
@@ -202,7 +190,6 @@ export default function Navbar() {
         </div>
       </motion.header>
 
-      {/* Mobile Drawer Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -211,7 +198,6 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[99] bg-black/95 backdrop-blur-xl md:hidden flex flex-col justify-center px-8"
           >
-            {/* Drawer Navigation List */}
             <nav className="flex flex-col gap-8 text-left">
               {NAV_ITEMS.map((item, idx) => {
                 const isActive = activeSection === item.target;
@@ -234,7 +220,6 @@ export default function Navbar() {
                 );
               })}
               
-              {/* Mobile CTA */}
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -247,7 +232,6 @@ export default function Navbar() {
                 <ArrowUpRight size={14} />
               </motion.button>
 
-              {/* Mobile Theme Selector */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

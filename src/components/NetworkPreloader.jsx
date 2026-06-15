@@ -8,9 +8,7 @@ export default function NetworkPreloader({ progress, isReady, onDismissed }) {
   const [isDismissing, setIsDismissing] = useState(false);
   const startTimestamp = useRef(Date.now());
 
-  // Dismissal coordination
   useEffect(() => {
-    // We want the preloader to play for the full 6 seconds so the hello loop completes its drawing and undrawing cycle
     const MIN_DURATION = 5800;
     const check = () => {
       const elapsed = Date.now() - startTimestamp.current;
@@ -20,7 +18,6 @@ export default function NetworkPreloader({ progress, isReady, onDismissed }) {
         setIsDismissing(true);
 
         const ctx = gsap.context(() => {
-          // Smoothly scale up and fade out the centered logo
           gsap.to(helloRef.current, {
             scale: 1.15,
             opacity: 0,
@@ -28,7 +25,6 @@ export default function NetworkPreloader({ progress, isReady, onDismissed }) {
             ease: 'power3.inOut',
           });
 
-          // Smoothly fade out the preloader background panel
           gsap.to(containerRef.current, {
             opacity: 0,
             duration: 1.0,
@@ -59,12 +55,10 @@ export default function NetworkPreloader({ progress, isReady, onDismissed }) {
       className="fixed inset-0 z-[9999] bg-[#000000] flex items-center justify-center overflow-hidden"
       style={{ touchAction: 'none' }}
     >
-      {/* Dynamic theme-based background radial glow */}
       <div 
         className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--cyan-rgb),0.1)_0%,#000000_80%)] pointer-events-none transition-all duration-700" 
       />
 
-      {/* Perfectly Centered Apple Hello Animated SVG */}
       <div 
         ref={helloRef} 
         className="w-[260px] h-[260px] sm:w-[340px] sm:h-[340px] md:w-[400px] md:h-[400px] flex items-center justify-center transition-transform select-none pointer-events-none"
@@ -76,13 +70,11 @@ export default function NetworkPreloader({ progress, isReady, onDismissed }) {
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            {/* Dynamic theme-based gradient */}
             <linearGradient id="hello-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="var(--color-cyan-hex, #22d3ee)" />
               <stop offset="100%" stopColor="var(--color-fuchsia-hex, #d946ef)" />
             </linearGradient>
             
-            {/* Premium Glow Filter for visual depth */}
             <filter id="hello-glow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="5" result="blur" />
               <feMerge>

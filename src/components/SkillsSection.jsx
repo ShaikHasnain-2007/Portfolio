@@ -41,7 +41,6 @@ export default function SkillsSection() {
   const [activeTab, setActiveTab] = useState('all');
   const containerRef = useRef(null);
 
-  // Scroll-driven entry animations for section components
   useEffect(() => {
     const ctx = gsap.context(() => {
       const el = containerRef.current;
@@ -83,10 +82,8 @@ export default function SkillsSection() {
     return () => ctx.revert();
   }, []);
 
-  // Aggregate active skills list
   const getActiveSkills = () => {
     if (activeTab === 'all') {
-      // Flatten all categories
       const all = [];
       skillCategories.forEach(cat => {
         if (cat.skills) {
@@ -111,19 +108,14 @@ export default function SkillsSection() {
 
   return (
     <section id="skills" ref={containerRef} className="relative w-full bg-transparent py-20 px-4 md:px-12 flex flex-col items-center overflow-hidden">
-      
-      {/* Background glowing lights */}
       <div className="absolute -top-1/4 right-1/4 w-[400px] h-[400px] bg-fuchsia-500/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute -bottom-1/4 left-1/4 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Decorative oversized section index */}
       <div className="absolute right-12 top-10 font-syne font-black text-[120px] leading-none text-white/[0.02] select-none pointer-events-none">
         02
       </div>
 
       <div className="w-full max-w-7xl relative z-10">
-        
-        {/* Section Header */}
         <div className="section-header text-left mb-12">
           <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase font-satoshi">COMPETENCIES</span>
           <h2 className="font-syne font-extrabold text-4xl md:text-6xl text-white mt-2">
@@ -134,7 +126,6 @@ export default function SkillsSection() {
           </p>
         </div>
 
-        {/* Categories Tab Selector */}
         <div role="tablist" aria-label="Skill Categories" className="category-tabs flex flex-wrap gap-2 mb-10 pb-2 border-b border-white/5 text-left">
           {skillCategories.map((cat) => {
             const isActive = cat.id === activeTab;
@@ -158,7 +149,6 @@ export default function SkillsSection() {
           })}
         </div>
 
-        {/* Skill Tag Cloud */}
         <div 
           id="skills-panel" 
           role="tabpanel" 
@@ -193,7 +183,6 @@ export default function SkillsSection() {
             })}
           </AnimatePresence>
         </div>
-
       </div>
     </section>
   );
