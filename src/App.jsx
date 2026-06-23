@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, Suspense, lazy } from 'react';
+import React, { useEffect, useRef, useState, useCallback, Suspense, lazy } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -125,6 +125,10 @@ export default function App() {
     }
   }, [preloaderFinished]);
 
+  const handlePreloaderDismissed = useCallback(() => {
+    setPreloaderFinished(true);
+  }, []);
+
   const isPreloaderReady = isReady && isWindowLoaded;
 
   return (
@@ -141,7 +145,7 @@ export default function App() {
           <NetworkPreloader
             progress={loadingProgress}
             isReady={isPreloaderReady}
-            onDismissed={() => setPreloaderFinished(true)}
+            onDismissed={handlePreloaderDismissed}
           />
         )}
 

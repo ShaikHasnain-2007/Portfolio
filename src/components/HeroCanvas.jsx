@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Linkedin, Mail, ChevronDown } from 'lucide-react';
 import SplitText from './SplitText';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const TOTAL_FRAMES = 165;
 const FIRST_BATCH_SIZE = 30;
@@ -20,6 +18,8 @@ function useTextScramble(targetText, active = true, speed = 35, delay = 0) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+~`|}{[]:;?><,./-';
     let frame = 0;
     const duration = 20; // total animation frames to resolve
+    let timeoutId = null;
+    let rAFId = null;
     
     const run = () => {
       if (isCancelled) return;
@@ -46,16 +46,20 @@ function useTextScramble(targetText, active = true, speed = 35, delay = 0) {
         }
       }
       setText(result);
-      setTimeout(() => requestAnimationFrame(run), 1000 / speed);
+      timeoutId = setTimeout(() => {
+        rAFId = requestAnimationFrame(run);
+      }, 1000 / speed);
     };
 
     const delayTimeout = setTimeout(() => {
-      requestAnimationFrame(run);
+      rAFId = requestAnimationFrame(run);
     }, delay * 1000);
 
     return () => {
       isCancelled = true;
       clearTimeout(delayTimeout);
+      if (timeoutId) clearTimeout(timeoutId);
+      if (rAFId) cancelAnimationFrame(rAFId);
     };
   }, [targetText, active, speed, delay]);
 
@@ -183,26 +187,37 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
 
   // Resize listener
   useEffect(() => {
+    let resizeAnimationFrameId = null;
+
     const handleResize = () => {
-      // Ignore height-only resizing on mobile (like address bar toggles) to prevent scroll jitter
-      const isMobile = window.innerWidth < 768;
-      if (isMobile) {
-        const lastWidth = canvasRef.current?._lastWidth || 0;
-        if (lastWidth === window.innerWidth) return;
-      }
+      if (resizeAnimationFrameId) return;
 
-      if (canvasRef.current) {
-        canvasRef.current._lastWidth = window.innerWidth;
-      }
+      resizeAnimationFrameId = requestAnimationFrame(() => {
+        resizeAnimationFrameId = null;
 
-      const currentImg = imagesRef.current[frameIndexRef.current];
-      if (currentImg) {
-        drawImage(currentImg);
-      }
+        // Ignore height-only resizing on mobile (like address bar toggles) to prevent scroll jitter
+        const isMobile = window.innerWidth < 768;
+        if (isMobile) {
+          const lastWidth = canvasRef.current?._lastWidth || 0;
+          if (lastWidth === window.innerWidth) return;
+        }
+
+        if (canvasRef.current) {
+          canvasRef.current._lastWidth = window.innerWidth;
+        }
+
+        const currentImg = imagesRef.current[frameIndexRef.current];
+        if (currentImg) {
+          drawImage(currentImg);
+        }
+      });
     };
 
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (resizeAnimationFrameId) cancelAnimationFrame(resizeAnimationFrameId);
+    };
   }, []);
 
   // GSAP ScrollTrigger animation with gsap.context
@@ -222,7 +237,24 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
           onUpdate: () => {
             const index = Math.round(obj.frame);
             frameIndexRef.current = index;
-            const img = imagesRef.current[index];
+            let img = imagesRef.current[index];
+
+            // Fallback for failed/unloaded images - search for nearest loaded frame
+            if (!img) {
+              let offset = 1;
+              while (index - offset >= 0 || index + offset < TOTAL_FRAMES) {
+                if (index - offset >= 0 && imagesRef.current[index - offset]) {
+                  img = imagesRef.current[index - offset];
+                  break;
+                }
+                if (index + offset < TOTAL_FRAMES && imagesRef.current[index + offset]) {
+                  img = imagesRef.current[index + offset];
+                  break;
+                }
+                offset++;
+              }
+            }
+
             if (img) {
               drawImage(img);
             }
@@ -366,7 +398,7 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
 
               {/* Bottom-Left: Title */}
               <div ref={titleRef} className="w-full md:max-w-xl text-left">
-                <h1 className="font-syne font-extrabold text-5xl sm:text-6xl md:text-8xl uppercase tracking-tighter leading-none mb-2">
+                <h1 className="font-syne font-extrabold text-5xl sm:text-6xl md:text-8xl uppercase tracking-tighter leading-none mb-2 select-text cursor-default inline-block">
                   <SplitText text="AI/ML" type="chars" stagger={0.03} delay={1.4} /> <br />
                   <SplitText
                     text="Engineer"

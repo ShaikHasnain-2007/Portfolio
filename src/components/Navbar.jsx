@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -6,7 +6,8 @@ const NAV_ITEMS = [
   { label: 'About', target: 'about' },
   { label: 'Skills', target: 'skills' },
   { label: 'Projects', target: 'projects' },
-  { label: 'Timeline', target: 'timeline' }
+  { label: 'Timeline', target: 'timeline' },
+  { label: 'Contact', target: 'contact' }
 ];
 
 export default function Navbar() {
@@ -16,6 +17,63 @@ export default function Navbar() {
   const [isVisible, setIsVisible] = useState(false);
   const lastScrollYRef = useRef(0);
   const [theme, setTheme] = useState('cyberpunk');
+  const mobileMenuRef = useRef(null);
+
+  // Lock body scroll and trap focus when mobile menu is open
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = 'hidden';
+    
+    if (window.lenis) {
+      window.lenis.stop();
+    }
+
+    const menuEl = mobileMenuRef.current;
+    if (!menuEl) return;
+
+    const focusableElements = menuEl.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (firstElement) {
+      firstElement.focus();
+    }
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+        return;
+      }
+
+      if (e.key !== 'Tab') return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement.focus();
+          e.preventDefault();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalStyle;
+      if (window.lenis) {
+        window.lenis.start();
+      }
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('portfolio-theme') || 'cyberpunk';
@@ -69,7 +127,7 @@ export default function Navbar() {
 
     const observer = new IntersectionObserver(handleIntersection, observerOptions);
 
-    const sections = ['about', 'skills', 'projects', 'timeline'];
+    const sections = ['about', 'skills', 'projects', 'timeline', 'contact'];
     sections.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -171,7 +229,7 @@ export default function Navbar() {
             </div>
 
             <button
-              onClick={() => handleNavClick('about')}
+              onClick={() => handleNavClick('contact')}
               className="group flex items-center gap-1.5 font-syne text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full border border-white/10 hover:border-cyan-400/50 hover:bg-cyan-500/5 text-white hover:text-cyan-400 transition-all duration-300 active:scale-95"
             >
               <span>Get In Touch</span>
@@ -193,6 +251,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            ref={mobileMenuRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -225,7 +284,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ delay: 0.35, duration: 0.3 }}
-                onClick={() => handleNavClick('about')}
+                onClick={() => handleNavClick('contact')}
                 className="w-full flex items-center justify-center gap-2 font-syne text-xs uppercase font-bold tracking-widest py-4 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-white mt-4"
               >
                 <span>Get In Touch</span>
@@ -243,6 +302,7 @@ export default function Navbar() {
                 <div className="flex gap-3">
                   <button
                     onClick={() => changeTheme('cyberpunk')}
+                    aria-label="Switch to Signature theme"
                     className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl border text-[10px] font-syne font-bold uppercase tracking-widest transition-all duration-300 ${
                       theme === 'cyberpunk' ? 'bg-white/10 text-white border-white/20' : 'text-white/40 bg-transparent border-white/5'
                     }`}
@@ -252,6 +312,7 @@ export default function Navbar() {
                   </button>
                   <button
                     onClick={() => changeTheme('sunset')}
+                    aria-label="Switch to Sunset theme"
                     className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl border text-[10px] font-syne font-bold uppercase tracking-widest transition-all duration-300 ${
                       theme === 'sunset' ? 'bg-white/10 text-white border-white/20' : 'text-white/40 bg-transparent border-white/5'
                     }`}
@@ -261,6 +322,7 @@ export default function Navbar() {
                   </button>
                   <button
                     onClick={() => changeTheme('matrix')}
+                    aria-label="Switch to Matrix theme"
                     className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl border text-[10px] font-syne font-bold uppercase tracking-widest transition-all duration-300 ${
                       theme === 'matrix' ? 'bg-white/10 text-white border-white/20' : 'text-white/40 bg-transparent border-white/5'
                     }`}

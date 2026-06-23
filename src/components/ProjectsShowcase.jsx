@@ -1,10 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink, Cpu, Gamepad2, HeartHandshake, Award } from 'lucide-react';
+import { Github, Cpu, Gamepad2, HeartHandshake, Award } from 'lucide-react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {

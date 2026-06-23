@@ -1,9 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GraduationCap, Code2, Award, Zap, Compass } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const milestones = [
   {

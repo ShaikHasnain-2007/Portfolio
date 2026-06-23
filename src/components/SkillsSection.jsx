@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitText from './SplitText';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const skillCategories = [
   {

@@ -1,12 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Send, MapPin, GraduationCap } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import BentoCard from './BentoCard';
 import MagneticElement from './MagneticElement';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function BentoGrid() {
   const gridRef = useRef(null);
@@ -91,7 +88,10 @@ export default function BentoGrid() {
   // Form submit handler to submit messages using Web3Forms
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (!formText.trim()) return;
+    if (!formText.trim()) {
+      setFormError('Please write a message before sending.');
+      return;
+    }
     
     setIsSubmitting(true);
     setFormError('');
@@ -164,9 +164,8 @@ export default function BentoGrid() {
 
   // Simulated GitHub Contribution Grid data generator - Seeded for consistency
   const [activeCommits, setActiveCommits] = useState(null);
-  const contributionGrid = useRef([]);
   
-  if (contributionGrid.current.length === 0) {
+  const contributionGrid = useMemo(() => {
     const days = 7;
     const weeks = 48; // Fits desktop layout nicely
     const list = [];
@@ -183,13 +182,15 @@ export default function BentoGrid() {
       }
       list.push(weekCols);
     }
-    contributionGrid.current = list;
-  }
+    return list;
+  }, []);
 
   // Sum the contributions to get actual representative contributions count
-  const totalContributions = contributionGrid.current.reduce((acc, week) => {
-    return acc + week.reduce((wAcc, val) => wAcc + (val > 0 ? Math.floor(val * 1.3) : 0), 0);
-  }, 0);
+  const totalContributions = useMemo(() => {
+    return contributionGrid.reduce((acc, week) => {
+      return acc + week.reduce((wAcc, val) => wAcc + (val > 0 ? Math.floor(val * 1.3) : 0), 0);
+    }, 0);
+  }, [contributionGrid]);
 
   return (
     <section id="about" className="relative w-full bg-transparent py-20 px-4 md:px-12 flex justify-center overflow-hidden">
@@ -238,7 +239,7 @@ export default function BentoGrid() {
         </div>
 
         {/* CARD 2: Intro Card (7 cols, 2 rows) */}
-        <div className="bento-wrapper col-span-12 md:col-span-7 row-span-2">
+        <div id="contact" className="bento-wrapper col-span-12 md:col-span-7 row-span-2">
           <BentoCard className="w-full h-full p-6 md:p-8 flex flex-col justify-between">
             {/* Content */}
             <div className="text-left relative z-10">
@@ -429,7 +430,7 @@ export default function BentoGrid() {
                   8.5 CGPA
                 </span>
                 <span className="text-[9px] font-bold font-syne text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1 uppercase tracking-wider">
-                  2025 — Present
+                  2025 — 2029
                 </span>
               </div>
             </div>
@@ -464,10 +465,10 @@ export default function BentoGrid() {
 
             {/* Contribution Heatmap Grid */}
             <div className="relative w-full overflow-x-auto my-6 py-2 no-scrollbar z-10" role="grid" aria-label="GitHub Contributions Heatmap">
-              <div className="flex flex-col gap-[3px] min-w-[700px]">
+              <div className="flex flex-col gap-[3px] min-w-[340px] md:min-w-[700px] justify-center items-center md:items-start">
                 {Array.from({ length: 7 }).map((_, dIdx) => (
                   <div key={dIdx} className="flex gap-[3px]" role="row">
-                    {contributionGrid.current.map((week, wIdx) => {
+                    {contributionGrid.map((week, wIdx) => {
                       const weight = week[dIdx];
                       // Map weight value to neon shades
                       const colorClass = 
@@ -479,6 +480,7 @@ export default function BentoGrid() {
                       return (
                         <div
                           key={wIdx}
+                          tabIndex={0}
                           onMouseEnter={() => {
                             setActiveCommits({
                               commits: weight === 0 ? 'No' : weight * 2,
@@ -486,7 +488,14 @@ export default function BentoGrid() {
                             });
                           }}
                           onMouseLeave={() => setActiveCommits(null)}
-                          className={`w-[11px] h-[11px] rounded-[2px] transition-all duration-300 hover:scale-125 cursor-crosshair ${colorClass}`}
+                          onFocus={() => {
+                            setActiveCommits({
+                              commits: weight === 0 ? 'No' : weight * 2,
+                              date: `Week ${wIdx + 1}, Day ${dIdx + 1}`
+                            });
+                          }}
+                          onBlur={() => setActiveCommits(null)}
+                          className={`w-[11px] h-[11px] rounded-[2px] transition-all duration-300 hover:scale-125 focus:scale-125 focus:outline-none focus:ring-1 focus:ring-cyan-400 cursor-crosshair ${colorClass} ${wIdx < 24 ? 'hidden md:block' : ''}`}
                           role="gridcell"
                           aria-label={`${weight === 0 ? 'No' : weight * 2} contributions on week ${wIdx + 1}, day ${dIdx + 1}`}
                         />

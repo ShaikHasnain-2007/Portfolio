@@ -1,7 +1,18 @@
-import React from 'react';
+import { useRef } from 'react';
 import { Linkedin, Github, Instagram, Mail, ArrowUp } from 'lucide-react';
 
 export default function Footer() {
+  const textRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const el = textRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    el.style.setProperty('--text-mouse-x', `${x}px`);
+    el.style.setProperty('--text-mouse-y', `${y}px`);
+  };
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
@@ -114,10 +125,14 @@ export default function Footer() {
       </div>
 
       {/* Large Typographic Display Word */}
-      <div className="w-full text-center mt-12 mb-6 select-none overflow-hidden pointer-events-none">
-        <h1 className="font-syne font-black text-[12vw] leading-none tracking-tighter text-white/[0.03] uppercase">
+      <div 
+        ref={textRef}
+        onMouseMove={handleMouseMove}
+        className="w-full text-center mt-12 mb-6 select-none overflow-hidden cursor-default"
+      >
+        <div className="font-syne font-black text-[12vw] leading-none tracking-tighter text-white/[0.03] uppercase spotlight-text">
           HASNAIN.
-        </h1>
+        </div>
       </div>
 
       {/* Bottom Sub-bar: Copyright and Tech tag */}

@@ -224,6 +224,42 @@ html.lenis {
   opacity: 1;
 }
 
+.spotlight-text {
+  transition: color 0.3s ease, filter 0.3s ease, background 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.spotlight-text * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.spotlight-text:hover {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background: radial-gradient(
+    250px circle at var(--text-mouse-x, -999px) var(--text-mouse-y, -999px),
+    #ffffff 0%,
+    rgba(var(--cyan-rgb), 1) 35%,
+    rgba(var(--fuchsia-rgb), 0.6) 65%,
+    rgba(255, 255, 255, 0.05) 100%
+  ) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  filter: drop-shadow(0 0 25px rgba(var(--cyan-rgb), 0.55));
+}
+
+.spotlight-text:hover * {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background: inherit !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+
+
+
 .curtain-panel-top {
   position: fixed;
   top: 0;

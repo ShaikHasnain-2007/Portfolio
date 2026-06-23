@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -11,7 +11,7 @@ const PRESETS = [
 
 export default function AIChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [hasOpened, setHasOpened] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(1);
   const [isVisible, setIsVisible] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -24,10 +24,24 @@ export default function AIChatWidget() {
   const [inputVal, setInputVal] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
+  const typingIntervalRef = useRef(null);
+  const isOpenRef = useRef(isOpen);
+
+  useEffect(() => {
+    isOpenRef.current = isOpen;
+  }, [isOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (typingIntervalRef.current) {
+        clearInterval(typingIntervalRef.current);
+      }
+    };
+  }, []);
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
-    setHasOpened(true);
+    setUnreadCount(0);
   };
 
   const handleSendMessage = (text) => {
@@ -42,6 +56,11 @@ export default function AIChatWidget() {
     setMessages((prev) => [...prev, userMsg]);
     setInputVal('');
     setIsTyping(true);
+
+    if (typingIntervalRef.current) {
+      clearInterval(typingIntervalRef.current);
+      typingIntervalRef.current = null;
+    }
 
     setTimeout(() => {
       let botResponse = "I'm sorry, I don't have that specific detail on record. You can try asking about 'CampusX', 'Unity Zombie FPS', 'SRM AP projects', or 'Contact details'!";
@@ -69,6 +88,10 @@ export default function AIChatWidget() {
 
       setIsTyping(false);
 
+      if (!isOpenRef.current) {
+        setUnreadCount((prev) => prev + 1);
+      }
+
       const botMsgId = Date.now();
       const newBotMsg = {
         id: botMsgId,
@@ -83,7 +106,7 @@ export default function AIChatWidget() {
       let charIndex = 0;
       const speed = 15;
 
-      const typeInterval = setInterval(() => {
+      typingIntervalRef.current = setInterval(() => {
         if (charIndex < botResponse.length) {
           currentText += botResponse[charIndex];
           setMessages((prev) => 
@@ -93,7 +116,10 @@ export default function AIChatWidget() {
           );
           charIndex++;
         } else {
-          clearInterval(typeInterval);
+          if (typingIntervalRef.current) {
+            clearInterval(typingIntervalRef.current);
+            typingIntervalRef.current = null;
+          }
         }
       }, speed);
 
@@ -156,8 +182,8 @@ export default function AIChatWidget() {
                       <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 border border-black animate-pulse" />
                     </div>
                     <div>
-                      <h3 className="font-syne font-bold text-sm text-white leading-tight">Hasnain's AI Companion</h3>
-                      <span className="text-[9px] font-bold text-cyan-400 tracking-wider uppercase">Active Agent</span>
+                      <h3 className="font-syne font-bold text-sm text-white leading-tight">Hasnain's FAQ Companion</h3>
+                      <span className="text-[9px] font-bold text-cyan-400 tracking-wider uppercase">FAQ Bot</span>
                     </div>
                   </div>
                   <button 
@@ -231,6 +257,7 @@ export default function AIChatWidget() {
                   <input
                     type="text"
                     placeholder="Ask Hasnain's AI..."
+                    aria-label="Ask Shaik Hasnain's AI Assistant"
                     value={inputVal}
                     onChange={(e) => setInputVal(e.target.value)}
                     className="flex-grow bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-white/30 focus:border-cyan-400 focus:shadow-[0_0_12px_rgba(var(--cyan-rgb),0.2)] outline-none transition-all duration-300"
@@ -278,10 +305,10 @@ export default function AIChatWidget() {
             
             <div className="absolute inset-[-4px] rounded-full border border-cyan-400/30 animate-pulse pointer-events-none" />
 
-            {!isOpen && !hasOpened && (
+            {!isOpen && unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 flex h-4 w-4">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-cyan-500 text-[9px] font-bold text-black items-center justify-center">1</span>
+                <span className="relative inline-flex rounded-full h-4 w-4 bg-cyan-500 text-[9px] font-bold text-black items-center justify-center">{unreadCount}</span>
               </span>
             )}
           </motion.button>
