@@ -152,7 +152,7 @@ export default function SkillsSection() {
           aria-labelledby={`tab-${activeTab}`} 
           className="skills-cloud flex flex-wrap gap-4 justify-start items-start w-full min-h-[180px]"
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             {activeSkills.map((skill, idx) => {
               const borderGlowClass = 
                 skill.color === 'cyan' 

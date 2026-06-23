@@ -511,20 +511,26 @@ export default function BentoGrid() {
               {/* Hover tooltip feedback */}
               <div className="min-h-[16px] text-left">
                 <AnimatePresence mode="wait">
-                  {activeCommits && (
+                  {activeCommits ? (
                     <motion.span
+                      key="active"
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -5 }}
-                      className="text-xs font-bold text-cyan-400 uppercase tracking-widest font-syne"
+                      className="text-xs font-bold text-cyan-400 uppercase tracking-widest font-syne block"
                     >
                       {activeCommits.commits} contributions on {activeCommits.date}
                     </motion.span>
-                  )}
-                  {!activeCommits && (
-                    <span className="text-xs text-white/30 font-satoshi">
+                  ) : (
+                    <motion.span
+                      key="idle"
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      className="text-xs text-white/30 font-satoshi block"
+                    >
                       Hover boxes to check daily contributions
-                    </span>
+                    </motion.span>
                   )}
                 </AnimatePresence>
               </div>
