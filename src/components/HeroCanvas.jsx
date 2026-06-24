@@ -307,7 +307,6 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
       // Parallax vignette scaling down
       if (vignetteRef.current) {
         tl.to(vignetteRef.current, {
-          scale: 0.9,
           opacity: 0.3,
           ease: 'none'
         }, 0);
