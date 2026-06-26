@@ -327,7 +327,7 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
     <div
       id="hero"
       ref={containerRef}
-      className={`relative w-full ${startAnimations ? 'h-[800vh]' : 'h-screen overflow-hidden'}`}
+      className={`relative w-full ${startAnimations ? 'h-[500vh]' : 'h-screen overflow-hidden'}`}
     >
       {/* Sticky Frame Wrapper */}
       <div className="sticky top-0 left-0 w-full h-screen bg-black overflow-hidden select-none">
