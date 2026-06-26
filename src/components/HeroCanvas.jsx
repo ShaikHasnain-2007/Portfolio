@@ -126,10 +126,20 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
       });
     };
 
+    // Helper to resize canvas to viewport dimensions
+    const resizeCanvas = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
     // Load first batch immediately (0 to 29)
     loadBatch(0, FIRST_BATCH_SIZE - 1).then(() => {
       setIsReady(true);
       if (onReady) onReady();
+
+      resizeCanvas(); // Set initial canvas dimensions
 
       // Draw the first frame
       const firstImg = imagesRef.current[0];
@@ -157,10 +167,8 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    canvas.width = w;
-    canvas.height = h;
+    const w = canvas.width;
+    const h = canvas.height;
 
     const imgW = img.naturalWidth || 1920;
     const imgH = img.naturalHeight || 1080;
@@ -205,6 +213,8 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
         if (canvasRef.current) {
           canvasRef.current._lastWidth = window.innerWidth;
         }
+
+        resizeCanvas(); // Update canvas dimensions on resize
 
         const currentImg = imagesRef.current[frameIndexRef.current];
         if (currentImg) {

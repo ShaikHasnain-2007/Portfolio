@@ -25,14 +25,6 @@ export default function CustomCursor() {
         hiddenRef.current = false;
         setHidden(false);
       }
-
-      // Move immediate dot instantly
-      gsap.to(dot, {
-        x: mouse.x,
-        y: mouse.y,
-        duration: 0.1,
-        ease: 'power2.out'
-      });
     };
 
     const onMouseLeave = () => {
@@ -58,6 +50,12 @@ export default function CustomCursor() {
       gsap.set(ring, {
         x: ringPos.x,
         y: ringPos.y
+      });
+
+      // Move immediate dot instantly without creating new tweens
+      gsap.set(dot, {
+        x: mouse.x,
+        y: mouse.y
       });
     };
 
