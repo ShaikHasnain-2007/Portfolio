@@ -153,7 +153,7 @@ export default function InteractiveTimeline() {
                   </div>
 
                   {/* Glass Card Container */}
-                  <div className="timeline-card w-full bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 hover:border-cyan-400/30 transition-colors duration-500 relative group">
+                  <div className="timeline-card w-full bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(var(--cyan-rgb),0.3)] transition-all duration-500 relative group">
                     {/* Shadow overlay */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/[0.01] to-transparent rounded-3xl pointer-events-none" />
 

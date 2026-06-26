@@ -104,7 +104,7 @@ export default function CertificationsSection() {
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: `radial-gradient(300px circle at 50% 30%, ${isCyan ? 'rgba(var(--cyan-rgb),0.08)' : 'rgba(var(--fuchsia-rgb),0.08)'}, transparent 60%)`
+                    background: `radial-gradient(300px circle at 50% 30%, ${isCyan ? 'rgba(var(--cyan-rgb),0.3)' : 'rgba(var(--fuchsia-rgb),0.3)'}, transparent 60%)`
                   }}
                 />
 

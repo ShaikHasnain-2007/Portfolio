@@ -9,7 +9,7 @@ const stats = [
     label: 'Hackathons Competed',
     desc: 'HackSRM, Code to Connect, and regional hackathons',
     color: 'from-cyan-400 to-blue-500',
-    glow: 'rgba(var(--cyan-rgb), 0.15)'
+    glow: 'rgba(var(--cyan-rgb), 0.35)'
   },
   {
     value: 6,
@@ -17,7 +17,7 @@ const stats = [
     label: 'Projects Shipped',
     desc: 'AI systems, game simulations, and production web apps',
     color: 'from-fuchsia-500 to-purple-600',
-    glow: 'rgba(var(--fuchsia-rgb), 0.15)'
+    glow: 'rgba(var(--fuchsia-rgb), 0.35)'
   },
   {
     value: 8.5,
@@ -25,7 +25,7 @@ const stats = [
     label: 'Academic Standing (CGPA)',
     desc: 'Solid first semester at SRM AP University',
     color: 'from-emerald-400 to-teal-500',
-    glow: 'rgba(52, 211, 153, 0.15)',
+    glow: 'rgba(52, 211, 153, 0.35)',
     isFloat: true
   },
   {
@@ -34,7 +34,7 @@ const stats = [
     label: 'Game Simulations',
     desc: '3D FPS game, Flappy AP, and physics experiments',
     color: 'from-amber-400 to-orange-500',
-    glow: 'rgba(245, 158, 11, 0.15)'
+    glow: 'rgba(245, 158, 11, 0.35)'
   }
 ];
 
@@ -69,7 +69,7 @@ export default function StatCounters() {
       elements.forEach((numEl) => {
         const targetVal = parseFloat(numEl.getAttribute('data-target'));
         const isFloat = numEl.getAttribute('data-float') === 'true';
-
+ 
         const obj = { val: 0 };
         gsap.to(obj, {
           val: targetVal,
@@ -105,7 +105,7 @@ export default function StatCounters() {
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="group border border-white/5 bg-white/[0.02] backdrop-blur-xl rounded-3xl p-6 md:p-8 flex flex-col justify-between overflow-hidden relative transition-all duration-500 hover:border-white/10 hover:bg-white/[0.04]"
+              className="group border border-white/5 bg-white/[0.02] backdrop-blur-xl rounded-3xl p-6 md:p-8 flex flex-col justify-between overflow-hidden relative transition-all duration-500 hover:border-white/20 hover:bg-white/[0.05]"
               style={{
                 boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.4)`,
               }}

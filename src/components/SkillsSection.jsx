@@ -135,29 +135,29 @@ export default function SkillsSection() {
                 id={`tab-${cat.id}`}
                 onClick={() => setActiveTab(cat.id)}
                 className={`font-syne text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border transition-all duration-300 relative ${
-                  isActive 
-                    ? 'border-cyan-400/50 text-white bg-cyan-500/5 font-bold shadow-[0_0_15px_rgba(var(--cyan-rgb),0.15)]' 
-                    : 'border-white/5 text-white/40 hover:text-white hover:border-white/20 bg-transparent'
-                }`}
-              >
-                {cat.name}
-              </button>
-            );
-          })}
-        </div>
+                isActive 
+                  ? 'border-cyan-400/50 text-white bg-cyan-500/5 font-bold shadow-[0_0_25px_rgba(var(--cyan-rgb),0.4)]' 
+                  : 'border-white/5 text-white/40 hover:text-white hover:border-white/20 bg-transparent'
+              }`}
+            >
+              {cat.name}
+            </button>
+          );
+        })}
+      </div>
 
-        <div 
-          id="skills-panel" 
-          role="tabpanel" 
-          aria-labelledby={`tab-${activeTab}`} 
-          className="skills-cloud flex flex-wrap gap-4 justify-start items-start w-full min-h-[180px]"
-        >
-          <AnimatePresence>
-            {activeSkills.map((skill, idx) => {
-              const borderGlowClass = 
-                skill.color === 'cyan' 
-                  ? 'hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.15)] hover:text-cyan-400' 
-                  : 'hover:border-fuchsia-400/50 hover:shadow-[0_0_15px_rgba(var(--fuchsia-rgb),0.15)] hover:text-fuchsia-400';
+      <div 
+        id="skills-panel" 
+        role="tabpanel" 
+        aria-labelledby={`tab-${activeTab}`} 
+        className="skills-cloud flex flex-wrap gap-4 justify-start items-start w-full min-h-[180px]"
+      >
+        <AnimatePresence>
+          {activeSkills.map((skill, idx) => {
+            const borderGlowClass = 
+              skill.color === 'cyan' 
+                ? 'hover:border-cyan-400/50 hover:shadow-[0_0_25px_rgba(var(--cyan-rgb),0.4)] hover:text-cyan-400' 
+                : 'hover:border-fuchsia-400/50 hover:shadow-[0_0_25px_rgba(var(--fuchsia-rgb),0.4)] hover:text-fuchsia-400';
 
               return (
                 <motion.div

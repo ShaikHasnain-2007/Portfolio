@@ -12,7 +12,7 @@ const projects = [
     icon: Cpu,
     gradient: 'from-cyan-500/20 to-blue-500/20',
     borderColor: 'group-hover:border-cyan-400/50',
-    glowColor: 'rgba(var(--cyan-rgb), 0.15)',
+    glowColor: 'rgba(var(--cyan-rgb), 0.35)',
     bannerText: 'AI Consensus Engine'
   },
   {
@@ -23,7 +23,7 @@ const projects = [
     icon: Gamepad2,
     gradient: 'from-fuchsia-500/20 to-purple-500/20',
     borderColor: 'group-hover:border-fuchsia-400/50',
-    glowColor: 'rgba(var(--fuchsia-rgb), 0.15)',
+    glowColor: 'rgba(var(--fuchsia-rgb), 0.35)',
     bannerText: '3D Physics FPS Game'
   },
   {
@@ -34,7 +34,7 @@ const projects = [
     icon: HeartHandshake,
     gradient: 'from-emerald-500/20 to-teal-500/20',
     borderColor: 'group-hover:border-emerald-400/50',
-    glowColor: 'rgba(16, 185, 129, 0.15)',
+    glowColor: 'rgba(16, 185, 129, 0.35)',
     bannerText: 'Interactive Support Platform'
   },
   {
@@ -45,7 +45,7 @@ const projects = [
     icon: Award,
     gradient: 'from-amber-500/20 to-orange-500/20',
     borderColor: 'group-hover:border-amber-400/50',
-    glowColor: 'rgba(245, 158, 11, 0.15)',
+    glowColor: 'rgba(245, 158, 11, 0.35)',
     bannerText: 'Firebase High-Score Game'
   }
 ];

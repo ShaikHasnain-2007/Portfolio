@@ -190,7 +190,7 @@ html.lenis {
   border-radius: inherit;
   background: radial-gradient(
     600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
-    rgba(var(--cyan-rgb), 0.12),
+    rgba(var(--cyan-rgb), 0.35),
     transparent 50%
   );
   z-index: 1;
@@ -207,7 +207,7 @@ html.lenis {
   padding: 1.5px;
   background: radial-gradient(
     300px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
-    rgba(var(--fuchsia-rgb), 0.4),
+    rgba(var(--fuchsia-rgb), 0.85),
     transparent 60%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
