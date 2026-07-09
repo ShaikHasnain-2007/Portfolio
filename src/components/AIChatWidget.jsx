@@ -9,6 +9,9 @@ const PRESETS = [
   { q: "How can I contact you?", a: "You can email me directly at shaikhasnain2007@gmail.com, or check out my LinkedIn (linkedin.com/in/shaik-hasnain-55a072396) and GitHub (github.com/ShaikHasnain-2007) profiles." },
 ];
 
+const getTimestamp = () => Date.now();
+const getFormattedTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
 export default function AIChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(1);
@@ -18,7 +21,7 @@ export default function AIChatWidget() {
       id: 1,
       sender: 'bot',
       text: "Hi! I'm Shaik's AI Portfolio Assistant. Ask me anything about his projects, skills, or hackathon timeline!",
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      time: getFormattedTime()
     }
   ]);
   const [inputVal, setInputVal] = useState('');
@@ -48,10 +51,10 @@ export default function AIChatWidget() {
     if (!text.trim()) return;
 
     const userMsg = {
-      id: Date.now() - 1,
+      id: getTimestamp() - 1,
       sender: 'user',
       text: text,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      time: getFormattedTime()
     };
     setMessages((prev) => [...prev, userMsg]);
     setInputVal('');
@@ -92,12 +95,12 @@ export default function AIChatWidget() {
         setUnreadCount((prev) => prev + 1);
       }
 
-      const botMsgId = Date.now();
+      const botMsgId = getTimestamp();
       const newBotMsg = {
         id: botMsgId,
         sender: 'bot',
         text: '',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        time: getFormattedTime()
       };
 
       setMessages((prev) => [...prev, newBotMsg]);

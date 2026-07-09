@@ -1,21 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
 export default function NetworkPreloader({ progress, isReady, onDismissed }) {
   const containerRef = useRef(null);
   const helloRef = useRef(null);
 
-  const [isDismissing, setIsDismissing] = useState(false);
-  const startTimestamp = useRef(Date.now());
+  const startTimestamp = useRef(null);
+
+  useEffect(() => {
+    startTimestamp.current = Date.now();
+  }, []);
 
   useEffect(() => {
     const MIN_DURATION = 3900;
     const check = () => {
-      const elapsed = Date.now() - startTimestamp.current;
+      const start = startTimestamp.current || Date.now();
+      const elapsed = Date.now() - start;
       const done = isReady && progress >= 100;
 
       if (done && elapsed >= MIN_DURATION) {
-        setIsDismissing(true);
 
         const ctx = gsap.context(() => {
           gsap.to(helloRef.current, {

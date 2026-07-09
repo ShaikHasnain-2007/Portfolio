@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 /**
  * Reusable infinitely scrolling horizontal marquee text strip.

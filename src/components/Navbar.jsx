@@ -13,10 +13,16 @@ const NAV_ITEMS = [
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState('hero');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(() => {
+    return typeof window !== 'undefined' ? window.scrollY > 50 : false;
+  });
+  const [isVisible, setIsVisible] = useState(() => {
+    return typeof window !== 'undefined' ? window.scrollY > 50 : false;
+  });
   const lastScrollYRef = useRef(0);
-  const [theme, setTheme] = useState('cyberpunk');
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('portfolio-theme') || 'cyberpunk';
+  });
   const mobileMenuRef = useRef(null);
 
   // Lock body scroll and trap focus when mobile menu is open
@@ -75,14 +81,7 @@ export default function Navbar() {
     };
   }, [isMobileMenuOpen]);
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('portfolio-theme') || 'cyberpunk';
-    setTheme(savedTheme);
 
-    const initialScrollY = window.scrollY;
-    setIsScrolled(initialScrollY > 50);
-    setIsVisible(initialScrollY > 50);
-  }, []);
 
   const changeTheme = (newTheme) => {
     setTheme(newTheme);

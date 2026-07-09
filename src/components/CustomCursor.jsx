@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
 export default function CustomCursor() {
@@ -6,7 +6,7 @@ export default function CustomCursor() {
   const ringRef = useRef(null);
   const hiddenRef = useRef(true);
   const [hidden, setHidden] = useState(true);
-  const [hovered, setHovered] = useState(false);
+
 
   useEffect(() => {
     const dot = dotRef.current;
@@ -79,7 +79,6 @@ export default function CustomCursor() {
         target.classList.contains('cursor-pointer');
 
       if (isHoverable) {
-        setHovered(true);
         gsap.to(ring, {
           scale: 1.6,
           borderColor: 'var(--color-fuchsia-hex)', // Fuchsia on hover
@@ -92,7 +91,6 @@ export default function CustomCursor() {
           duration: 0.3
         });
       } else {
-        setHovered(false);
         gsap.to(ring, {
           scale: 1.0,
           borderColor: 'var(--color-cyan-ring-border)', // Cyan border

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 export default function BentoCard({ children, className = '', style = {}, speed = 0, ...props }) {
   const cardRef = useRef(null);

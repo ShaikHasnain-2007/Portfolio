@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Linkedin, Github, Instagram, Mail, ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 
 export default function Footer() {
   const textRef = useRef(null);

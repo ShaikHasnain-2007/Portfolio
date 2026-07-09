@@ -1,5 +1,4 @@
 import { useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Github, Cpu, Gamepad2, HeartHandshake, Award } from 'lucide-react';
 import { gsap } from 'gsap';
 

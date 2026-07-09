@@ -65,7 +65,9 @@ export default function App() {
   const [isReady, setIsReady] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [preloaderFinished, setPreloaderFinished] = useState(false);
-  const [isWindowLoaded, setIsWindowLoaded] = useState(false);
+  const [isWindowLoaded, setIsWindowLoaded] = useState(() => {
+    return typeof document !== 'undefined' ? document.readyState === 'complete' : false;
+  });
   const lenisRef = useRef(null);
 
   useEffect(() => {
@@ -103,9 +105,7 @@ export default function App() {
       setIsWindowLoaded(true);
     };
 
-    if (document.readyState === 'complete') {
-      setIsWindowLoaded(true);
-    } else {
+    if (document.readyState !== 'complete') {
       window.addEventListener('load', handleLoad);
     }
 

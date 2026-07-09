@@ -83,82 +83,22 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
   // Scramble developer name branding
   const scrambledBrandName = useTextScramble("Shaik Hasnain.", startAnimations, 35, 0.5);
 
-  // Progressive batch loader
+  // Keep latest callbacks in refs to avoid useEffect dependency churn
+  const onProgressRef = useRef(onProgress);
+  const onReadyRef = useRef(onReady);
+
   useEffect(() => {
-    // Array to hold images
-    imagesRef.current = new Array(TOTAL_FRAMES);
+    onProgressRef.current = onProgress;
+    onReadyRef.current = onReady;
+  }, [onProgress, onReady]);
 
-    const loadBatch = (start, end) => {
-      return new Promise((resolve) => {
-        let loadedInBatch = 0;
-        const batchSize = end - start + 1;
-        if (batchSize <= 0) {
-          resolve();
-          return;
-        }
-
-        for (let i = start; i <= end; i++) {
-          const img = new Image();
-          img.src = `/frames/frame_${String(i).padStart(3, '0')}_delay-0.042s.webp`;
-          img.onload = () => {
-            imagesRef.current[i] = img;
-            loadedInBatch++;
-
-            // Calculate progress for user feedback
-            if (start === 0 && onProgress) {
-              onProgress(Math.round((loadedInBatch / FIRST_BATCH_SIZE) * 100));
-            }
-
-            if (loadedInBatch === batchSize) {
-              resolve();
-            }
-          };
-          img.onerror = () => {
-            loadedInBatch++;
-            if (start === 0 && onProgress) {
-              onProgress(Math.round((loadedInBatch / FIRST_BATCH_SIZE) * 100));
-            }
-            if (loadedInBatch === batchSize) {
-              resolve();
-            }
-          };
-        }
-      });
-    };
-
-    // Helper to resize canvas to viewport dimensions
-    const resizeCanvas = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    // Load first batch immediately (0 to 29)
-    loadBatch(0, FIRST_BATCH_SIZE - 1).then(() => {
-      setIsReady(true);
-      if (onReady) onReady();
-
-      resizeCanvas(); // Set initial canvas dimensions
-
-      // Draw the first frame
-      const firstImg = imagesRef.current[0];
-      if (firstImg) {
-        requestAnimationFrame(() => drawImage(firstImg));
-      }
-
-      // Load remaining frames in batches of 30 in the background
-      const loadBackgroundBatches = async () => {
-        const batchSize = 30;
-        for (let start = FIRST_BATCH_SIZE; start < TOTAL_FRAMES; start += batchSize) {
-          const end = Math.min(start + batchSize - 1, TOTAL_FRAMES - 1);
-          await loadBatch(start, end);
-        }
-      };
-
-      loadBackgroundBatches();
-    });
-  }, []);
+  // Helper to resize canvas to viewport dimensions
+  const resizeCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
 
   // Canvas drawing function with cover scaling
   const drawImage = (img) => {
@@ -192,6 +132,75 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
     ctx.clearRect(0, 0, w, h);
     ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
   };
+
+  // Progressive batch loader
+  useEffect(() => {
+    // Array to hold images
+    imagesRef.current = new Array(TOTAL_FRAMES);
+
+    const loadBatch = (start, end) => {
+      return new Promise((resolve) => {
+        let loadedInBatch = 0;
+        const batchSize = end - start + 1;
+        if (batchSize <= 0) {
+          resolve();
+          return;
+        }
+
+        for (let i = start; i <= end; i++) {
+          const img = new Image();
+          img.src = `/frames/frame_${String(i).padStart(3, '0')}_delay-0.042s.webp`;
+          img.onload = () => {
+            imagesRef.current[i] = img;
+            loadedInBatch++;
+
+            // Calculate progress for user feedback
+            if (start === 0 && onProgressRef.current) {
+              onProgressRef.current(Math.round((loadedInBatch / FIRST_BATCH_SIZE) * 100));
+            }
+
+            if (loadedInBatch === batchSize) {
+              resolve();
+            }
+          };
+          img.onerror = () => {
+            loadedInBatch++;
+            if (start === 0 && onProgressRef.current) {
+              onProgressRef.current(Math.round((loadedInBatch / FIRST_BATCH_SIZE) * 100));
+            }
+            if (loadedInBatch === batchSize) {
+              resolve();
+            }
+          };
+        }
+      });
+    };
+
+    // Load first batch immediately (0 to 29)
+    loadBatch(0, FIRST_BATCH_SIZE - 1).then(() => {
+      setIsReady(true);
+      if (onReadyRef.current) onReadyRef.current();
+
+      resizeCanvas(); // Set initial canvas dimensions
+
+      // Draw the first frame
+      const firstImg = imagesRef.current[0];
+      if (firstImg) {
+        requestAnimationFrame(() => drawImage(firstImg));
+      }
+
+      // Load remaining frames in batches of 30 in the background
+      const loadBackgroundBatches = async () => {
+        const batchSize = 30;
+        for (let start = FIRST_BATCH_SIZE; start < TOTAL_FRAMES; start += batchSize) {
+          const end = Math.min(start + batchSize - 1, TOTAL_FRAMES - 1);
+          await loadBatch(start, end);
+        }
+      };
+
+      loadBackgroundBatches();
+    });
+  }, []);
 
   // Resize listener
   useEffect(() => {

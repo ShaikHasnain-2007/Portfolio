@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
-import SplitText from './SplitText';
 
 const skillCategories = [
   {
@@ -153,7 +152,7 @@ export default function SkillsSection() {
         className="skills-cloud flex flex-wrap gap-4 justify-start items-start w-full min-h-[180px]"
       >
         <AnimatePresence>
-          {activeSkills.map((skill, idx) => {
+          {activeSkills.map((skill) => {
             const borderGlowClass = 
               skill.color === 'cyan' 
                 ? 'hover:border-cyan-400/50 hover:shadow-[0_0_25px_rgba(var(--cyan-rgb),0.4)] hover:text-cyan-400' 
