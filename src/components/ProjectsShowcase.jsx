@@ -196,8 +196,8 @@ export default function ProjectsShowcase() {
       {/* Viewport frame - pinned by GSAP */}
       <div className="h-full w-full overflow-hidden flex flex-col justify-center bg-transparent">
         {/* Background neon orb glows */}
-        <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute top-1/2 left-2/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-fuchsia-500/5 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/2 left-2/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-fuchsia-500/20 rounded-full blur-[140px] pointer-events-none" />
 
         {/* Outer content container flow */}
         <div className="w-full flex flex-col justify-between h-full py-12 md:py-16 relative z-10">

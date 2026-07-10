@@ -98,7 +98,7 @@ export default function StatCounters() {
   return (
     <section ref={containerRef} className="relative w-full bg-transparent py-16 px-4 md:px-12 flex flex-col items-center overflow-hidden">
       {/* Background orb glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-cyan-500/20 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="w-full max-w-7xl relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

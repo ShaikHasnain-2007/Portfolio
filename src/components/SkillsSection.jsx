@@ -104,8 +104,8 @@ export default function SkillsSection() {
 
   return (
     <section id="skills" ref={containerRef} className="relative w-full bg-transparent py-20 px-4 md:px-12 flex flex-col items-center overflow-hidden">
-      <div className="absolute -top-1/4 right-1/4 w-[400px] h-[400px] bg-fuchsia-500/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute -bottom-1/4 left-1/4 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute -top-1/4 right-1/4 w-[400px] h-[400px] bg-fuchsia-500/18 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-1/4 left-1/4 w-[400px] h-[400px] bg-cyan-500/18 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="absolute right-12 top-10 font-syne font-black text-[120px] leading-none text-white/[0.02] select-none pointer-events-none">
         02

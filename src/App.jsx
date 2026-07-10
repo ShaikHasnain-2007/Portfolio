@@ -137,8 +137,8 @@ export default function App() {
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-[0]">
           <div className="absolute inset-0 bg-cyber-dots opacity-80" />
           
-          <div className="absolute top-[15%] left-[-15%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle,rgba(var(--cyan-rgb),0.22)_0%,transparent_70%)] blur-[120px] animate-orb-float-1" />
-          <div className="absolute bottom-[10%] right-[-15%] w-[55vw] h-[55vw] rounded-full bg-[radial-gradient(circle,rgba(var(--fuchsia-rgb),0.22)_0%,transparent_70%)] blur-[130px] animate-orb-float-2" />
+          <div className="absolute top-[15%] left-[-15%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle,rgba(var(--cyan-rgb),0.48)_0%,transparent_75%)] blur-[120px] animate-orb-float-1" />
+          <div className="absolute bottom-[10%] right-[-15%] w-[55vw] h-[55vw] rounded-full bg-[radial-gradient(circle,rgba(var(--fuchsia-rgb),0.48)_0%,transparent_75%)] blur-[130px] animate-orb-float-2" />
         </div>
 
         {!preloaderFinished && (
