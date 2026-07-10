@@ -191,10 +191,10 @@ export default function ProjectsShowcase() {
     <section
       id="projects"
       ref={containerRef}
-      className="relative w-full h-screen bg-transparent overflow-hidden"
+      className="relative w-full h-screen bg-transparent"
     >
       {/* Viewport frame - pinned by GSAP */}
-      <div className="h-full w-full overflow-hidden flex flex-col justify-center bg-transparent">
+      <div className="h-full w-full flex flex-col justify-center bg-transparent">
         {/* Background neon orb glows */}
         <div className="absolute top-1/2 left-[-10%] -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/35 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute top-1/2 right-[-10%] -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-500/35 rounded-full blur-[140px] pointer-events-none" />

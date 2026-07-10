@@ -193,7 +193,7 @@ export default function BentoGrid() {
   }, [contributionGrid]);
 
   return (
-    <section id="about" className="relative w-full bg-transparent py-20 px-4 md:px-12 flex justify-center overflow-hidden">
+    <section id="about" className="relative w-full bg-transparent py-20 px-4 md:px-12 flex justify-center">
 
       {/* Background Accent Lights */}
       <div className="absolute top-1/4 left-[-10%] w-[600px] h-[600px] bg-cyan-500/35 rounded-full blur-[130px] pointer-events-none" />

@@ -77,7 +77,7 @@ export default function CertificationsSection() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full bg-transparent py-20 px-4 md:px-12 flex flex-col items-center overflow-hidden">
+    <section ref={containerRef} className="relative w-full bg-transparent py-20 px-4 md:px-12 flex flex-col items-center">
       <div className="absolute top-1/2 left-[-10%] -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/35 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute top-1/2 right-[-10%] -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-500/35 rounded-full blur-[140px] pointer-events-none" />
 
