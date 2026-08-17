@@ -12,16 +12,43 @@ import ScrollProgress from './components/ScrollProgress';
 import AIChatWidget from './components/AIChatWidget';
 import MarqueeStrip from './components/MarqueeStrip';
 
-const BentoGrid = lazy(() => import('./components/BentoGrid'));
-const SkillsSection = lazy(() => import('./components/SkillsSection'));
-const StatCounters = lazy(() => import('./components/StatCounters'));
-const ProjectsShowcase = lazy(() => import('./components/ProjectsShowcase'));
-const TestimonialsSection = lazy(() => import('./components/TestimonialsSection'));
-const InteractiveTimeline = lazy(() => import('./components/InteractiveTimeline'));
-const CertificationsSection = lazy(() => import('./components/CertificationsSection'));
-const Footer = lazy(() => import('./components/Footer'));
+// Resilient lazy loader with auto-retry and cache mismatch recovery
+function lazyWithRetry(componentImport) {
+  return lazy(() => {
+    return new Promise((resolve, reject) => {
+      const hasRefreshed = typeof window !== 'undefined' && window.sessionStorage.getItem('chunk_retry_refreshed');
 
-class ErrorBoundary extends React.Component {
+      componentImport()
+        .then((module) => {
+          if (typeof window !== 'undefined') {
+            window.sessionStorage.removeItem('chunk_retry_refreshed');
+          }
+          resolve(module);
+        })
+        .catch((error) => {
+          // If chunk fails to fetch (e.g. after a new deployment or network glitch)
+          if (!hasRefreshed && typeof window !== 'undefined') {
+            window.sessionStorage.setItem('chunk_retry_refreshed', 'true');
+            window.location.reload();
+          } else {
+            console.error('Lazy chunk load failed:', error);
+            reject(error);
+          }
+        });
+    });
+  });
+}
+
+const BentoGrid = lazyWithRetry(() => import('./components/BentoGrid'));
+const SkillsSection = lazyWithRetry(() => import('./components/SkillsSection'));
+const StatCounters = lazyWithRetry(() => import('./components/StatCounters'));
+const ProjectsShowcase = lazyWithRetry(() => import('./components/ProjectsShowcase'));
+const TestimonialsSection = lazyWithRetry(() => import('./components/TestimonialsSection'));
+const InteractiveTimeline = lazyWithRetry(() => import('./components/InteractiveTimeline'));
+const CertificationsSection = lazyWithRetry(() => import('./components/CertificationsSection'));
+const Footer = lazyWithRetry(() => import('./components/Footer'));
+
+class SectionErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false };
@@ -30,20 +57,55 @@ class ErrorBoundary extends React.Component {
     return { hasError: true };
   }
   componentDidCatch(error, info) {
-    console.error('Portfolio Error Boundary caught:', error, info);
+    console.warn(`Section Error caught [${this.props.name || 'Component'}]:`, error, info);
   }
   render() {
     if (this.state.hasError) {
       return (
-        <div className="w-full h-screen bg-black flex items-center justify-center text-center px-6">
-          <div>
-            <h2 className="font-syne text-2xl font-bold text-white mb-3">Something went wrong</h2>
-            <p className="font-satoshi text-sm text-white/50 mb-6">An unexpected error occurred while rendering this section.</p>
+        <div className="w-full py-12 flex flex-col items-center justify-center text-center px-4">
+          <p className="font-satoshi text-xs text-white/40 mb-3">Content temporarily unavailable</p>
+          <button
+            onClick={() => this.setState({ hasError: false })}
+            className="px-4 py-1.5 rounded-lg bg-white/10 text-white/80 font-syne text-[10px] uppercase font-bold tracking-widest hover:bg-white/20 transition-colors"
+          >
+            Retry Section
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+class RootErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error, info) {
+    console.error('Root Error Boundary caught:', error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="w-full min-h-screen bg-black flex items-center justify-center text-center px-6">
+          <div className="max-w-md">
+            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 font-bold">
+              !
+            </div>
+            <h2 className="font-syne text-xl font-bold text-white mb-2">Portfolio Recovery Mode</h2>
+            <p className="font-satoshi text-xs text-white/50 mb-6 leading-relaxed">A temporary resource glitch occurred. Click below to refresh your view with the latest version.</p>
             <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-white font-syne text-xs uppercase font-bold tracking-widest hover:scale-105 transition-transform"
+              onClick={() => {
+                window.sessionStorage.clear();
+                window.location.reload();
+              }}
+              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-white font-syne text-xs uppercase font-bold tracking-widest hover:scale-105 transition-transform shadow-lg cursor-pointer"
             >
-              Reload Page
+              Refresh Application
             </button>
           </div>
         </div>
@@ -132,7 +194,7 @@ export default function App() {
   const isPreloaderReady = isReady && isWindowLoaded;
 
   return (
-    <ErrorBoundary>
+    <RootErrorBoundary>
       <div className="w-full bg-black text-white relative min-h-screen">
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-[0]">
           <div className="absolute inset-0 bg-cyber-dots opacity-80" />
@@ -179,39 +241,55 @@ export default function App() {
             color="cyan"
           />
           
-          <Suspense fallback={<SectionLoader />}>
-            <BentoGrid />
-          </Suspense>
+          <SectionErrorBoundary name="BentoGrid">
+            <Suspense fallback={<SectionLoader />}>
+              <BentoGrid />
+            </Suspense>
+          </SectionErrorBoundary>
 
-          <Suspense fallback={<SectionLoader />}>
-            <SkillsSection />
-          </Suspense>
+          <SectionErrorBoundary name="SkillsSection">
+            <Suspense fallback={<SectionLoader />}>
+              <SkillsSection />
+            </Suspense>
+          </SectionErrorBoundary>
           
-          <Suspense fallback={<SectionLoader />}>
-            <StatCounters />
-          </Suspense>
+          <SectionErrorBoundary name="StatCounters">
+            <Suspense fallback={<SectionLoader />}>
+              <StatCounters />
+            </Suspense>
+          </SectionErrorBoundary>
 
-          <Suspense fallback={<SectionLoader />}>
-            <ProjectsShowcase />
-          </Suspense>
+          <SectionErrorBoundary name="ProjectsShowcase">
+            <Suspense fallback={<SectionLoader />}>
+              <ProjectsShowcase />
+            </Suspense>
+          </SectionErrorBoundary>
 
-          <Suspense fallback={<SectionLoader />}>
-            <TestimonialsSection />
-          </Suspense>
+          <SectionErrorBoundary name="TestimonialsSection">
+            <Suspense fallback={<SectionLoader />}>
+              <TestimonialsSection />
+            </Suspense>
+          </SectionErrorBoundary>
 
-          <Suspense fallback={<SectionLoader />}>
-            <InteractiveTimeline />
-          </Suspense>
+          <SectionErrorBoundary name="InteractiveTimeline">
+            <Suspense fallback={<SectionLoader />}>
+              <InteractiveTimeline />
+            </Suspense>
+          </SectionErrorBoundary>
 
-          <Suspense fallback={<SectionLoader />}>
-            <CertificationsSection />
-          </Suspense>
+          <SectionErrorBoundary name="CertificationsSection">
+            <Suspense fallback={<SectionLoader />}>
+              <CertificationsSection />
+            </Suspense>
+          </SectionErrorBoundary>
 
-          <Suspense fallback={<SectionLoader />}>
-            <Footer />
-          </Suspense>
+          <SectionErrorBoundary name="Footer">
+            <Suspense fallback={<SectionLoader />}>
+              <Footer />
+            </Suspense>
+          </SectionErrorBoundary>
         </main>
       </div>
-    </ErrorBoundary>
+    </RootErrorBoundary>
   );
 }

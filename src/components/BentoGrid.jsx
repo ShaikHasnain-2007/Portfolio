@@ -21,8 +21,9 @@ export default function BentoGrid() {
   // GSAP scroll trigger edge-assembly scroll-scrub animations
   useEffect(() => {
     const ctx = gsap.context(() => {
+      if (!gridRef.current) return;
       const wrappers = gridRef.current.querySelectorAll('.bento-wrapper');
-      if (wrappers.length < 6) return;
+      if (!wrappers || wrappers.length < 6) return;
 
       const isMobile = window.innerWidth < 768;
       const shiftX = isMobile ? window.innerWidth : 800;

@@ -46,6 +46,8 @@ export default function SkillsSection() {
       const tabs = el.querySelector('.category-tabs');
       const cloud = el.querySelector('.skills-cloud');
 
+      if (!header || !tabs || !cloud) return;
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
