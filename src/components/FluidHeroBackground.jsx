@@ -679,13 +679,53 @@ export default function FluidHeroBackground({
       gl.uniform1f(renderU.uTime, elapsed);
 
       drawQuad();
-      raf = requestAnimationFrame(draw);
+      if (isVisible) {
+        raf = requestAnimationFrame(draw);
+      }
     };
+
+    let isVisible = true;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (!isVisible) {
+            isVisible = true;
+            lastTime = performance.now();
+            if (!raf) {
+              raf = requestAnimationFrame(draw);
+            }
+          }
+        } else {
+          isVisible = false;
+          if (raf) {
+            cancelAnimationFrame(raf);
+            raf = null;
+          }
+        }
+      });
+    }, { threshold: 0 });
+
+    observer.observe(canvas);
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (raf) {
+          cancelAnimationFrame(raf);
+          raf = null;
+        }
+      } else if (isVisible && !raf) {
+        lastTime = performance.now();
+        raf = requestAnimationFrame(draw);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     raf = requestAnimationFrame(draw);
 
     return () => {
-      cancelAnimationFrame(raf);
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (raf) cancelAnimationFrame(raf);
       canvas.removeEventListener('webglcontextlost', handleContextLost);
       canvas.removeEventListener('webglcontextrestored', handleContextRestored);
 

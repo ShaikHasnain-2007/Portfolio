@@ -34,7 +34,7 @@ export default function BentoCard({ children, className = '', style = {}, speed 
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`bento-card spotlight-card border border-white/10 rounded-3xl bg-white/5 backdrop-blur-md shadow-lg overflow-hidden relative group transition-all duration-300 ${className}`}
+      className={`bento-card spotlight-card specular-border border border-white/10 rounded-3xl bg-white/5 backdrop-blur-md shadow-lg overflow-hidden relative group transition-all duration-300 ${className}`}
       style={style}
       data-speed={speed}
       {...props}

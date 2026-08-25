@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "BubbledotICG-FinePos";
+  src: url("https://db.onlinewebfonts.com/t/8cb707a9b8a73f8a7403336b861c3074.eot");
+  src: url("https://db.onlinewebfonts.com/t/8cb707a9b8a73f8a7403336b861c3074.eot?#iefix") format("embedded-opentype"),
+       url("https://db.onlinewebfonts.com/t/8cb707a9b8a73f8a7403336b861c3074.woff2") format("woff2"),
+       url("https://db.onlinewebfonts.com/t/8cb707a9b8a73f8a7403336b861c3074.woff") format("woff"),
+       url("https://db.onlinewebfonts.com/t/8cb707a9b8a73f8a7403336b861c3074.ttf") format("truetype");
+  font-display: swap;
+}
+
+@layer utilities {
+  .font-pixel {
+    font-family: "BubbledotICG-FinePos", "Doto", "Pixelify Sans", "Silkscreen", monospace;
+  }
+  .font-display {
+    font-family: "BubbledotICG-FinePos", "Doto", "Pixelify Sans", monospace;
+  }
+  .font-dot {
+    font-family: "Doto", "BubbledotICG-FinePos", monospace;
+  }
+}
+
 :root {
   --c-glass: #38bdf8;
   --c-light: #ffffff;
@@ -118,7 +140,55 @@ body, button, a, span, h1, h2, h3, h4, div, section, svg, circle, path {
 }
 
 .animate-marquee {
-  animation: marquee 20s linear infinite;
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.85) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.25) rotate(180deg);
+    filter: drop-shadow(0 0 8px rgba(var(--cyan-rgb), 0.9));
+  }
+}
+
+.animate-twinkle {
+  animation: twinkle 3.5s ease-in-out infinite;
+}
+
+.animate-twinkle-delay-1 {
+  animation: twinkle 4.2s ease-in-out infinite 1.2s;
+}
+
+.animate-twinkle-delay-2 {
+  animation: twinkle 5s ease-in-out infinite 2.4s;
+}
+
+.specular-border {
+  position: relative;
+}
+
+.specular-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.03) 50%, rgba(var(--cyan-rgb), 0.35) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 body {

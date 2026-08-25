@@ -83,12 +83,14 @@ export default function CertificationsSection() {
 
       <div className="w-full max-w-7xl relative z-10">
         <div className="text-left mb-12">
-          <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase font-satoshi">ACHIEVEMENTS</span>
-          <h2 className="font-syne font-extrabold text-4xl md:text-6xl text-white mt-2">
-            Certifications & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Awards</span>
+          <span className="font-mono text-cyan-400 text-xs font-bold tracking-widest uppercase mb-2 inline-flex items-center gap-2">
+            // 05. ACHIEVEMENTS <span className="animate-twinkle text-cyan-300">✦</span>
+          </span>
+          <h2 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white mt-2 tracking-wide leading-tight">
+            Certifications & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-fuchsia-500">Awards</span>
           </h2>
-          <p className="font-satoshi text-sm md:text-base text-white/50 max-w-lg mt-4 leading-relaxed">
-            Hackathon victories, academic milestones, and research initiatives that define the journey.
+          <p className="font-serif italic text-base md:text-lg text-white/75 max-w-lg mt-3 leading-relaxed tracking-wide">
+            Hackathon victories, academic milestones, and research initiatives that define my engineering journey.
           </p>
         </div>
 

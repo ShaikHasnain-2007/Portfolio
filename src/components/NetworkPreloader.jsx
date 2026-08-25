@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
 
 export default function NetworkPreloader({ progress, isReady, onDismissed }) {
@@ -11,34 +11,38 @@ export default function NetworkPreloader({ progress, isReady, onDismissed }) {
     startTimestamp.current = Date.now();
   }, []);
 
+  const isDismissing = useRef(false);
+
+  const triggerDismiss = useCallback(() => {
+    if (isDismissing.current) return;
+    isDismissing.current = true;
+
+    gsap.to(helloRef.current, {
+      scale: 1.15,
+      opacity: 0,
+      duration: 0.6,
+      ease: 'power3.inOut',
+    });
+
+    gsap.to(containerRef.current, {
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power4.inOut',
+      onComplete: () => {
+        if (onDismissed) onDismissed();
+      },
+    });
+  }, [onDismissed]);
+
   useEffect(() => {
-    const MIN_DURATION = 3900;
+    const MIN_DURATION = 2400;
     const check = () => {
       const start = startTimestamp.current || Date.now();
       const elapsed = Date.now() - start;
       const done = isReady && progress >= 100;
 
       if (done && elapsed >= MIN_DURATION) {
-
-        const ctx = gsap.context(() => {
-          gsap.to(helloRef.current, {
-            scale: 1.15,
-            opacity: 0,
-            duration: 0.8,
-            ease: 'power3.inOut',
-          });
-
-          gsap.to(containerRef.current, {
-            opacity: 0,
-            duration: 1.0,
-            ease: 'power4.inOut',
-            onComplete: () => {
-              if (onDismissed) onDismissed();
-            },
-          });
-        }, containerRef);
-
-        return () => ctx.revert();
+        triggerDismiss();
       } else {
         const remaining = Math.max(50, MIN_DURATION - elapsed);
         const timer = setTimeout(check, remaining);
@@ -50,12 +54,15 @@ export default function NetworkPreloader({ progress, isReady, onDismissed }) {
     return () => {
       if (typeof cleanup === 'function') cleanup();
     };
-  }, [isReady, progress, onDismissed]);
+  }, [isReady, progress, triggerDismiss]);
 
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[9999] bg-[#000000] flex items-center justify-center overflow-hidden"
+      onClick={() => {
+        if (isReady) triggerDismiss();
+      }}
+      className="fixed inset-0 z-[9999] bg-[#000000] flex items-center justify-center overflow-hidden cursor-pointer"
       style={{ touchAction: 'none' }}
     >
       <div 

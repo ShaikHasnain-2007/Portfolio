@@ -1,11 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Linkedin, Mail, ChevronDown } from 'lucide-react';
+import { Linkedin, Mail, ChevronDown, Brain, Gamepad2, Code2 } from 'lucide-react';
 import SplitText from './SplitText';
 import FluidHeroBackground from './FluidHeroBackground';
 import baseBgImg from './retouch_2026070720521920.jpg_202607082155.jpeg';
 import revealBgImg from './Make_man\'s_chest_wider_2K_202607082155.jpeg';
+
+const ROLES = [
+  { title: "AI & ML Engineer", icon: Brain },
+  { title: "Unity 3D Game Dev", icon: Gamepad2 },
+  { title: "Intelligent Systems", icon: Code2 },
+];
 
 // Custom hook to scramble text with random characters before settling on the target text
 function useTextScramble(targetText, active = true, speed = 35, delay = 0) {
@@ -75,6 +81,17 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
   const navRef = useRef(null);
   const contactRef = useRef(null);
   const vignetteRef = useRef(null);
+
+  // Cycling role index
+  const [activeRole, setActiveRole] = useState(0);
+
+  useEffect(() => {
+    if (!startAnimations) return;
+    const interval = setInterval(() => {
+      setActiveRole((prev) => (prev + 1) % ROLES.length);
+    }, 3200);
+    return () => clearInterval(interval);
+  }, [startAnimations]);
 
   // Scramble developer name branding
   const scrambledBrandName = useTextScramble("Shaik Hasnain.", startAnimations, 35, 0.5);
@@ -182,8 +199,8 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
 
           {/* Top Row: Links and Branding */}
           <div className="flex justify-between items-start w-full">
-            <div ref={navRef} className="font-syne text-xl font-bold tracking-tight uppercase">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">
+            <div ref={navRef} className="font-pixel text-xl sm:text-2xl font-bold tracking-wider uppercase">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-fuchsia-500">
                 {scrambledBrandName || "Shaik Hasnain."}
               </span>
             </div>
@@ -212,9 +229,62 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
           {/* Bottom Row: Title and scroll prompt */}
           <div className="flex flex-col md:flex-row justify-between items-end w-full gap-8 md:gap-4 pb-8 md:pb-0">
 
-            {/* Bottom-Left: Title */}
+            {/* Bottom-Left: Title & Dynamic Cycling Role Capsule */}
             <div ref={titleRef} className="w-full md:max-w-xl text-left">
-              <h1 className="font-syne font-extrabold text-5xl sm:text-6xl md:text-8xl uppercase tracking-tighter leading-none mb-2 select-text cursor-default inline-block">
+              {/* Cycling Multi-Icon Role Capsule */}
+              <div className="flex items-center gap-3 mb-4 pointer-events-auto select-none">
+                {/* Stacked Icon Rings */}
+                <div
+                  className="relative flex items-center h-10 w-[68px]"
+                  style={{ zIndex: 10 }}
+                >
+                  {ROLES.map((role, idx) => {
+                    const pos = (idx - activeRole + 2 + ROLES.length) % ROLES.length;
+                    const IconComp = role.icon;
+                    const isActive = idx === activeRole;
+
+                    return (
+                      <div
+                        key={role.title}
+                        className="absolute top-0 w-10 h-10 rounded-full p-[2px] bg-black/85 border border-white/20 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] shadow-[0_4px_16px_rgba(0,0,0,0.7)] flex items-center justify-center"
+                        style={{
+                          transform: `translateX(${pos * 18}px)`,
+                          zIndex: pos === 2 ? 30 : pos === 1 ? 20 : 10,
+                          opacity: pos === 2 ? 1 : pos === 1 ? 0.75 : 0.45,
+                        }}
+                      >
+                        <div className={`w-full h-full rounded-full flex items-center justify-center transition-colors duration-500 ${
+                          isActive 
+                            ? 'bg-gradient-to-tr from-cyan-400/30 to-fuchsia-500/30 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(56,189,248,0.4)]' 
+                            : 'bg-white/5 text-white/40'
+                        }`}>
+                          <IconComp size={16} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Sliding Role Pill */}
+                <div className="h-10 px-5 rounded-full bg-black/70 border border-white/20 backdrop-blur-md flex items-center shadow-[0_4px_24px_rgba(0,0,0,0.6)] overflow-hidden relative w-[240px] sm:w-[260px]">
+                  <div className="relative w-full h-full flex items-center">
+                    {ROLES.map((role, idx) => (
+                      <span
+                        key={role.title}
+                        className={`absolute left-0 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                          activeRole === idx 
+                            ? 'opacity-100 translate-y-0 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-fuchsia-500' 
+                            : 'opacity-0 translate-y-3 pointer-events-none text-white/30'
+                        }`}
+                      >
+                        {role.title}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <h1 className="font-pixel text-4xl sm:text-6xl md:text-8xl uppercase tracking-tight leading-tight mb-2 select-text cursor-default inline-block">
                 <SplitText text="AI/ML" type="chars" stagger={0.03} delay={1.4} /> <br />
                 <SplitText
                   text="Engineer"
@@ -227,9 +297,9 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
             </div>
 
             {/* Bottom-Right: Description and Scroll Prompt */}
-            <div ref={descRef} className="flex flex-col items-start md:items-end text-left md:text-right gap-4 font-satoshi max-w-sm">
-              <p className="text-white/80 text-sm md:text-base leading-relaxed">
-                Crafting high-performance intelligent interfaces and immersive graphics simulations. Scroll to explore the details.
+            <div ref={descRef} className="flex flex-col items-start md:items-end text-left md:text-right gap-4 max-w-sm">
+              <p className="font-serif italic font-normal text-white/90 text-base md:text-lg leading-relaxed tracking-wide">
+                crafting high-performance intelligent interfaces and immersive graphics simulations where complex logic meets seamless visual art.
               </p>
 
               {/* Scroll Indicator */}

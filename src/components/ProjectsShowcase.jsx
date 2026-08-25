@@ -205,13 +205,15 @@ export default function ProjectsShowcase() {
           {/* Header block (fixed top) */}
           <div className="w-full px-6 md:px-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
             <div className="text-left">
-              <span className="text-fuchsia-500 text-xs font-bold tracking-widest uppercase font-satoshi">SHOWCASE</span>
-              <h2 className="font-syne font-extrabold text-4xl md:text-6xl text-white mt-1">
-                Selected <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Creations</span>
+              <span className="font-mono text-fuchsia-400 text-xs font-bold tracking-widest uppercase mb-1 inline-flex items-center gap-2">
+                // 03. SHOWCASE <span className="animate-twinkle-delay-1 text-fuchsia-300">✦</span>
+              </span>
+              <h2 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white mt-1 tracking-wide leading-tight">
+                Selected <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-fuchsia-500">Creations</span>
               </h2>
             </div>
-            <p className="font-satoshi text-xs md:text-sm text-white/50 max-w-md leading-relaxed text-left">
-              A selective snapshot of products built during hackathons, academic terms, and nights dedicated to building smart interfaces and virtual simulations.
+            <p className="font-serif italic text-base md:text-lg text-white/75 max-w-md leading-relaxed text-left tracking-wide">
+              A selective snapshot of products built during hackathons, academic research, and nights dedicated to building smart interfaces and virtual simulations.
             </p>
           </div>
 

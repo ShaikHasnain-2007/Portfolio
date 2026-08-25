@@ -123,18 +123,13 @@ export default function StatCounters() {
                 {/* Large animated number */}
                 <div className="flex items-baseline">
                   <span
-                    className="stat-val font-syne font-black text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-white to-white tracking-tighter"
-                    style={{
-                      backgroundImage: 'linear-gradient(to right, #ffffff, #888888)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                    }}
+                    className="stat-val font-pixel text-4xl sm:text-5xl md:text-6xl text-white tracking-wider"
                     data-target={stat.value}
                     data-float={stat.isFloat ? 'true' : 'false'}
                   >
                     0
                   </span>
-                  <span className="font-syne font-black text-4xl md:text-5xl text-white/90">
+                  <span className="font-pixel text-3xl sm:text-4xl md:text-5xl text-cyan-400 ml-1">
                     {stat.suffix}
                   </span>
                 </div>

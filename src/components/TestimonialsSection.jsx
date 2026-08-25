@@ -92,9 +92,11 @@ export default function TestimonialsSection() {
       <div className="w-full max-w-4xl relative z-10">
         {/* Header */}
         <div className="testimonial-header text-left mb-12">
-          <span className="text-fuchsia-400 text-xs font-bold tracking-widest uppercase font-satoshi">FEEDBACK</span>
-          <h2 className="font-syne font-extrabold text-4xl md:text-6xl text-white mt-2">
-            What People <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Say</span>
+          <span className="font-mono text-fuchsia-400 text-xs font-bold tracking-widest uppercase mb-2 inline-flex items-center gap-2">
+            // 06. FEEDBACK <span className="animate-twinkle-delay-1 text-fuchsia-300">✦</span>
+          </span>
+          <h2 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white mt-2 tracking-wide leading-tight">
+            What People <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-fuchsia-500">Say</span>
           </h2>
         </div>
 
@@ -116,12 +118,12 @@ export default function TestimonialsSection() {
 
               <Quote size={32} className={`mb-4 ${current.color === 'cyan' ? 'text-cyan-400/30' : 'text-fuchsia-400/30'}`} />
 
-              <p className="font-satoshi text-sm md:text-base text-white/80 leading-relaxed mb-6 relative z-10">
+              <p className="font-serif italic text-base md:text-lg text-white/90 leading-relaxed mb-6 relative z-10 font-light">
                 "{current.quote}"
               </p>
 
               <div className="flex items-center gap-3 relative z-10">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold font-syne ${current.color === 'cyan' ? 'bg-cyan-400/10 text-cyan-400 border border-cyan-400/20' : 'bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20'}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold font-mono ${current.color === 'cyan' ? 'bg-cyan-400/10 text-cyan-400 border border-cyan-400/20' : 'bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20'}`}>
                   {current.name.charAt(0)}
                 </div>
                 <div>

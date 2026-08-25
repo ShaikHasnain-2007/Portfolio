@@ -119,11 +119,13 @@ export default function InteractiveTimeline() {
         
         {/* Section Header */}
         <div className="text-left mb-20">
-          <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase font-satoshi">CHRONOLOGY</span>
-          <h2 className="font-syne font-extrabold text-4xl md:text-6xl text-white mt-2">
-            Academic & Project <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Journey</span>
+          <span className="font-mono text-cyan-400 text-xs font-bold tracking-widest uppercase mb-2 inline-flex items-center gap-2">
+            // 04. CHRONOLOGY <span className="animate-twinkle-delay-2 text-cyan-300">✦</span>
+          </span>
+          <h2 className="font-pixel text-3xl sm:text-5xl md:text-6xl text-white mt-2 tracking-wide leading-tight">
+            Academic & Project <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-fuchsia-500">Journey</span>
           </h2>
-          <p className="font-satoshi text-sm md:text-base text-white/50 max-w-md mt-4 leading-relaxed">
+          <p className="font-serif italic text-base md:text-lg text-white/75 max-w-md mt-4 leading-relaxed tracking-wide">
             A linear progression of milestones, hackathons, and technical leaps as a Computer Science student at SRM University AP.
           </p>
         </div>

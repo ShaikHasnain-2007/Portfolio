@@ -49,13 +49,17 @@ export default function CustomCursor() {
 
       gsap.set(ring, {
         x: ringPos.x,
-        y: ringPos.y
+        y: ringPos.y,
+        xPercent: -50,
+        yPercent: -50
       });
 
       // Move immediate dot instantly without creating new tweens
       gsap.set(dot, {
         x: mouse.x,
-        y: mouse.y
+        y: mouse.y,
+        xPercent: -50,
+        yPercent: -50
       });
     };
 

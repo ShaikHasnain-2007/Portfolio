@@ -161,7 +161,7 @@ export default function BentoGrid() {
     { name: 'Spline', src: '/spline_logo.webp', isInverted: false }
   ];
 
-  const duplicatedTools = [...tools, ...tools];
+  const duplicatedTools = [...tools, ...tools, ...tools, ...tools];
 
   // Simulated GitHub Contribution Grid data generator - Seeded for consistency
   const [activeCommits, setActiveCommits] = useState(null);
@@ -244,12 +244,14 @@ export default function BentoGrid() {
           <BentoCard className="w-full h-full p-6 md:p-8 flex flex-col justify-between">
             {/* Content */}
             <div className="text-left relative z-10">
-              <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase font-satoshi">WHO I AM</span>
-              <h2 className="font-syne font-extrabold text-2xl md:text-4xl text-white mt-2 mb-3">
+              <span className="font-mono text-cyan-400 text-xs font-bold tracking-widest uppercase mb-1 inline-flex items-center gap-2">
+                // 01. WHO I AM <span className="animate-twinkle text-cyan-300">✦</span>
+              </span>
+              <h2 className="font-pixel text-3xl sm:text-4xl md:text-5xl text-white mt-2 mb-3 tracking-wide leading-tight">
                 Hi, I'm Shaik Hasnain
               </h2>
-              <p className="font-satoshi text-sm md:text-base text-white/70 leading-relaxed max-w-xl">
-                I am an AI/ML student and developer at SRM AP University. Passionate about building high-performance intelligence consensus engines like <span className="text-cyan-400 font-medium">CampusX</span> and creating fast-paced immersive FPS games in <span className="text-fuchsia-400 font-medium">Unity</span>.
+              <p className="font-serif italic text-base md:text-lg text-white/80 leading-relaxed max-w-xl font-light tracking-wide">
+                I am an AI/ML developer & CS scholar at SRM University AP. Passionate about building high-performance intelligence consensus engines like <span className="text-cyan-400 font-medium not-italic font-satoshi">CampusX</span> and creating fast-paced immersive FPS games in <span className="text-fuchsia-400 font-medium not-italic font-satoshi">Unity</span>.
               </p>
             </div>
 
@@ -279,13 +281,12 @@ export default function BentoGrid() {
                   />
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="flex-grow flex flex-col">
-                  <label htmlFor="contact-message" className="sr-only">Your Message</label>
+              <div className="flex gap-2">
+                <div className="flex-1 flex flex-col">
+                  <label htmlFor="contact-text" className="sr-only">Message</label>
                   <input
-                    id="contact-message"
+                    id="contact-text"
                     type="text"
-                    required
                     placeholder="Drop a quick message..."
                     value={formText}
                     onChange={(e) => setFormText(e.target.value)}
@@ -296,7 +297,7 @@ export default function BentoGrid() {
                   <button
                     type="submit"
                     disabled={isSubmitting || isSubmitted}
-                    className="bg-white text-black hover:bg-cyan-400 hover:text-black disabled:bg-white/20 disabled:text-white/40 disabled:pointer-events-none transition-all duration-300 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 text-sm shrink-0"
+                    className="bg-white text-black hover:bg-cyan-400 hover:text-black disabled:bg-white/20 disabled:text-white/40 disabled:pointer-events-none transition-all duration-300 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 text-sm shrink-0 font-syne"
                   >
                     <span className="hidden sm:inline">Send</span>
                     <Send size={14} />
@@ -320,7 +321,7 @@ export default function BentoGrid() {
                   transition={{ type: 'spring', damping: 25, stiffness: 120 }}
                   className="absolute inset-0 bg-gradient-to-r from-cyan-900 to-black z-30 flex flex-col justify-center items-start px-8 text-left"
                 >
-                  <h3 className="font-syne text-xl md:text-2xl font-bold text-cyan-400 flex items-center gap-2">
+                  <h3 className="font-pixel text-xl md:text-2xl font-bold text-cyan-400 flex items-center gap-2">
                     <span>Message Transmitted!</span>
                   </h3>
                   <p className="font-satoshi text-sm text-white/70 mt-2">
@@ -332,14 +333,17 @@ export default function BentoGrid() {
           </BentoCard>
         </div>
 
-        {/* CARD 3: Tools Marquee (12 cols, 1 row) - Expanded to full row width for maximum impact */}
+        {/* CARD 3: Tools Marquee (12 cols, 1 row) */}
         <div className="bento-wrapper col-span-12 row-span-1">
-          <BentoCard className="w-full h-full flex flex-col justify-center">
-            <div className="absolute top-0 left-0 w-8 h-full bg-gradient-to-r from-black/80 to-transparent z-10 pointer-events-none" />
-            <div className="absolute top-0 right-0 w-8 h-full bg-gradient-to-l from-black/80 to-transparent z-10 pointer-events-none" />
-
-            <div className="flex items-center w-full h-full overflow-hidden z-0">
-              <div className="flex gap-10 items-center px-4 animate-marquee w-max">
+          <BentoCard className="w-full h-full flex flex-col justify-center py-2">
+            <div 
+              className="flex items-center w-full h-full overflow-hidden z-0"
+              style={{
+                maskImage: 'linear-gradient(to right, transparent, black 4%, black 96%, transparent)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent, black 4%, black 96%, transparent)'
+              }}
+            >
+              <div className="flex gap-8 items-center px-4 animate-marquee">
                 {duplicatedTools.map((tool, index) => (
                   <div
                     key={index}
@@ -354,7 +358,7 @@ export default function BentoGrid() {
                         loading="lazy"
                       />
                     </div>
-                    <span className="font-syne text-sm font-semibold tracking-tight text-white/50 group-hover/tool:text-white transition-colors duration-300">
+                    <span className="font-syne text-sm font-semibold tracking-tight text-white/60 group-hover/tool:text-white transition-colors duration-300">
                       {tool.name}
                     </span>
                   </div>
@@ -398,39 +402,74 @@ export default function BentoGrid() {
             <div className="absolute top-8 right-8 w-20 h-20 rounded-full bg-cyan-400/10 blur-xl pointer-events-none animate-pulse" />
             <div className="absolute bottom-12 left-8 w-16 h-16 rounded-full bg-fuchsia-500/10 blur-xl pointer-events-none animate-pulse [animation-delay:1s]" />
 
+            {/* Top row: Location & Status */}
             <div className="relative z-10 text-left">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center">
-                  <MapPin size={14} className="text-cyan-400" />
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center">
+                    <MapPin size={14} className="text-cyan-400" />
+                  </div>
+                  <span className="font-mono text-cyan-400 text-xs font-bold tracking-widest uppercase">LOCATION</span>
                 </div>
-                <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase font-satoshi">LOCATION</span>
+
+                <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-emerald-400">Available for Projects</span>
+                </div>
               </div>
-              <h3 className="font-syne font-extrabold text-2xl md:text-3xl text-white mb-1">
+
+              <h3 className="font-pixel text-2xl md:text-3xl text-white mb-1 tracking-wide">
                 Andhra Pradesh
               </h3>
               <p className="font-satoshi text-sm text-white/50">India 🇮🇳</p>
             </div>
 
-            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent relative z-10" />
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent relative z-10 my-3" />
 
-            <div className="relative z-10 text-left">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center">
-                  <GraduationCap size={14} className="text-fuchsia-400" />
-                </div>
-                <span className="text-fuchsia-400 text-xs font-bold tracking-widest uppercase font-satoshi">EDUCATION</span>
+            {/* Middle: Currently Exploring */}
+            <div className="relative z-10 text-left my-2">
+              <span className="text-[10px] uppercase tracking-widest text-white/40 font-mono font-bold block mb-2">Currently Exploring</span>
+              <div className="flex flex-wrap gap-1.5">
+                {['Consensus LLMs', 'Unity State Machines', 'WebGL Shaders', 'Quantum Logic'].map((topic) => (
+                  <span
+                    key={topic}
+                    className="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] font-satoshi text-white/80 hover:border-cyan-400/40 hover:text-cyan-300 transition-colors cursor-default"
+                  >
+                    {topic}
+                  </span>
+                ))}
               </div>
-              <h3 className="font-syne font-bold text-lg md:text-xl text-white mb-1">
+            </div>
+
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent relative z-10 my-3" />
+
+            {/* Bottom: Education */}
+            <div className="relative z-10 text-left">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center">
+                    <GraduationCap size={14} className="text-fuchsia-400" />
+                  </div>
+                  <span className="font-mono text-fuchsia-400 text-xs font-bold tracking-widest uppercase">EDUCATION</span>
+                </div>
+                <span className="text-[9px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-0.5 uppercase tracking-wider">
+                  ● In Progress
+                </span>
+              </div>
+              <h3 className="font-pixel text-lg md:text-xl text-white mb-1 tracking-wide">
                 SRM University AP
               </h3>
               <p className="font-satoshi text-xs text-white/50 leading-relaxed">
                 B.Tech CSE — AI & Machine Learning Specialization
               </p>
               <div className="flex items-center gap-3 mt-3">
-                <span className="text-[9px] font-bold font-syne text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 rounded-full px-3 py-1 uppercase tracking-wider">
+                <span className="text-[9px] font-bold font-mono text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 rounded-full px-3 py-1 uppercase tracking-wider">
                   8.5 CGPA
                 </span>
-                <span className="text-[9px] font-bold font-syne text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1 uppercase tracking-wider">
+                <span className="text-[9px] font-bold font-mono text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1 uppercase tracking-wider">
                   2025 — 2029
                 </span>
               </div>
@@ -444,22 +483,27 @@ export default function BentoGrid() {
             {/* Header Stats */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full z-10 text-left">
               <div>
-                <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase font-satoshi">CODE ACTIVITY</span>
-                <h3 className="font-syne font-extrabold text-xl md:text-2xl text-white mt-1">
+                <span className="font-mono text-cyan-400 text-xs font-bold tracking-widest uppercase mb-1 inline-flex items-center gap-2">
+                  // 02. CODE ACTIVITY <span className="animate-twinkle text-cyan-300">✦</span>
+                </span>
+                <h3 className="font-pixel text-xl md:text-2xl text-white mt-1 tracking-wide">
                   github.com/ShaikHasnain-2007
                 </h3>
               </div>
               
-              {/* Custom GitHub stats counter */}
-              <div className="flex items-center gap-6 font-syne text-xs uppercase text-white/50">
-                <div>
-                  <span className="text-white block font-bold text-base">{totalContributions}+</span>
-                  <span>Contributions</span>
+              {/* Custom GitHub & problem solving stats counter */}
+              <div className="flex flex-wrap items-center gap-3 font-mono text-xs uppercase text-white/50">
+                <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-left">
+                  <span className="text-white block font-bold text-sm sm:text-base font-syne">{totalContributions}+</span>
+                  <span className="text-[10px]">Contributions</span>
                 </div>
-                <div className="w-[1px] h-8 bg-white/10" />
-                <div>
-                  <span className="text-cyan-400 block font-bold text-base">Active</span>
-                  <span>Dev Status</span>
+                <div className="px-3 py-1.5 rounded-xl bg-[#00B8A3]/10 border border-[#00B8A3]/20 text-left">
+                  <span className="text-[#00B8A3] block font-bold text-sm sm:text-base font-syne">150+</span>
+                  <span className="text-[10px] text-[#00B8A3]/80">Problems Solved</span>
+                </div>
+                <div className="px-3 py-1.5 rounded-xl bg-cyan-400/10 border border-cyan-400/20 text-left">
+                  <span className="text-cyan-400 block font-bold text-sm sm:text-base font-syne">Active</span>
+                  <span className="text-[10px] text-cyan-400/80">Dev Status</span>
                 </div>
               </div>
             </div>

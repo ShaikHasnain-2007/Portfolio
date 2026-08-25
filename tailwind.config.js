@@ -7,8 +7,14 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        pixel: ["BubbledotICG-FinePos", "Doto", "Pixelify Sans", "Silkscreen", "monospace"],
+        dot: ["Doto", "BubbledotICG-FinePos", "Pixelify Sans", "monospace"],
+        display: ["BubbledotICG-FinePos", "Doto", "Space Grotesk", "Syne", "sans-serif"],
         syne: ["Syne", "sans-serif"],
         satoshi: ["Satoshi", "sans-serif"],
+        serif: ["Cormorant Garamond", "serif"],
+        mono: ["Space Mono", "monospace"],
+        grotesk: ["Space Grotesk", "sans-serif"],
       },
       colors: {
         cyan: {
@@ -20,6 +26,9 @@ export default {
           500: 'rgb(var(--fuchsia-500) / <alpha-value>)',
         }
       },
+      animation: {
+        marquee: 'marquee 25s linear infinite',
+      }
     },
   },
   plugins: [],
