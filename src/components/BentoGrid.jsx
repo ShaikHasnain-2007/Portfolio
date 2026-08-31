@@ -241,23 +241,23 @@ export default function BentoGrid() {
 
         {/* CARD 2: Intro Card (7 cols, 2 rows) */}
         <div id="contact" className="bento-wrapper col-span-12 md:col-span-7 row-span-2">
-          <BentoCard className="w-full h-full p-6 md:p-8 flex flex-col justify-between">
+          <BentoCard className="w-full h-full p-5 sm:p-6 md:p-7 flex flex-col justify-between">
             {/* Content */}
             <div className="text-left relative z-10">
               <span className="font-mono text-cyan-400 text-xs font-bold tracking-widest uppercase mb-1 inline-flex items-center gap-2">
                 // 01. WHO I AM <span className="animate-twinkle text-cyan-300">✦</span>
               </span>
-              <h2 className="font-pixel text-3xl sm:text-4xl md:text-5xl text-white mt-2 mb-3 tracking-wide leading-tight">
+              <h2 className="font-pixel text-2xl sm:text-3xl md:text-4xl text-white mt-1.5 mb-2.5 tracking-wide leading-tight">
                 Hi, I'm Shaik Hasnain
               </h2>
-              <p className="font-serif italic text-base md:text-lg text-white/80 leading-relaxed max-w-xl font-light tracking-wide">
+              <p className="font-serif italic text-sm sm:text-[15px] md:text-base text-white/80 leading-relaxed max-w-xl font-light tracking-wide">
                 I am an AI/ML developer & CS scholar at SRM University AP. Passionate about building high-performance intelligence consensus engines like <span className="text-cyan-400 font-medium not-italic font-satoshi">CampusX</span> and creating fast-paced immersive FPS games in <span className="text-fuchsia-400 font-medium not-italic font-satoshi">Unity</span>.
               </p>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleFormSubmit} className="relative z-20 w-full flex flex-col gap-3 mt-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <form onSubmit={handleFormSubmit} className="relative z-20 w-full flex flex-col gap-2.5 mt-3 sm:mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div className="flex flex-col">
                   <label htmlFor="contact-name" className="sr-only">Your Name</label>
                   <input
@@ -266,7 +266,7 @@ export default function BentoGrid() {
                     placeholder="Your Name (Optional)"
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
-                    className="bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.3)] outline-none transition-all duration-300"
+                    className="bg-black/50 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-cyan-400 focus:bg-black/70 focus:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.3)] outline-none transition-all duration-300"
                   />
                 </div>
                 <div className="flex flex-col">
@@ -277,11 +277,12 @@ export default function BentoGrid() {
                     placeholder="Your Email (Optional)"
                     value={formEmail}
                     onChange={(e) => setFormEmail(e.target.value)}
-                    className="bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.3)] outline-none transition-all duration-300"
+                    className="bg-black/50 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-cyan-400 focus:bg-black/70 focus:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.3)] outline-none transition-all duration-300"
                   />
                 </div>
               </div>
-              <div className="flex gap-2">
+
+              <div className="flex gap-2.5 items-stretch">
                 <div className="flex-1 flex flex-col">
                   <label htmlFor="contact-text" className="sr-only">Message</label>
                   <input
@@ -290,14 +291,14 @@ export default function BentoGrid() {
                     placeholder="Drop a quick message..."
                     value={formText}
                     onChange={(e) => setFormText(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.3)] outline-none transition-all duration-300"
+                    className="w-full bg-black/50 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-cyan-400 focus:bg-black/70 focus:shadow-[0_0_15px_rgba(var(--cyan-rgb),0.3)] outline-none transition-all duration-300"
                   />
                 </div>
                 <MagneticElement>
                   <button
                     type="submit"
                     disabled={isSubmitting || isSubmitted}
-                    className="bg-white text-black hover:bg-cyan-400 hover:text-black disabled:bg-white/20 disabled:text-white/40 disabled:pointer-events-none transition-all duration-300 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 text-sm shrink-0 font-syne"
+                    className="h-full bg-white text-black hover:bg-cyan-400 hover:text-black disabled:bg-white/20 disabled:text-white/40 disabled:pointer-events-none transition-all duration-300 font-bold px-4 sm:px-5 py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs sm:text-sm shrink-0 font-syne shadow-md"
                   >
                     <span className="hidden sm:inline">Send</span>
                     <Send size={14} />
@@ -305,7 +306,7 @@ export default function BentoGrid() {
                 </MagneticElement>
               </div>
               {formError && (
-                <span className="text-rose-500 text-xs font-satoshi mt-1 block text-left">
+                <span className="text-rose-500 text-xs font-satoshi mt-0.5 block text-left">
                   {formError}
                 </span>
               )}
@@ -393,7 +394,7 @@ export default function BentoGrid() {
 
         {/* CARD 5: Location & Education Card (6 cols, 2 rows) */}
         <div className="bento-wrapper col-span-12 md:col-span-6 row-span-2">
-          <BentoCard className="w-full h-full p-6 md:p-8 flex flex-col justify-between">
+          <BentoCard className="w-full h-full p-5 sm:p-6 md:p-7 flex flex-col justify-between">
             {/* Animated gradient background */}
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-fuchsia-500/5 pointer-events-none" />
             <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
@@ -404,15 +405,15 @@ export default function BentoGrid() {
 
             {/* Top row: Location & Status */}
             <div className="relative z-10 text-left">
-              <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="flex items-center justify-between gap-2 mb-1.5">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center">
-                    <MapPin size={14} className="text-cyan-400" />
+                  <div className="w-7 h-7 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center">
+                    <MapPin size={13} className="text-cyan-400" />
                   </div>
                   <span className="font-mono text-cyan-400 text-xs font-bold tracking-widest uppercase">LOCATION</span>
                 </div>
 
-                <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -421,22 +422,22 @@ export default function BentoGrid() {
                 </div>
               </div>
 
-              <h3 className="font-pixel text-2xl md:text-3xl text-white mb-1 tracking-wide">
+              <h3 className="font-pixel text-xl sm:text-2xl text-white mt-1 mb-0.5 tracking-wide">
                 Andhra Pradesh
               </h3>
-              <p className="font-satoshi text-sm text-white/50">India 🇮🇳</p>
+              <p className="font-satoshi text-xs text-white/50">India 🇮🇳</p>
             </div>
 
-            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent relative z-10 my-3" />
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent relative z-10 my-2" />
 
             {/* Middle: Currently Exploring */}
-            <div className="relative z-10 text-left my-2">
-              <span className="text-[10px] uppercase tracking-widest text-white/40 font-mono font-bold block mb-2">Currently Exploring</span>
+            <div className="relative z-10 text-left">
+              <span className="text-[9px] uppercase tracking-widest text-white/40 font-mono font-bold block mb-1.5">// CURRENTLY EXPLORING</span>
               <div className="flex flex-wrap gap-1.5">
                 {['Consensus LLMs', 'Unity State Machines', 'WebGL Shaders', 'Quantum Logic'].map((topic) => (
                   <span
                     key={topic}
-                    className="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] font-satoshi text-white/80 hover:border-cyan-400/40 hover:text-cyan-300 transition-colors cursor-default"
+                    className="px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-[10px] font-satoshi text-white/80 hover:border-cyan-400/40 hover:text-cyan-300 transition-colors cursor-default"
                   >
                     {topic}
                   </span>
@@ -444,32 +445,32 @@ export default function BentoGrid() {
               </div>
             </div>
 
-            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent relative z-10 my-3" />
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent relative z-10 my-2" />
 
             {/* Bottom: Education */}
             <div className="relative z-10 text-left">
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center">
-                    <GraduationCap size={14} className="text-fuchsia-400" />
+                  <div className="w-7 h-7 rounded-lg bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center">
+                    <GraduationCap size={13} className="text-fuchsia-400" />
                   </div>
                   <span className="font-mono text-fuchsia-400 text-xs font-bold tracking-widest uppercase">EDUCATION</span>
                 </div>
-                <span className="text-[9px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-0.5 uppercase tracking-wider">
+                <span className="text-[9px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2 py-0.5 uppercase tracking-wider">
                   ● In Progress
                 </span>
               </div>
-              <h3 className="font-pixel text-lg md:text-xl text-white mb-1 tracking-wide">
+              <h3 className="font-pixel text-base sm:text-lg text-white mb-0.5 tracking-wide">
                 SRM University AP
               </h3>
-              <p className="font-satoshi text-xs text-white/50 leading-relaxed">
+              <p className="font-satoshi text-[11px] sm:text-xs text-white/50 leading-relaxed mb-2">
                 B.Tech CSE — AI & Machine Learning Specialization
               </p>
-              <div className="flex items-center gap-3 mt-3">
-                <span className="text-[9px] font-bold font-mono text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 rounded-full px-3 py-1 uppercase tracking-wider">
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] font-bold font-mono text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 rounded-full px-2.5 py-0.5 uppercase tracking-wider">
                   8.5 CGPA
                 </span>
-                <span className="text-[9px] font-bold font-mono text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1 uppercase tracking-wider">
+                <span className="text-[9px] font-bold font-mono text-white/50 bg-white/5 border border-white/10 rounded-full px-2.5 py-0.5 uppercase tracking-wider">
                   2025 — 2029
                 </span>
               </div>
