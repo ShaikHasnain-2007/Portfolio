@@ -225,16 +225,17 @@ html.lenis {
 }
 
 ::-webkit-scrollbar-track {
-  background: #000;
+  background: #050505;
+  border-left: 1px solid rgba(var(--cyan-rgb), 0.1);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #222;
+  background: rgba(var(--cyan-rgb), 0.3);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333;
+  background: rgba(var(--cyan-rgb), 0.6);
 }
 
 .glitch-text {

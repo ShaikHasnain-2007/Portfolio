@@ -15,6 +15,7 @@ export default function BentoGrid() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formError, setFormError] = useState('');
+  const [botcheck, setBotcheck] = useState(false);
   
 
 
@@ -89,6 +90,17 @@ export default function BentoGrid() {
   // Form submit handler to submit messages using Web3Forms
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    if (botcheck) {
+      setFormError('Spam detected. Message dropped.');
+      return;
+    }
+    
+    const lastSent = localStorage.getItem('lastSentMessage');
+    if (lastSent && Date.now() - parseInt(lastSent) < 60000) {
+      setFormError('Please wait a minute before sending another message.');
+      return;
+    }
+
     if (!formText.trim()) {
       setFormError('Please write a message before sending.');
       return;
@@ -110,11 +122,13 @@ export default function BentoGrid() {
           name: formName.trim() || 'Anonymous Portfolio Visitor',
           email: formEmail.trim() || 'no-reply@portfolio.com',
           message: formText.trim(),
-          subject: 'New Message from Shaik Hasnain Portfolio'
+          subject: 'New Message from Shaik Hasnain Portfolio',
+          botcheck: botcheck
         })
       });
       const data = await response.json();
       if (data.success) {
+        localStorage.setItem('lastSentMessage', Date.now().toString());
         setIsSubmitted(true);
         setFormText('');
         setFormName('');
@@ -324,6 +338,9 @@ export default function BentoGrid() {
 
             {/* Form */}
             <form onSubmit={handleFormSubmit} className="relative z-20 w-full flex flex-col gap-2.5 mt-3 sm:mt-4">
+              {/* Honeypot field for spam prevention */}
+              <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} checked={botcheck} onChange={(e) => setBotcheck(e.target.checked)} />
+              
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div className="flex flex-col">
                   <label htmlFor="contact-name" className="sr-only">Your Name</label>
