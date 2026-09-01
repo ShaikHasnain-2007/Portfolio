@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Menu, X, ArrowUpRight, FileText } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
@@ -288,16 +288,6 @@ export default function Navbar() {
               </label>
             </fieldset>
 
-            <a
-              href="/Shaik_Hasnain_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="liquid-glass-btn group flex items-center gap-1.5 font-syne text-[10px] font-bold uppercase tracking-widest px-3.5 py-2.5 rounded-full text-white/90 hover:text-cyan-400 active:scale-95 cursor-pointer"
-            >
-              <FileText size={12} className="text-cyan-400 group-hover:scale-110 transition-transform" />
-              <span>Resume</span>
-            </a>
-
             <button
               onClick={() => handleNavClick('contact')}
               className="liquid-glass-btn group flex items-center gap-1.5 font-syne text-[10px] font-bold uppercase tracking-widest px-4 py-2.5 rounded-full text-white hover:text-cyan-400 active:scale-95 cursor-pointer"
@@ -351,19 +341,7 @@ export default function Navbar() {
                 );
               })}
 
-              <motion.a
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ delay: 0.3, duration: 0.3 }}
-                href="/Shaik_Hasnain_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 py-3 mt-2 rounded-2xl bg-white/10 border border-white/15 text-xs font-syne font-bold uppercase tracking-wider text-white hover:text-cyan-400 transition-colors"
-              >
-                <FileText size={14} className="text-cyan-400" />
-                <span>Download Resume</span>
-              </motion.a>
+
               
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
