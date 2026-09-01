@@ -128,10 +128,10 @@ export default function Footer() {
       <div 
         ref={textRef}
         onMouseMove={handleMouseMove}
-        className="w-full text-center mt-12 mb-6 select-none overflow-hidden cursor-default"
+        className="w-full flex justify-center items-center mt-12 mb-6 select-none overflow-hidden cursor-default"
       >
-        <div className="font-syne font-black text-[13.5vw] leading-none tracking-tighter text-white/[0.04] uppercase spotlight-text">
-          HASNAIN.
+        <div className="font-syne font-black text-[11.5vw] leading-none tracking-tight text-white/[0.04] uppercase spotlight-text text-center w-full mx-auto">
+          HASNAIN
         </div>
       </div>
 
