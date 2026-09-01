@@ -4,18 +4,18 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const stats = [
   {
-    value: 4,
+    value: 7,
     suffix: '+',
-    label: 'Hackathons Competed',
-    desc: 'HackSRM, Code to Connect, and regional hackathons',
+    label: 'Hackathons & Contests',
+    desc: 'Adobe Hackathon, Hack The Winter, HackSRM, My1stHack & QuizOff',
     color: 'from-cyan-400 to-blue-500',
     glow: 'rgba(var(--cyan-rgb), 0.35)'
   },
   {
-    value: 6,
+    value: 8,
     suffix: '+',
     label: 'Projects Shipped',
-    desc: 'AI systems, game simulations, and production web apps',
+    desc: 'AI consensus, FastAPI backends, AEGIS governance & WebXR',
     color: 'from-fuchsia-500 to-purple-600',
     glow: 'rgba(var(--fuchsia-rgb), 0.35)'
   },
@@ -23,16 +23,16 @@ const stats = [
     value: 8.5,
     suffix: '',
     label: 'Academic Standing (CGPA)',
-    desc: 'Solid first semester at SRM AP University',
+    desc: 'B.Tech CSE with AI/ML at SRM University AP',
     color: 'from-emerald-400 to-teal-500',
     glow: 'rgba(52, 211, 153, 0.35)',
     isFloat: true
   },
   {
-    value: 3,
+    value: 5,
     suffix: '+',
-    label: 'Game Simulations',
-    desc: '3D FPS game, Flappy AP, and physics experiments',
+    label: 'Simulations & VR/AR',
+    desc: 'Unity 3D FPS, ARC-LABS WebXR, Deloitte & Mastercard Cyber',
     color: 'from-amber-400 to-orange-500',
     glow: 'rgba(245, 158, 11, 0.35)'
   }

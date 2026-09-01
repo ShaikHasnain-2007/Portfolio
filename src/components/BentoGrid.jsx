@@ -332,7 +332,7 @@ export default function BentoGrid() {
                 Hi, I'm Shaik Hasnain
               </h2>
               <p className="font-serif italic text-sm sm:text-[15px] md:text-base text-white/80 leading-relaxed max-w-xl font-light tracking-wide">
-                I am an AI/ML developer & CS scholar at SRM University AP. Passionate about building high-performance intelligence consensus engines like <span className="text-cyan-400 font-medium not-italic font-satoshi">CampusX</span> and creating fast-paced immersive FPS games in <span className="text-fuchsia-400 font-medium not-italic font-satoshi">Unity</span>.
+                I am an AI/ML developer & CS scholar at SRM University AP. Passionate about building high-performance intelligence consensus engines like <span className="text-cyan-400 font-medium not-italic font-satoshi">CampusX</span>, scalable <span className="text-blue-400 font-medium not-italic font-satoshi">FastAPI backends</span>, and immersive spatial WebXR simulations in <span className="text-fuchsia-400 font-medium not-italic font-satoshi">Unity & Meta Quest</span>.
               </p>
             </div>
 

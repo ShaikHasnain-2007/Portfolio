@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { Github, Cpu, Gamepad2, HeartHandshake, Award } from 'lucide-react';
+import { Github, Cpu, Gamepad2, HeartHandshake, Server, ShieldCheck, Glasses } from 'lucide-react';
 import { gsap } from 'gsap';
 
 const projects = [
@@ -15,37 +15,59 @@ const projects = [
     bannerText: 'AI Consensus Engine'
   },
   {
-    title: 'Unity Zombie Apocalypse FPS',
-    description: 'A high-octane 3D first-person shooter game featuring intelligent zombie AI behavior states, pathfinding systems, and physics-based player movement dynamics.',
-    tech: ['Unity Engine', 'C#', 'AI Pathfinding', '3D Graphics'],
-    github: 'https://github.com/ShaikHasnain-2007/Zombie-FPS-Unity',
-    icon: Gamepad2,
+    title: 'ipl-ai-backend',
+    description: 'High-performance AI inference backend engineered with FastAPI, featuring predictive match simulation algorithms, real-time ball-by-ball telemetry, and automated statistical endpoints.',
+    tech: ['FastAPI', 'Python', 'AI/ML Inference', 'Predictive Analytics', 'REST API'],
+    github: 'https://github.com/ShaikHasnain-2007/ipl-ai-backend',
+    icon: Server,
+    gradient: 'from-blue-500/20 to-indigo-500/20',
+    borderColor: 'group-hover:border-blue-400/50',
+    glowColor: 'rgba(59, 130, 246, 0.35)',
+    bannerText: 'FastAPI AI Predictive Engine'
+  },
+  {
+    title: 'AEGIS Governance System',
+    description: 'A scalable enterprise governance and compliance architecture engineered with multi-tenant database management, automated audit trails, and strict role-based access security.',
+    tech: ['Full-Stack', 'System Design', 'Database Mgmt', 'Scalable Architecture', 'Security'],
+    github: 'https://github.com/ShaikHasnain-2007/AEGIS-Governance-System',
+    icon: ShieldCheck,
     gradient: 'from-fuchsia-500/20 to-purple-500/20',
     borderColor: 'group-hover:border-fuchsia-400/50',
     glowColor: 'rgba(var(--fuchsia-rgb), 0.35)',
+    bannerText: 'Scalable System Architecture'
+  },
+  {
+    title: 'ARC-LABS / Spatial WebXR',
+    description: 'Immersive spatial computing environment and WebXR virtual laboratory featuring interactive 3D scene graphs, spatial audio, and live testing on Meta Quest hardware.',
+    tech: ['AR/VR', 'WebXR', 'Spatial Computing', 'Three.js', 'Meta Quest'],
+    github: 'https://github.com/ShaikHasnain-2007/ARC-LABS',
+    icon: Glasses,
+    gradient: 'from-emerald-500/20 to-teal-500/20',
+    borderColor: 'group-hover:border-emerald-400/50',
+    glowColor: 'rgba(16, 185, 129, 0.35)',
+    bannerText: 'Spatial Computing & WebXR'
+  },
+  {
+    title: 'Unity Zombie Apocalypse FPS',
+    description: 'A high-octane 3D first-person shooter game featuring intelligent zombie AI behavior states, pathfinding systems, and physics-based player movement dynamics.',
+    tech: ['Unity Engine', 'C#', 'AI Pathfinding', '3D Graphics', 'Game Physics'],
+    github: 'https://github.com/ShaikHasnain-2007/Zombie-FPS-Unity',
+    icon: Gamepad2,
+    gradient: 'from-amber-500/20 to-orange-500/20',
+    borderColor: 'group-hover:border-amber-400/50',
+    glowColor: 'rgba(245, 158, 11, 0.35)',
     bannerText: '3D Physics FPS Game'
   },
   {
     title: 'SafeEcho',
-    description: 'A specialized mental health web application engineered for the Code to Connect hackathon. Tailored around emotional intelligence, analysis, and responsive support.',
+    description: 'A specialized mental health web application engineered for the Code to Connect hackathon. Tailored around emotional intelligence, sentiment analysis, and responsive support.',
     tech: ['React.js', 'Tailwind CSS', 'Sentiment Logic', 'Framer Motion'],
     github: 'https://github.com/ShaikHasnain-2007/SafeEcho',
     icon: HeartHandshake,
-    gradient: 'from-emerald-500/20 to-teal-500/20',
-    borderColor: 'group-hover:border-emerald-400/50',
-    glowColor: 'rgba(16, 185, 129, 0.35)',
-    bannerText: 'Interactive Support Platform'
-  },
-  {
-    title: 'Flappy Bhai - SRM AP Edition',
-    description: 'A customized, high-contrast web game designed around the SRM University AP ecosystem, integrated with Firebase Realtime Database for cross-device high score tracking.',
-    tech: ['Web Dev', 'Firebase DB', 'Game Physics', 'Realtime Sync'],
-    github: 'https://github.com/ShaikHasnain-2007/Flappy-Bhai',
-    icon: Award,
-    gradient: 'from-amber-500/20 to-orange-500/20',
-    borderColor: 'group-hover:border-amber-400/50',
-    glowColor: 'rgba(245, 158, 11, 0.35)',
-    bannerText: 'Firebase High-Score Game'
+    gradient: 'from-teal-500/20 to-cyan-500/20',
+    borderColor: 'group-hover:border-teal-400/50',
+    glowColor: 'rgba(20, 184, 166, 0.35)',
+    bannerText: 'Sentiment AI Platform'
   }
 ];
 

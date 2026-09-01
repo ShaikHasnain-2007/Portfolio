@@ -73,18 +73,28 @@ export default function AIChatWidget() {
 
       if (query.includes('campusx') || query.includes('consensus')) {
         botResponse = PRESETS[0].a;
+      } else if (query.includes('ipl') || query.includes('backend') || query.includes('fastapi')) {
+        botResponse = "The ipl-ai-backend is Shaik's high-performance AI inference backend engineered with FastAPI. It delivers real-time match simulation, ball-by-ball predictive analytics, and automated inference endpoints.";
+      } else if (query.includes('aegis') || query.includes('governance')) {
+        botResponse = "AEGIS is an enterprise-grade governance and compliance system designed with scalable full-stack architecture, relational database management, and role-based access security.";
+      } else if (query.includes('arc') || query.includes('webxr') || query.includes('vr') || query.includes('ar') || query.includes('spatial') || query.includes('meta quest')) {
+        botResponse = "Shaik builds immersive spatial computing and WebXR virtual environments (like ARC-LABS), featuring interactive 3D scene graphs, Three.js rendering, and live testing on Meta Quest headsets.";
       } else if (query.includes('unity') || query.includes('zombie') || query.includes('fps') || query.includes('game')) {
         botResponse = PRESETS[1].a;
-      } else if (query.includes('srm') || query.includes('university') || query.includes('platform') || query.includes('voca') || query.includes('safeecho') || query.includes('flappy')) {
+      } else if (query.includes('deloitte') || query.includes('mastercard') || query.includes('cyber') || query.includes('security')) {
+        botResponse = "Shaik has completed Cybersecurity Job Simulations with both Deloitte (practical security tasks, threat analysis, secure software) and Mastercard (phishing awareness campaigns, simulation metrics).";
+      } else if (query.includes('adobe') || query.includes('quizoff') || query.includes('my1sthack') || query.includes('hackathon') || query.includes('winter') || query.includes('voca')) {
+        botResponse = "Shaik has an active hackathon track record! Including the Adobe University Hackathon (Adobe & Unstop), QuizOff 2026 (5.25L+ global participants), My1stHack 2025 (Team Apex Coders), Hack The Winter – Angry Bird Edition (VOCA), and HackSRM (CampusX).";
+      } else if (query.includes('srm') || query.includes('university') || query.includes('platform') || query.includes('safeecho') || query.includes('flappy')) {
         botResponse = PRESETS[2].a;
       } else if (query.includes('contact') || query.includes('email') || query.includes('linkedin') || query.includes('github') || query.includes('social')) {
         botResponse = PRESETS[3].a;
       } else if (query.includes('cgpa') || query.includes('grades') || query.includes('gpa') || query.includes('semester')) {
-        botResponse = "Shaik Hasnain completed his first semester at SRM University AP with a solid academic GPA of 8.5.";
+        botResponse = "Shaik Hasnain completed his first semester at SRM University AP with a solid academic GPA of 8.5 in core Computer Science & AI/ML.";
       } else if (hiRegex.test(query)) {
-        botResponse = "Hi there! 👋 It's wonderful to meet you. I'm Shaik's AI assistant. I can tell you all about his projects (like CampusX and the Unity Zombie FPS), his hackathons at SRM AP, his technical stack, or how to contact him. What would you like to explore?";
+        botResponse = "Hi there! 👋 It's wonderful to meet you. I'm Shaik's AI assistant. I can tell you all about his projects (CampusX, ipl-ai-backend, AEGIS, ARC-LABS WebXR, Unity Zombie FPS), his hackathons (Adobe, Hack The Winter, HackSRM), cybersecurity credentials (Deloitte, Mastercard), or his technical skills. What would you like to explore?";
       } else if (query.includes('skills') || query.includes('tools') || query.includes('stack') || query.includes('languages') || query.includes('tech')) {
-        botResponse = "Shaik has a versatile technical arsenal! In AI/ML: Python, LLM integration, Consensus models, and Groq/Ollama APIs. In Web: React.js, Next.js, Vite, GSAP, and Firebase. In Game Dev: Unity Engine (C#) and Unreal Engine.";
+        botResponse = "Shaik has a versatile technical arsenal! In AI/ML: Python, PyTorch, LLM consensus, FastAPI, Groq/Ollama. In Web: React.js, Next.js, TypeScript, Vite, Tailwind CSS, Firebase. In Spatial & Games: Unity Engine (C#), WebXR, AR/VR, Unreal Engine. In Core: Cybersecurity, System Design, C++, Java, PostgreSQL, Docker, Linux.";
       } else if (query.includes('resume') || query.includes('cv')) {
         botResponse = "Shaik doesn't have a public resume linked here at the moment. However, you can see all of his detailed project records and academic progression directly on this website, or contact him via email at shaikhasnain2007@gmail.com!";
       }

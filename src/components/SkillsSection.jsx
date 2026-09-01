@@ -56,7 +56,7 @@ const SKILLS_DATA = [
     glow: 'rgba(0, 150, 136, 0.35)',
   },
 
-  // Game Development
+  // Game Development & Spatial Computing
   {
     name: 'Unity Engine',
     category: 'Game Engine',
@@ -71,6 +71,22 @@ const SKILLS_DATA = [
     type: 'game-dev',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg',
     glow: 'rgba(155, 79, 150, 0.35)',
+  },
+  {
+    name: 'AR/VR & WebXR',
+    category: 'WebXR / Meta Quest',
+    type: 'game-dev',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/threejs/threejs-original.svg',
+    extraClass: 'invert',
+    glow: 'rgba(217, 70, 239, 0.35)',
+  },
+  {
+    name: 'Spatial Computing',
+    category: '3D Virtual Spaces',
+    type: 'game-dev',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/unity/unity-original.svg',
+    extraClass: 'invert',
+    glow: 'rgba(56, 189, 248, 0.35)',
   },
   {
     name: 'Unreal Engine',
@@ -149,6 +165,20 @@ const SKILLS_DATA = [
   },
 
   // Systems & Languages
+  {
+    name: 'Cybersecurity',
+    category: 'InfoSec & Audit',
+    type: 'core',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/oauth/oauth-original.svg',
+    glow: 'rgba(59, 130, 246, 0.35)',
+  },
+  {
+    name: 'System Design',
+    category: 'Scalable Architecture',
+    type: 'core',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-plain.svg',
+    glow: 'rgba(249, 115, 22, 0.35)',
+  },
   {
     name: 'C++',
     category: 'Language',

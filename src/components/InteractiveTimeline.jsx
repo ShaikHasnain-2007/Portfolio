@@ -1,21 +1,21 @@
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
-import { GraduationCap, Code2, Award, Zap, Compass } from 'lucide-react';
+import { GraduationCap, Code2, Award, Zap, Trophy, Glasses } from 'lucide-react';
 
 const milestones = [
   {
     date: 'Late 2025',
     title: 'Commenced CS Degree (AI/ML)',
     location: 'SRM University AP',
-    description: 'Enrolled in B.Tech Computer Science & Engineering, specializing in Artificial Intelligence and Machine Learning to build the foundation of algorithmic logic and complex computing systems.',
+    description: 'Enrolled in B.Tech Computer Science & Engineering, specializing in Artificial Intelligence and Machine Learning to build the foundation of algorithmic logic, neural computation, and software systems.',
     icon: GraduationCap,
     glow: 'rgba(var(--cyan-rgb), 0.2)'
   },
   {
     date: 'December 2025',
-    title: 'Developed VOCA & Hack The Winter',
-    location: 'Hackathon Initiative',
-    description: 'Led team "Stark Industries" to engineer VOCA, an innovative AI-powered language learning platform, during the Hack The Winter hackathon.',
+    title: 'Hack The Winter – The Second Wave (Angry Bird Edition)',
+    location: 'Team Stark Industries',
+    description: 'Led Team "Stark Industries" to build the VOCA platform. Focused on robust system design, architecture mapping, scalable database schemas, and strict Git workflows with feature branches and pull request code reviews.',
     icon: Code2,
     glow: 'rgba(var(--fuchsia-rgb), 0.2)'
   },
@@ -23,24 +23,32 @@ const milestones = [
     date: 'January 2026',
     title: 'First Semester Milestone',
     location: 'Academic Standing',
-    description: 'Completed the initial university term with a strong academic foundation, achieving an 8.5 CGPA in core computer science curriculum.',
+    description: 'Completed the initial university term with a strong academic foundation, achieving an 8.5 CGPA in core computer science and engineering coursework.',
     icon: Award,
     glow: 'rgba(16, 185, 129, 0.2)'
   },
   {
     date: 'February 2026',
-    title: 'Hackathon Sprint & Triple Launches',
-    location: 'HackSRM & Code to Connect',
-    description: 'A high-velocity month engineering the CampusX LLM consensus engine for HackSRM, scripting SafeEcho for Code to Connect, and compiling the Firebase-integrated game "Flappy Bhai - SRM AP Edition".',
+    title: 'My1stHack 2025 & Hackathon Triple Launches',
+    location: 'GFG SRM AP & HackSRM',
+    description: 'Competed with Team Apex Coders at My1stHack 2025 focusing on live debugging and building software architecture from scratch. Engineered the CampusX AI consensus engine and deployed SafeEcho for Code to Connect.',
     icon: Zap,
     glow: 'rgba(245, 158, 11, 0.2)'
   },
   {
     date: 'March 2026',
-    title: 'QC² Quantum Computing Conclave',
-    location: 'Research & Innovation Hack',
-    description: 'Selected to participate in the prestigious QC² Quantum Computing Conclave hackathon, exploring quantum gates, superpositions, and molecular simulations.',
-    icon: Compass,
+    title: 'Adobe University Hackathon & QuizOff 2026',
+    location: 'Adobe, Unstop & CampusCrew',
+    description: 'Competed in the Adobe University Hackathon (Adobe & Unstop) with a focus on rapid prototyping, real-time problem solving, and cross-functional teamwork. Competed in QuizOff 2026 (India\'s Biggest AI Quiz) alongside 5.25L+ students globally.',
+    icon: Trophy,
+    glow: 'rgba(var(--fuchsia-rgb), 0.2)'
+  },
+  {
+    date: 'April 2026',
+    title: 'YISL AR/VR Innovation Workshop & QC²',
+    location: 'Young Innovators STEM Lab & X-Lab',
+    description: 'Hands-on spatial computing experience at Young Innovators STEM Lab (YISL) building VR applications, exploring WebXR technologies, and live testing on Meta Quest headsets at the X-Lab Auditorium. Selected for QC² Quantum Conclave.',
+    icon: Glasses,
     glow: 'rgba(var(--cyan-rgb), 0.2)'
   }
 ];

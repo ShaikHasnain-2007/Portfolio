@@ -1,8 +1,26 @@
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
-import { Award, Trophy, BookOpen, Cpu, Sparkles } from 'lucide-react';
+import { Award, Trophy, BookOpen, Cpu, Sparkles, ShieldCheck, Lock } from 'lucide-react';
 
 const certifications = [
+  {
+    title: 'Deloitte Cyber Job Simulation',
+    issuer: 'Deloitte (Forage)',
+    type: 'Simulation',
+    icon: ShieldCheck,
+    color: 'cyan',
+    year: '2026',
+    description: 'Hands-on exposure to practical cybersecurity tasks, threat analysis, and engineering secure software systems.',
+  },
+  {
+    title: 'Mastercard Cybersecurity Simulation',
+    issuer: 'Mastercard (Forage)',
+    type: 'Simulation',
+    icon: Lock,
+    color: 'fuchsia',
+    year: '2026',
+    description: 'Designed phishing awareness campaigns and analyzed threat simulation metrics for proactive organizational security.',
+  },
   {
     title: 'HackSRM Hackathon',
     issuer: 'SRM University AP',
@@ -10,16 +28,16 @@ const certifications = [
     icon: Trophy,
     color: 'cyan',
     year: '2026',
-    description: 'Built CampusX AI consensus engine — multi-LLM aggregation system',
+    description: 'Built CampusX AI consensus engine — dynamic multi-LLM aggregation and ranking system.',
   },
   {
-    title: 'Hack The Winter',
+    title: 'Hack The Winter – The Second Wave',
     issuer: 'Hackathon Community',
     type: 'Competition',
     icon: Award,
     color: 'fuchsia',
     year: '2025',
-    description: 'Led Team Stark Industries, engineered VOCA language learning platform',
+    description: 'Led Team Stark Industries (Angry Bird Edition), architected VOCA with scalable schemas & strict Git PR workflows.',
   },
   {
     title: 'Code to Connect',
@@ -28,7 +46,7 @@ const certifications = [
     icon: Sparkles,
     color: 'cyan',
     year: '2026',
-    description: 'Developed SafeEcho mental health support web application',
+    description: 'Developed SafeEcho mental health support platform with responsive sentiment intelligence.',
   },
   {
     title: 'QC² Quantum Conclave',
@@ -37,7 +55,7 @@ const certifications = [
     icon: Cpu,
     color: 'fuchsia',
     year: '2026',
-    description: 'Selected participant — quantum gates, superpositions, molecular simulations',
+    description: 'Selected participant — quantum gates, superpositions, and molecular computational algorithms.',
   },
   {
     title: 'B.Tech CSE — AI/ML',
@@ -46,7 +64,7 @@ const certifications = [
     icon: BookOpen,
     color: 'cyan',
     year: '2025–29',
-    description: 'Computer Science & Engineering with AI/ML specialization — 8.5 CGPA',
+    description: 'Computer Science & Engineering with AI/ML specialization — 8.5 CGPA academic standing.',
   },
 ];
 
