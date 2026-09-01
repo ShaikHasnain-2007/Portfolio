@@ -98,6 +98,7 @@ export default function BentoGrid() {
     setFormError('');
 
     try {
+      const apiKey = import.meta.env.VITE_WEB3FORMS_KEY || '7f6e89bf-60c1-438b-a4a0-5032643aa3b3';
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: {
@@ -105,7 +106,7 @@ export default function BentoGrid() {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
+          access_key: apiKey,
           name: formName.trim() || 'Anonymous Portfolio Visitor',
           email: formEmail.trim() || 'no-reply@portfolio.com',
           message: formText.trim(),
@@ -122,11 +123,15 @@ export default function BentoGrid() {
           setIsSubmitted(false);
         }, 4000);
       } else {
-        setFormError(data.message || 'Failed to send message. Please try again.');
+        setFormError(
+          data.message?.includes('Access Key') || data.message?.includes('Form ID')
+            ? 'Access Key not configured. Please add your free key to .env or email directly.'
+            : (data.message || 'Failed to send message. Please try again.')
+        );
       }
     } catch (err) {
       console.error("Web3Forms submission failed:", err);
-      setFormError('Network error. Please check your connection and try again.');
+      setFormError('Connection issue. You can also reach me directly at shaikhasnain2007@gmail.com.');
     } finally {
       setIsSubmitting(false);
     }
