@@ -63,43 +63,44 @@ export default function InteractiveTimeline() {
         ease: 'none',
         scrollTrigger: {
           trigger: el,
-          start: 'top 60%',
-          end: 'bottom 60%',
-          scrub: true,
+          start: 'top 75%',
+          end: 'bottom 85%',
+          scrub: 0.3,
         }
       });
 
-      // Animate timeline nodes and cards entering viewport alternately
-      items.forEach((item, idx) => {
+      // Animate timeline nodes and cards entering viewport quickly and smoothly
+      items.forEach((item) => {
         const node = item.querySelector('.timeline-node');
         const card = item.querySelector('.timeline-card');
-        const isEven = idx % 2 === 0;
 
         gsap.fromTo(node, 
           { scale: 0, opacity: 0 },
           { 
             scale: 1, 
             opacity: 1, 
-            duration: 0.5,
+            duration: 0.35,
+            ease: 'back.out(1.8)',
             scrollTrigger: {
-              trigger: node,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse'
+              trigger: item,
+              start: 'top 90%',
+              toggleActions: 'play none none none'
             }
           }
         );
 
         gsap.fromTo(card,
-          { x: isEven ? -200 : 200, opacity: 0 },
+          { y: 35, opacity: 0, scale: 0.97 },
           {
-            x: 0,
+            y: 0,
             opacity: 1,
-            duration: 0.8,
-            ease: 'power3.out',
+            scale: 1,
+            duration: 0.5,
+            ease: 'power2.out',
             scrollTrigger: {
-              trigger: card,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse'
+              trigger: item,
+              start: 'top 90%',
+              toggleActions: 'play none none none'
             }
           }
         );
