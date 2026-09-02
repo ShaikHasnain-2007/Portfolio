@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const skillCategories = [
   { id: 'all', name: 'All Skills' },
@@ -269,6 +270,16 @@ export default function SkillsSection() {
 
     return () => ctx.revert();
   }, []);
+
+  // Recalculate GSAP ScrollTrigger positions when skills filter changes section height
+  useEffect(() => {
+    const t1 = setTimeout(() => ScrollTrigger.refresh(), 50);
+    const t2 = setTimeout(() => ScrollTrigger.refresh(), 300);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [activeTab]);
 
   const activeSkills = activeTab === 'all' 
     ? SKILLS_DATA 

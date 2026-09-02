@@ -40,59 +40,86 @@ const stats = [
 
 export default function StatCounters() {
   const containerRef = useRef(null);
+  const animatedRef = useRef(false);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const ctx = gsap.context(() => {
-      const cards = el.querySelectorAll('.grid > div');
+    const animateNumbers = () => {
+      if (animatedRef.current) return;
+      animatedRef.current = true;
+
       const elements = el.querySelectorAll('.stat-val');
-      
-      // Animate cards entry from bottom edge
-      gsap.fromTo(cards,
-        { y: 80, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.0,
-          stagger: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          }
-        }
-      );
-      
       elements.forEach((numEl) => {
         const targetVal = parseFloat(numEl.getAttribute('data-target'));
         const isFloat = numEl.getAttribute('data-float') === 'true';
- 
+
         const obj = { val: 0 };
         gsap.to(obj, {
           val: targetVal,
-          duration: 2.0,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: numEl,
-            start: 'top 88%',
-            toggleActions: 'play none none none',
-          },
+          duration: 1.6,
+          ease: 'power2.out',
           onUpdate: () => {
             numEl.textContent = isFloat ? obj.val.toFixed(1) : Math.floor(obj.val).toString();
+          },
+          onComplete: () => {
+            numEl.textContent = isFloat ? targetVal.toFixed(1) : targetVal.toString();
           }
         });
       });
+    };
+
+    // IntersectionObserver triggers immediately when the section enters the viewport (via scroll OR layout shift above)
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateNumbers();
+          }
+        });
+      },
+      { threshold: 0.05, rootMargin: '80px' }
+    );
+
+    observer.observe(el);
+
+    const ctx = gsap.context(() => {
+      const cards = el.querySelectorAll('.grid > div');
+
+      // Animate cards entry from bottom edge
+      gsap.fromTo(cards,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 95%',
+            toggleActions: 'play none none none',
+            onEnter: () => animateNumbers(),
+          }
+        }
+      );
     }, el);
 
-    // Recalculate scroll triggers since the section is lazy loaded
+    // Refresh triggers to ensure geometry is up to date
     setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 100);
+      // Check if already in viewport on mount
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        animateNumbers();
+      }
+    }, 150);
 
-    return () => ctx.revert();
+    return () => {
+      observer.disconnect();
+      ctx.revert();
+    };
   }, []);
 
   return (
