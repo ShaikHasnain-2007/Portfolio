@@ -109,11 +109,30 @@ export default function CustomCursor() {
       }
     };
 
+    // Click ripple / shockwave effect
+    const onMouseDown = () => {
+      gsap.to(dot, { scale: 0.6, duration: 0.15 });
+      gsap.fromTo(ring, 
+        { scale: 0.9, opacity: 1 },
+        { scale: 2.4, opacity: 0.4, borderColor: 'var(--color-cyan-hex)', duration: 0.35, ease: 'power2.out', onComplete: () => {
+          gsap.to(ring, { scale: 1.0, opacity: 1, duration: 0.2 });
+        }}
+      );
+    };
+
+    const onMouseUp = () => {
+      gsap.to(dot, { scale: 1.0, duration: 0.2, ease: 'back.out(2)' });
+    };
+
+    window.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mouseover', handleMouseOver);
 
     // Cleanups
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mouseleave', onMouseLeave);
       document.removeEventListener('mouseenter', onMouseEnter);
       document.removeEventListener('mouseover', handleMouseOver);

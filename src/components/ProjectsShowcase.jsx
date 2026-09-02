@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { Github, Cpu, Gamepad2, HeartHandshake, Server, ShieldCheck, Glasses } from 'lucide-react';
 import { gsap } from 'gsap';
+import MagneticElement from './MagneticElement';
 
 const projects = [
   {
@@ -111,6 +112,7 @@ function ProjectCard({ project }) {
       className="group relative border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-xl p-5 md:p-7 flex flex-col justify-between overflow-hidden transition-all duration-300 spotlight-card h-full"
       style={{
         boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.37)`,
+        transformStyle: 'preserve-3d',
       }}
     >
       {/* Glow Backing Effect */}
@@ -121,9 +123,12 @@ function ProjectCard({ project }) {
         }}
       />
 
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow" style={{ transformStyle: 'preserve-3d' }}>
         {/* Dynamic Abstract Tech Banner */}
-        <div className={`relative w-full h-24 md:h-32 rounded-2xl bg-gradient-to-br ${project.gradient} border border-white/5 overflow-hidden flex items-center justify-center mb-4 shrink-0`}>
+        <div 
+          className={`relative w-full h-24 md:h-32 rounded-2xl bg-gradient-to-br ${project.gradient} border border-white/5 overflow-hidden flex items-center justify-center mb-4 shrink-0 transition-transform duration-300 group-hover:translate-z-4`}
+          style={{ transform: 'translateZ(10px)' }}
+        >
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
           <IconComp className="w-12 h-12 md:w-16 md:h-16 text-white/80 group-hover:scale-110 transition-transform duration-500 relative z-10" />
           <span className="absolute bottom-2.5 left-3 text-[9px] font-bold tracking-widest uppercase text-white/60">
@@ -132,18 +137,26 @@ function ProjectCard({ project }) {
         </div>
 
         {/* Project Meta */}
-        <span className="text-cyan-400 text-[10px] font-bold tracking-widest uppercase font-satoshi">PROJECT</span>
-        <h3 className="font-syne font-bold text-xl md:text-2xl text-white mt-0.5 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-fuchsia-500 transition-all duration-300">
+        <span className="text-cyan-400 text-[10px] font-bold tracking-widest uppercase font-satoshi" style={{ transform: 'translateZ(12px)' }}>
+          PROJECT
+        </span>
+        <h3 
+          className="font-syne font-bold text-xl md:text-2xl text-white mt-0.5 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-fuchsia-500 transition-all duration-300"
+          style={{ transform: 'translateZ(18px)' }}
+        >
           {project.title}
         </h3>
-        <p className="font-satoshi text-xs md:text-sm text-white/60 leading-relaxed mb-4 line-clamp-3 md:line-clamp-4">
+        <p 
+          className="font-satoshi text-xs md:text-sm text-white/60 leading-relaxed mb-4 line-clamp-3 md:line-clamp-4"
+          style={{ transform: 'translateZ(8px)' }}
+        >
           {project.description}
         </p>
       </div>
 
-      <div className="shrink-0">
+      <div className="shrink-0" style={{ transformStyle: 'preserve-3d' }}>
         {/* Tech Badges */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        <div className="flex flex-wrap gap-1.5 mb-4" style={{ transform: 'translateZ(14px)' }}>
           {project.tech.map((t, i) => (
             <span
               key={i}
@@ -155,16 +168,18 @@ function ProjectCard({ project }) {
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center gap-4 pt-3 border-t border-white/5">
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-white/70 hover:text-cyan-400 font-bold font-syne text-[10px] uppercase tracking-widest transition-colors duration-300"
-          >
-            <Github size={12} />
-            <span>Repository</span>
-          </a>
+        <div className="flex items-center gap-4 pt-3 border-t border-white/5" style={{ transform: 'translateZ(16px)' }}>
+          <MagneticElement>
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-white/70 hover:text-cyan-400 font-bold font-syne text-[10px] uppercase tracking-widest transition-colors duration-300 cursor-pointer"
+            >
+              <Github size={12} />
+              <span>Repository</span>
+            </a>
+          </MagneticElement>
         </div>
       </div>
     </div>

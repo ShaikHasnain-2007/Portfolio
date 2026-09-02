@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import MagneticElement from './MagneticElement';
 
 const NAV_ITEMS = [
   { label: 'About', target: 'about' },
@@ -288,13 +289,15 @@ export default function Navbar() {
               </label>
             </fieldset>
 
-            <button
-              onClick={() => handleNavClick('contact')}
-              className="liquid-glass-btn group flex items-center gap-1.5 font-syne text-[10px] font-bold uppercase tracking-widest px-4 py-2.5 rounded-full text-white hover:text-cyan-400 active:scale-95 cursor-pointer"
-            >
-              <span>Get In Touch</span>
-              <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-cyan-400" />
-            </button>
+            <MagneticElement>
+              <button
+                onClick={() => handleNavClick('contact')}
+                className="liquid-glass-btn group flex items-center gap-1.5 font-syne text-[10px] font-bold uppercase tracking-widest px-4 py-2.5 rounded-full text-white hover:text-cyan-400 active:scale-95 cursor-pointer"
+              >
+                <span>Get In Touch</span>
+                <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-cyan-400" />
+              </button>
+            </MagneticElement>
           </div>
 
           {/* Mobile Menu Button */}

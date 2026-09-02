@@ -101,6 +101,12 @@ export default function BentoGrid() {
       return;
     }
 
+    const trimmedEmail = formEmail.trim();
+    if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      setFormError('Please enter a valid email address (e.g. name@example.com).');
+      return;
+    }
+
     if (!formText.trim()) {
       setFormError('Please write a message before sending.');
       return;
@@ -119,9 +125,9 @@ export default function BentoGrid() {
         },
         body: JSON.stringify({
           access_key: apiKey,
-          name: formName.trim() || 'Anonymous Portfolio Visitor',
-          email: formEmail.trim() || 'no-reply@portfolio.com',
-          message: formText.trim(),
+          name: formName.trim().slice(0, 80) || 'Anonymous Portfolio Visitor',
+          email: trimmedEmail.slice(0, 100) || 'no-reply@portfolio.com',
+          message: formText.trim().slice(0, 1200),
           subject: 'New Message from Shaik Hasnain Portfolio',
           botcheck: botcheck
         })
@@ -347,6 +353,7 @@ export default function BentoGrid() {
                   <input
                     id="contact-name"
                     type="text"
+                    maxLength={80}
                     placeholder="Your Name (Optional)"
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
@@ -358,6 +365,7 @@ export default function BentoGrid() {
                   <input
                     id="contact-email"
                     type="email"
+                    maxLength={100}
                     placeholder="Your Email (Optional)"
                     value={formEmail}
                     onChange={(e) => setFormEmail(e.target.value)}
@@ -372,6 +380,7 @@ export default function BentoGrid() {
                   <input
                     id="contact-text"
                     type="text"
+                    maxLength={1200}
                     placeholder="Drop a quick message..."
                     value={formText}
                     onChange={(e) => setFormText(e.target.value)}
@@ -646,7 +655,7 @@ export default function BentoGrid() {
                             });
                           }}
                           onBlur={() => setActiveCommits(null)}
-                          className={`flex-1 aspect-square max-w-[14px] min-w-[7px] rounded-[2px] transition-all duration-200 hover:scale-125 focus:scale-125 focus:outline-none focus:ring-1 focus:ring-cyan-400 cursor-crosshair ${colorClass}`}
+                          className={`flex-1 aspect-square max-w-[14px] min-w-[7px] rounded-[2px] transition-all duration-200 hover:scale-150 hover:z-20 hover:shadow-[0_0_12px_rgba(var(--cyan-rgb),1)] focus:scale-150 focus:z-20 focus:outline-none focus:ring-1 focus:ring-cyan-400 cursor-crosshair ${colorClass}`}
                           role="gridcell"
                           aria-label={`${count} contributions on ${date}`}
                         />
