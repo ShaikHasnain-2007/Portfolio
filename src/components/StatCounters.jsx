@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -38,48 +38,68 @@ const stats = [
   }
 ];
 
+function SingleCounter({ stat, shouldAnimate }) {
+  const [displayVal, setDisplayVal] = useState(0);
+
+  useEffect(() => {
+    if (!shouldAnimate) return;
+
+    const targetVal = stat.value;
+    const isFloat = stat.isFloat;
+    const obj = { val: 0 };
+
+    const tween = gsap.to(obj, {
+      val: targetVal,
+      duration: 1.6,
+      ease: 'power2.out',
+      onUpdate: () => {
+        setDisplayVal(isFloat ? parseFloat(obj.val.toFixed(1)) : Math.floor(obj.val));
+      },
+      onComplete: () => {
+        setDisplayVal(targetVal);
+      }
+    });
+
+    return () => {
+      tween.kill();
+    };
+  }, [shouldAnimate, stat.value, stat.isFloat]);
+
+  return (
+    <span className="font-pixel text-4xl sm:text-5xl md:text-6xl text-white tracking-wider">
+      {stat.isFloat ? (displayVal.toFixed ? displayVal.toFixed(1) : displayVal) : displayVal}
+    </span>
+  );
+}
+
 export default function StatCounters() {
   const containerRef = useRef(null);
-  const animatedRef = useRef(false);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const animateNumbers = () => {
-      if (animatedRef.current) return;
-      animatedRef.current = true;
-
-      const elements = el.querySelectorAll('.stat-val');
-      elements.forEach((numEl) => {
-        const targetVal = parseFloat(numEl.getAttribute('data-target'));
-        const isFloat = numEl.getAttribute('data-float') === 'true';
-
-        const obj = { val: 0 };
-        gsap.to(obj, {
-          val: targetVal,
-          duration: 1.6,
-          ease: 'power2.out',
-          onUpdate: () => {
-            numEl.textContent = isFloat ? obj.val.toFixed(1) : Math.floor(obj.val).toString();
-          },
-          onComplete: () => {
-            numEl.textContent = isFloat ? targetVal.toFixed(1) : targetVal.toString();
-          }
-        });
-      });
+    // Check if already in viewport immediately on mount or layout shift
+    const checkVisibility = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 100 && rect.bottom > -100) {
+        setShouldAnimate(true);
+      }
     };
 
-    // IntersectionObserver triggers immediately when the section enters the viewport (via scroll OR layout shift above)
+    checkVisibility();
+
+    // IntersectionObserver triggers immediately when the section enters viewport (via scroll OR tab filtering layout shifts)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            animateNumbers();
+            setShouldAnimate(true);
           }
         });
       },
-      { threshold: 0.05, rootMargin: '80px' }
+      { threshold: 0.05, rootMargin: '100px' }
     );
 
     observer.observe(el);
@@ -100,23 +120,19 @@ export default function StatCounters() {
             trigger: el,
             start: 'top 95%',
             toggleActions: 'play none none none',
-            onEnter: () => animateNumbers(),
+            onEnter: () => setShouldAnimate(true),
           }
         }
       );
     }, el);
 
-    // Refresh triggers to ensure geometry is up to date
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       ScrollTrigger.refresh();
-      // Check if already in viewport on mount
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        animateNumbers();
-      }
+      checkVisibility();
     }, 150);
 
     return () => {
+      clearTimeout(timer);
       observer.disconnect();
       ctx.revert();
     };
@@ -147,15 +163,9 @@ export default function StatCounters() {
               />
 
               <div className="relative z-10 text-left">
-                {/* Large animated number */}
+                {/* Large animated number managed by React state */}
                 <div className="flex items-baseline">
-                  <span
-                    className="stat-val font-pixel text-4xl sm:text-5xl md:text-6xl text-white tracking-wider"
-                    data-target={stat.value}
-                    data-float={stat.isFloat ? 'true' : 'false'}
-                  >
-                    0
-                  </span>
+                  <SingleCounter stat={stat} shouldAnimate={shouldAnimate} />
                   <span className="font-pixel text-3xl sm:text-4xl md:text-5xl text-cyan-400 ml-1">
                     {stat.suffix}
                   </span>
