@@ -244,14 +244,14 @@ export default function HolographicCore() {
     // 10. Animation Loop with Visibility Gating
     let animationFrameId = null;
     let isVisible = true;
-    let clock = new THREE.Clock();
+    const startTime = performance.now();
     let telemetryThrottle = 0;
 
     const render = () => {
       if (!isVisible) return;
       animationFrameId = requestAnimationFrame(render);
 
-      const elapsedTime = clock.getElapsedTime();
+      const elapsedTime = (performance.now() - startTime) * 0.001;
 
       // Inertial momentum and auto rotation
       if (!isDragging) {
@@ -324,7 +324,6 @@ export default function HolographicCore() {
       entries.forEach((entry) => {
         isVisible = entry.isIntersecting;
         if (isVisible && !animationFrameId) {
-          clock.start();
           render();
         } else if (!isVisible && animationFrameId) {
           cancelAnimationFrame(animationFrameId);
