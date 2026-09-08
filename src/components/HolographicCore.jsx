@@ -244,14 +244,14 @@ export default function HolographicCore() {
     // 10. Animation Loop with Visibility Gating
     let animationFrameId = null;
     let isVisible = true;
-    const startTime = performance.now();
+    let clock = new THREE.Clock();
     let telemetryThrottle = 0;
 
     const render = () => {
       if (!isVisible) return;
       animationFrameId = requestAnimationFrame(render);
 
-      const elapsedTime = (performance.now() - startTime) * 0.001;
+      const elapsedTime = clock.getElapsedTime();
 
       // Inertial momentum and auto rotation
       if (!isDragging) {
@@ -324,6 +324,7 @@ export default function HolographicCore() {
       entries.forEach((entry) => {
         isVisible = entry.isIntersecting;
         if (isVisible && !animationFrameId) {
+          clock.start();
           render();
         } else if (!isVisible && animationFrameId) {
           cancelAnimationFrame(animationFrameId);
@@ -417,9 +418,9 @@ export default function HolographicCore() {
           </div>
         </div>
 
-        {/* Drag Indicator Positioned Above Bottom Telemetry */}
-        <div className={`absolute bottom-12 left-1/2 -translate-x-1/2 transition-opacity duration-300 pointer-events-none text-center whitespace-nowrap ${isInteracting ? 'opacity-0' : 'opacity-70 group-hover/hologram:opacity-100'}`}>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-white/10 text-[9px] font-mono uppercase tracking-widest text-white/70 shadow-lg backdrop-blur-md">
+        {/* Center Hover / Drag Indicator */}
+        <div className={`transition-opacity duration-300 pointer-events-none text-center ${isInteracting ? 'opacity-0' : 'opacity-80 group-hover/hologram:opacity-100'}`}>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/50 border border-white/10 text-[9px] font-mono uppercase tracking-widest text-white/70 shadow-lg backdrop-blur-md">
             <Sparkles size={10} className="text-cyan-400 animate-spin" style={{ animationDuration: '6s' }} />
             <span>DRAG TO ROTATE • CLICK TO BURST</span>
           </div>
