@@ -4,7 +4,7 @@ import { Send, MapPin, GraduationCap } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import BentoCard from './BentoCard';
 import MagneticElement from './MagneticElement';
-import HolographicCore from './HolographicCore';
+import CyberMiniGame from './CyberMiniGame';
 
 export default function BentoGrid() {
   const gridRef = useRef(null);
@@ -463,10 +463,10 @@ export default function BentoGrid() {
           </BentoCard>
         </div>
 
-        {/* CARD 4: Interactive 3D Holographic Core (6 cols, 2 rows) */}
+        {/* CARD 4: Playable Micro-Game: Neon Defender (6 cols, 2 rows) */}
         <div className="bento-wrapper col-span-12 md:col-span-6 row-span-2">
           <BentoCard className="w-full h-full p-0 overflow-hidden">
-            <HolographicCore />
+            <CyberMiniGame />
           </BentoCard>
         </div>
 
