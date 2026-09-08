@@ -4,6 +4,7 @@ import { Send, MapPin, GraduationCap } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import BentoCard from './BentoCard';
 import MagneticElement from './MagneticElement';
+import HolographicCore from './HolographicCore';
 
 export default function BentoGrid() {
   const gridRef = useRef(null);
@@ -462,26 +463,10 @@ export default function BentoGrid() {
           </BentoCard>
         </div>
 
-        {/* CARD 4: Profile Picture (6 cols, 2 rows) - Expanded side-by-side layout */}
+        {/* CARD 4: Interactive 3D Holographic Core (6 cols, 2 rows) */}
         <div className="bento-wrapper col-span-12 md:col-span-6 row-span-2">
-          <BentoCard className="w-full h-full">
-            <img
-              src="/mine_pic.webp"
-              alt="Shaik Hasnain Profile"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-black/30 pointer-events-none" />
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: 'radial-gradient(circle, transparent 35%, rgba(0,0,0,0.85) 100%)'
-              }}
-            />
-
-            {/* Cyberpunk color shift overlay */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/30 via-purple-500/20 to-fuchsia-500/30 opacity-0 group-hover:opacity-100 transition-all duration-500 mix-blend-overlay pointer-events-none" />
-            <div className="absolute inset-0 bg-cyan-400/10 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none border border-cyan-400/40 rounded-3xl" />
+          <BentoCard className="w-full h-full p-0 overflow-hidden">
+            <HolographicCore />
           </BentoCard>
         </div>
 
