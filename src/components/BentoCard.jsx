@@ -39,6 +39,13 @@ export default function BentoCard({ children, className = '', style = {}, speed 
       data-speed={speed}
       {...props}
     >
+      {/* Dynamic Cursor Spotlight Glow */}
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-0"
+        style={{
+          background: `radial-gradient(380px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(var(--cyan-rgb), 0.12), transparent 65%)`
+        }}
+      />
       {children}
     </div>
   );

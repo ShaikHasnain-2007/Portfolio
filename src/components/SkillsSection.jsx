@@ -319,14 +319,22 @@ export default function SkillsSection() {
                 aria-selected={isActive}
                 aria-controls="skills-panel"
                 id={`tab-${cat.id}`}
+                data-cursor="FILTER"
                 onClick={() => setActiveTab(cat.id)}
-                className={`font-syne text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border transition-all duration-300 relative ${
+                className={`font-syne text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border transition-all duration-300 relative z-10 cursor-pointer ${
                   isActive 
-                    ? 'border-cyan-400/50 text-white bg-cyan-500/10 font-bold shadow-[0_0_25px_rgba(var(--cyan-rgb),0.4)]' 
+                    ? 'text-white font-bold border-cyan-400/40' 
                     : 'border-white/5 text-white/40 hover:text-white hover:border-white/20 bg-transparent'
                 }`}
               >
                 {cat.name}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeSkillTabIndicator"
+                    className="absolute inset-0 bg-cyan-500/20 border border-cyan-400/60 rounded-full shadow-[0_0_20px_rgba(var(--cyan-rgb),0.5)] -z-10"
+                    transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                  />
+                )}
               </button>
             );
           })}
@@ -339,16 +347,17 @@ export default function SkillsSection() {
           aria-labelledby={`tab-${activeTab}`} 
           className="skills-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 sm:gap-3.5 w-full items-start"
         >
-          <AnimatePresence>
+          <AnimatePresence mode="popLayout">
             {activeSkills.map((skill) => (
               <motion.div
                 layout
-                initial={{ opacity: 0, scale: 0.9, y: 15 }}
+                initial={{ opacity: 0, scale: 0.88, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 15 }}
-                transition={{ duration: 0.22, ease: 'easeOut' }}
+                exit={{ opacity: 0, scale: 0.88, y: -10 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 key={skill.name}
-                className="group relative h-[105px] sm:h-[116px] p-3 sm:p-3.5 rounded-2xl border border-white/10 bg-black/50 hover:bg-white/[0.05] hover:border-cyan-400/40 transition-all duration-300 cursor-default flex flex-col items-center justify-center gap-2 text-center select-none shadow-[0_4px_16px_rgba(0,0,0,0.4)] hover:-translate-y-1"
+                data-cursor="SKILL"
+                className="group relative h-[105px] sm:h-[116px] p-3 sm:p-3.5 rounded-2xl border border-white/10 bg-black/50 hover:bg-white/[0.06] hover:border-cyan-400/50 transition-all duration-300 cursor-default flex flex-col items-center justify-center gap-2 text-center select-none shadow-[0_4px_16px_rgba(0,0,0,0.4)] hover:-translate-y-1.5 hover:shadow-[0_8px_24px_rgba(var(--cyan-rgb),0.2)]"
               >
                 {/* Radial Glow on Hover */}
                 <div 

@@ -148,9 +148,12 @@ export default function InteractiveTimeline() {
           {/* Active growing line (Neon gradient fill on scroll) */}
           <div 
             ref={lineProgressRef}
-            className="absolute left-[15px] md:left-[31px] top-4 w-[2px] bg-gradient-to-b from-cyan-400 to-fuchsia-500 rounded-full origin-top h-0"
+            className="absolute left-[15px] md:left-[31px] top-4 w-[2px] bg-gradient-to-b from-cyan-400 via-fuchsia-400 to-cyan-300 rounded-full origin-top h-0 z-10"
             style={{ willChange: 'height' }}
-          />
+          >
+            {/* Glowing Laser Head Tracker */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(var(--cyan-rgb),1),0_0_24px_rgba(var(--cyan-rgb),0.8)] animate-pulse" />
+          </div>
 
           {/* Timeline Nodes & Cards */}
           <div className="flex flex-col gap-16">
@@ -160,16 +163,32 @@ export default function InteractiveTimeline() {
                 <div key={i} className="timeline-item relative flex flex-col items-start text-left">
                   
                   {/* Glowing Node Dot */}
-                  <div className="timeline-node absolute left-[-28px] md:left-[-44px] top-1.5 w-6 h-6 rounded-full bg-black border-2 border-cyan-400 flex items-center justify-center z-20 shadow-[0_0_10px_rgba(34,211,238,0.5)]">
-                    <div className="w-2 h-2 rounded-full bg-cyan-400" />
+                  <div className="timeline-node absolute left-[-28px] md:left-[-44px] top-1.5 w-6 h-6 rounded-full bg-black border-2 border-cyan-400 flex items-center justify-center z-20 shadow-[0_0_12px_rgba(34,211,238,0.6)] group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
                   </div>
 
                   {/* Glass Card Container */}
-                  <div className="timeline-card w-full bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(var(--cyan-rgb),0.3)] transition-all duration-500 relative group">
-                    {/* Shadow overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.01] to-transparent rounded-3xl pointer-events-none" />
+                  <div
+                    data-cursor="TIMELINE"
+                    onMouseMove={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      e.currentTarget.style.setProperty('--card-x', `${e.clientX - rect.left}px`);
+                      e.currentTarget.style.setProperty('--card-y', `${e.clientY - rect.top}px`);
+                    }}
+                    className="timeline-card w-full bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 hover:border-cyan-400/50 hover:-translate-y-1.5 hover:shadow-[0_12px_36px_rgba(var(--cyan-rgb),0.25)] transition-all duration-300 relative group overflow-hidden"
+                  >
+                    {/* Dynamic spotlight cursor tracking gradient */}
+                    <div 
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                      style={{
+                        background: `radial-gradient(350px circle at var(--card-x, 50%) var(--card-y, 50%), ${m.glow}, transparent 65%)`
+                      }}
+                    />
 
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                    {/* Top ambient hairline border glow */}
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                       {/* Left: Date / Title */}
                       <div>
                         <span className="text-[10px] font-bold tracking-widest text-cyan-400 uppercase font-syne bg-cyan-400/10 border border-cyan-400/20 px-3 py-1 rounded-full">
@@ -188,7 +207,7 @@ export default function InteractiveTimeline() {
                           </span>
                         </div>
                         <div 
-                          className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shadow-inner text-white group-hover:text-fuchsia-400 transition-colors duration-300"
+                          className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shadow-inner text-white group-hover:text-fuchsia-400 group-hover:border-fuchsia-400/30 transition-all duration-300"
                           style={{ boxShadow: `inset 0 0 10px rgba(255,255,255,0.05)` }}
                         >
                           <IconComp size={18} />
@@ -197,7 +216,7 @@ export default function InteractiveTimeline() {
                     </div>
 
                     {/* Milestone body text */}
-                    <p className="font-satoshi text-sm md:text-base text-white/60 leading-relaxed">
+                    <p className="relative z-10 font-satoshi text-sm md:text-base text-white/60 leading-relaxed">
                       {m.description}
                     </p>
                   </div>

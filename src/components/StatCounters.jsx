@@ -40,6 +40,7 @@ const stats = [
 
 function SingleCounter({ stat, shouldAnimate }) {
   const [displayVal, setDisplayVal] = useState(0);
+  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
     if (!shouldAnimate) return;
@@ -50,13 +51,17 @@ function SingleCounter({ stat, shouldAnimate }) {
 
     const tween = gsap.to(obj, {
       val: targetVal,
-      duration: 1.6,
-      ease: 'power2.out',
+      duration: 1.4,
+      ease: 'power4.out',
+      onStart: () => {
+        setCompleted(false);
+      },
       onUpdate: () => {
         setDisplayVal(isFloat ? parseFloat(obj.val.toFixed(1)) : Math.floor(obj.val));
       },
       onComplete: () => {
         setDisplayVal(targetVal);
+        setCompleted(true);
       }
     });
 
@@ -66,7 +71,11 @@ function SingleCounter({ stat, shouldAnimate }) {
   }, [shouldAnimate, stat.value, stat.isFloat]);
 
   return (
-    <span className="font-pixel text-4xl sm:text-5xl md:text-6xl text-white tracking-wider">
+    <span
+      className={`font-pixel text-4xl sm:text-5xl md:text-6xl text-white tracking-wider inline-block transition-transform duration-300 ${
+        completed ? 'scale-105 drop-shadow-[0_0_12px_rgba(var(--cyan-rgb),0.5)]' : ''
+      }`}
+    >
       {stat.isFloat ? (displayVal.toFixed ? displayVal.toFixed(1) : displayVal) : displayVal}
     </span>
   );
@@ -90,7 +99,7 @@ export default function StatCounters() {
 
     checkVisibility();
 
-    // IntersectionObserver triggers immediately when the section enters viewport (via scroll OR tab filtering layout shifts)
+    // IntersectionObserver triggers immediately when the section enters viewport
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -107,14 +116,14 @@ export default function StatCounters() {
     const ctx = gsap.context(() => {
       const cards = el.querySelectorAll('.grid > div');
 
-      // Animate cards entry from bottom edge
+      // Animate cards entry from bottom edge with snappy power3.out
       gsap.fromTo(cards,
         { y: 50, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           duration: 0.8,
-          stagger: 0.1,
+          stagger: 0.12,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: el,
@@ -138,6 +147,15 @@ export default function StatCounters() {
     };
   }, []);
 
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--card-x', `${x}px`);
+    card.style.setProperty('--card-y', `${y}px`);
+  };
+
   return (
     <section ref={containerRef} className="relative w-full bg-transparent py-16 px-4 md:px-12 flex flex-col items-center">
       {/* Background orb glow */}
@@ -149,18 +167,23 @@ export default function StatCounters() {
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="group border border-white/5 bg-white/[0.02] backdrop-blur-xl rounded-3xl p-6 md:p-8 flex flex-col justify-between overflow-hidden relative transition-all duration-500 hover:border-white/20 hover:bg-white/[0.05]"
+              data-cursor="STATS"
+              onMouseMove={handleMouseMove}
+              className="group border border-white/5 bg-white/[0.02] backdrop-blur-xl rounded-3xl p-6 md:p-8 flex flex-col justify-between overflow-hidden relative transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:bg-white/[0.05] hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
               style={{
                 boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.4)`,
               }}
             >
-              {/* Spotlight cursor tracking placeholder gradient */}
+              {/* Dynamic spotlight cursor tracking gradient */}
               <div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                 style={{
-                  background: `radial-gradient(300px circle at 50% 50%, ${stat.glow}, transparent 60%)`
+                  background: `radial-gradient(350px circle at var(--card-x, 50%) var(--card-y, 50%), ${stat.glow}, transparent 65%)`
                 }}
               />
+
+              {/* Top ambient hairline border glow */}
+              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               <div className="relative z-10 text-left">
                 {/* Large animated number managed by React state */}

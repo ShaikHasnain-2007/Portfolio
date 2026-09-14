@@ -55,24 +55,28 @@ export default function Footer() {
             <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-cyan-400">NAVIGATION</span>
             <button
               onClick={() => scrollToSection('about')}
+              data-cursor="NAV"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300 w-fit cursor-pointer text-left"
             >
               About
             </button>
             <button
               onClick={() => scrollToSection('skills')}
+              data-cursor="NAV"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300 w-fit cursor-pointer text-left"
             >
               Skills
             </button>
             <button
               onClick={() => scrollToSection('projects')}
+              data-cursor="NAV"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300 w-fit cursor-pointer text-left"
             >
               Projects
             </button>
             <button
               onClick={() => scrollToSection('timeline')}
+              data-cursor="NAV"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300 w-fit cursor-pointer text-left"
             >
               Timeline
@@ -86,6 +90,7 @@ export default function Footer() {
               href="https://linkedin.com/in/shaik-hasnain-55a072396"
               target="_blank"
               rel="noopener noreferrer"
+              data-cursor="LINK"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300"
             >
               LinkedIn
@@ -94,6 +99,7 @@ export default function Footer() {
               href="https://github.com/ShaikHasnain-2007"
               target="_blank"
               rel="noopener noreferrer"
+              data-cursor="CODE"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300"
             >
               GitHub
@@ -102,6 +108,7 @@ export default function Footer() {
               href="https://www.instagram.com/shaik_hasnain99"
               target="_blank"
               rel="noopener noreferrer"
+              data-cursor="LINK"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300"
             >
               Instagram
@@ -113,6 +120,7 @@ export default function Footer() {
         <div className="self-end md:self-start">
           <button
             onClick={scrollToTop}
+            data-cursor="TOP"
             className="group flex items-center gap-2 font-mono text-xs uppercase font-bold tracking-widest text-white/50 hover:text-cyan-400 transition-colors duration-300"
           >
             <span>Back To Top</span>

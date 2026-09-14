@@ -174,6 +174,7 @@ function ProjectCard({ project }) {
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
+              data-cursor="CODE"
               className="flex items-center gap-2 text-white/70 hover:text-cyan-400 font-bold font-syne text-[10px] uppercase tracking-widest transition-colors duration-300 cursor-pointer"
             >
               <Github size={12} />
@@ -189,10 +190,12 @@ function ProjectCard({ project }) {
 export default function ProjectsShowcase() {
   const containerRef = useRef(null);
   const trackRef = useRef(null);
+  const progressBarRef = useRef(null);
 
   useEffect(() => {
     const container = containerRef.current;
     const track = trackRef.current;
+    const progressBar = progressBarRef.current;
     if (!container || !track) return;
 
     // Calculate translation distance on trigger match
@@ -216,7 +219,14 @@ export default function ProjectsShowcase() {
     tl.to(track, {
       x: getTranslateX,
       ease: 'none'
-    });
+    }, 0);
+
+    if (progressBar) {
+      tl.to(progressBar, {
+        scaleX: 1,
+        ease: 'none'
+      }, 0);
+    }
 
     return () => {
       if (tl.scrollTrigger) tl.scrollTrigger.kill();
@@ -264,6 +274,7 @@ export default function ProjectsShowcase() {
               {projects.map((proj, idx) => (
                 <div
                   key={idx}
+                  data-cursor="PROJECT"
                   className="project-card-wrapper w-[85vw] sm:w-[420px] md:w-[480px] flex-shrink-0 h-[52vh] min-h-[420px] max-h-[500px]"
                 >
                   <ProjectCard project={proj} />
@@ -272,13 +283,23 @@ export default function ProjectsShowcase() {
             </div>
           </div>
 
-          {/* Bottom stats indicators */}
-          <div className="w-full px-6 md:px-16 flex justify-between items-center text-white/30 text-[10px] font-bold font-syne tracking-widest uppercase">
-            <span>Scroll to explore projects</span>
-            <div className="flex gap-2 items-center">
-              <span>01</span>
-              <div className="w-12 h-px bg-white/10" />
-              <span>04</span>
+          {/* Bottom stats & dynamic scrub progress indicator */}
+          <div className="w-full px-6 md:px-16 flex justify-between items-center text-white/40 text-[10px] font-bold font-syne tracking-widest uppercase">
+            <span className="flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+              Scroll down to explore horizontal gallery
+            </span>
+            <div className="flex gap-3 items-center">
+              <span className="text-cyan-400">01</span>
+              {/* Scrub Progress Bar */}
+              <div className="w-28 sm:w-44 md:w-60 h-[3px] bg-white/10 rounded-full overflow-hidden relative">
+                <div
+                  ref={progressBarRef}
+                  className="h-full w-full bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-cyan-400 origin-left rounded-full shadow-[0_0_8px_rgba(var(--cyan-rgb),0.8)]"
+                  style={{ transform: 'scaleX(0)' }}
+                />
+              </div>
+              <span className="text-white/60">06</span>
             </div>
           </div>
 
