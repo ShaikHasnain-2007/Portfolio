@@ -242,29 +242,43 @@ export default function SkillsSection() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
-          start: 'top 90%',
-          end: 'top 50%',
+          start: 'top 88%',
+          end: 'top 45%',
           scrub: 1,
           invalidateOnRefresh: true,
         }
       });
 
       tl.fromTo(header, 
-        { x: -120, opacity: 0 }, 
-        { x: 0, opacity: 1, ease: 'power2.out' },
+        { y: 60, opacity: 0, filter: 'blur(10px)' }, 
+        { y: 0, opacity: 1, filter: 'blur(0px)', ease: 'power3.out' },
         0
       );
 
       tl.fromTo(tabs, 
-        { x: 120, opacity: 0 }, 
-        { x: 0, opacity: 1, ease: 'power2.out' },
-        0.1
+        { y: 40, opacity: 0, scale: 0.94, filter: 'blur(8px)' }, 
+        { y: 0, opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'power3.out' },
+        0.08
       );
 
       tl.fromTo(grid, 
-        { y: 80, opacity: 0, scale: 0.96 }, 
-        { y: 0, opacity: 1, scale: 1, ease: 'power2.out' },
-        0.2
+        { 
+          y: 90, 
+          rotateX: 18, 
+          scale: 0.9, 
+          opacity: 0, 
+          filter: 'blur(12px)',
+          transformOrigin: '50% 0%'
+        }, 
+        { 
+          y: 0, 
+          rotateX: 0, 
+          scale: 1, 
+          opacity: 1, 
+          filter: 'blur(0px)', 
+          ease: 'power3.out' 
+        },
+        0.16
       );
     }, containerRef);
 

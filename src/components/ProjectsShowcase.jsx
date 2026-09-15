@@ -228,6 +228,26 @@ export default function ProjectsShowcase() {
       }, 0);
     }
 
+    // Dynamic 3D depth curve as each card scrolls into center focus
+    const cardWrappers = track.querySelectorAll('.project-card-wrapper');
+    cardWrappers.forEach((card) => {
+      gsap.fromTo(card,
+        { scale: 0.94, filter: 'blur(2px)' },
+        {
+          scale: 1,
+          filter: 'blur(0px)',
+          ease: 'power1.out',
+          scrollTrigger: {
+            trigger: card,
+            containerAnimation: tl,
+            start: 'left 95%',
+            end: 'center 50%',
+            scrub: true,
+          }
+        }
+      );
+    });
+
     return () => {
       if (tl.scrollTrigger) tl.scrollTrigger.kill();
       tl.kill();

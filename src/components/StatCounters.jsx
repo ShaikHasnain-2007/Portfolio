@@ -116,18 +116,28 @@ export default function StatCounters() {
     const ctx = gsap.context(() => {
       const cards = el.querySelectorAll('.grid > div');
 
-      // Animate cards entry from bottom edge with snappy power3.out
+      // Animate cards entry from 3D camera depth with blur-to-sharp dissolve
       gsap.fromTo(cards,
-        { y: 50, opacity: 0 },
+        {
+          y: 75,
+          rotateX: 20,
+          scale: 0.88,
+          opacity: 0,
+          filter: 'blur(12px)',
+          transformOrigin: '50% 0%'
+        },
         {
           y: 0,
+          rotateX: 0,
+          scale: 1,
           opacity: 1,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: 'power3.out',
+          filter: 'blur(0px)',
+          duration: 1.0,
+          stagger: 0.14,
+          ease: 'power4.out',
           scrollTrigger: {
             trigger: el,
-            start: 'top 95%',
+            start: 'top 92%',
             toggleActions: 'play none none none',
             onEnter: () => setShouldAnimate(true),
           }

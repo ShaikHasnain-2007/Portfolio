@@ -98,16 +98,27 @@ export default function InteractiveTimeline() {
         );
 
         gsap.fromTo(card,
-          { y: 35, opacity: 0, scale: 0.97 },
           {
-            y: 0,
-            opacity: 1,
+            x: 40,
+            rotateY: -15,
+            rotateX: 10,
+            scale: 0.92,
+            opacity: 0,
+            filter: 'blur(10px)',
+            transformOrigin: 'left center'
+          },
+          {
+            x: 0,
+            rotateY: 0,
+            rotateX: 0,
             scale: 1,
-            duration: 0.5,
-            ease: 'power2.out',
+            opacity: 1,
+            filter: 'blur(0px)',
+            duration: 0.85,
+            ease: 'power4.out',
             scrollTrigger: {
               trigger: item,
-              start: 'top 90%',
+              start: 'top 88%',
               toggleActions: 'play none none none'
             }
           }
