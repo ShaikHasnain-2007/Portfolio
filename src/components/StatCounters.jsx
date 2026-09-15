@@ -116,33 +116,34 @@ export default function StatCounters() {
     const ctx = gsap.context(() => {
       const cards = el.querySelectorAll('.grid > div');
 
-      // Animate cards entry from 3D camera depth with blur-to-sharp dissolve
-      gsap.fromTo(cards,
-        {
-          y: 75,
-          rotateX: 20,
-          scale: 0.88,
-          opacity: 0,
-          filter: 'blur(12px)',
-          transformOrigin: '50% 0%'
-        },
-        {
-          y: 0,
-          rotateX: 0,
-          scale: 1,
-          opacity: 1,
-          filter: 'blur(0px)',
-          duration: 1.0,
-          stagger: 0.14,
-          ease: 'power4.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 92%',
-            toggleActions: 'play none none none',
-            onEnter: () => setShouldAnimate(true),
+      // Animate cards entry from 3D camera depth with continuous scroll-driven scrub
+      cards.forEach((card) => {
+        gsap.fromTo(card,
+          {
+            y: 80,
+            rotateX: 24,
+            scale: 0.86,
+            opacity: 0,
+            filter: 'blur(12px)',
+            transformOrigin: '50% 0%'
+          },
+          {
+            y: 0,
+            rotateX: 0,
+            scale: 1,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 96%',
+              end: 'top 68%',
+              scrub: 0.8,
+              onEnter: () => setShouldAnimate(true),
+            }
           }
-        }
-      );
+        );
+      });
     }, el);
 
     const timer = setTimeout(() => {
@@ -158,12 +159,22 @@ export default function StatCounters() {
   }, []);
 
   const handleMouseMove = (e) => {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     card.style.setProperty('--card-x', `${x}px`);
     card.style.setProperty('--card-y', `${y}px`);
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+    card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.transform = `perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
   };
 
   return (
@@ -179,9 +190,11 @@ export default function StatCounters() {
               key={idx}
               data-cursor="STATS"
               onMouseMove={handleMouseMove}
-              className="group border border-white/5 bg-white/[0.02] backdrop-blur-xl rounded-3xl p-6 md:p-8 flex flex-col justify-between overflow-hidden relative transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:bg-white/[0.05] hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
+              onMouseLeave={handleMouseLeave}
+              className="group border border-white/5 bg-white/[0.02] backdrop-blur-xl rounded-3xl p-6 md:p-8 flex flex-col justify-between overflow-hidden relative transition-transform duration-200 ease-out hover:border-white/20 hover:bg-white/[0.05] hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
               style={{
                 boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.4)`,
+                transformStyle: 'preserve-3d',
               }}
             >
               {/* Dynamic spotlight cursor tracking gradient */}

@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, Trophy, BookOpen, Cpu, Sparkles, ShieldCheck, Lock } from 'lucide-react';
 
@@ -87,51 +88,73 @@ export default function CertificationsSection() {
         gsap.fromTo(header,
           { y: 50, opacity: 0, filter: 'blur(8px)' },
           {
-            y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out',
-            scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' }
+            y: 0, opacity: 1, filter: 'blur(0px)', ease: 'power2.out',
+            scrollTrigger: { trigger: header, start: 'top 92%', end: 'top 68%', scrub: 0.8 }
           }
         );
       }
 
       if (tabs) {
         gsap.fromTo(tabs,
-          { y: 30, opacity: 0, scale: 0.95 },
+          { y: 30, opacity: 0, scale: 0.95, filter: 'blur(6px)' },
           {
-            y: 0, opacity: 1, scale: 1, duration: 0.8, delay: 0.1, ease: 'power3.out',
-            scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' }
+            y: 0, opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'power2.out',
+            scrollTrigger: { trigger: tabs, start: 'top 92%', end: 'top 70%', scrub: 0.8 }
           }
         );
       }
 
-      // Animate cards entry with 3D camera depth and blur-to-sharp dissolve
-      gsap.fromTo(cards,
-        {
-          y: 75,
-          rotateX: 18,
-          scale: 0.9,
-          opacity: 0,
-          filter: 'blur(12px)',
-          transformOrigin: '50% 0%'
-        },
-        {
-          y: 0,
-          rotateX: 0,
-          scale: 1,
-          opacity: 1,
-          filter: 'blur(0px)',
-          duration: 0.9,
-          stagger: 0.1,
-          ease: 'power4.out',
+      // Parallax on oversized background number 05
+      const bgNumber = el.querySelector('.cert-bg-number');
+      if (bgNumber) {
+        gsap.to(bgNumber, {
+          y: -120,
+          ease: 'none',
           scrollTrigger: {
             trigger: el,
-            start: 'top 82%',
-            toggleActions: 'play none none none',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.2,
           }
-        }
-      );
+        });
+      }
+
+      // Animate cards entry with continuous 3D camera depth scrub and blur-to-sharp dissolve
+      cards.forEach((card) => {
+        gsap.fromTo(card,
+          {
+            y: 90,
+            rotateX: 24,
+            scale: 0.88,
+            opacity: 0,
+            filter: 'blur(12px)',
+            transformOrigin: '50% 0%'
+          },
+          {
+            y: 0,
+            rotateX: 0,
+            scale: 1,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 96%',
+              end: 'top 68%',
+              scrub: 0.8,
+            }
+          }
+        );
+      });
     }, el);
     return () => ctx.revert();
   }, []);
+
+  // Recalculate ScrollTrigger metrics when category tab filter updates
+  useEffect(() => {
+    const t = setTimeout(() => ScrollTrigger.refresh(), 100);
+    return () => clearTimeout(t);
+  }, [activeTab]);
 
   const handleCardMouseMove = (e) => {
     const card = e.currentTarget;
@@ -162,6 +185,11 @@ export default function CertificationsSection() {
     <section ref={containerRef} className="relative w-full bg-transparent py-20 px-4 md:px-12 flex flex-col items-center">
       <div className="absolute top-1/2 left-[-10%] -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/35 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute top-1/2 right-[-10%] -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-500/35 rounded-full blur-[140px] pointer-events-none" />
+
+      {/* Decorative oversized section index */}
+      <div className="cert-bg-number absolute right-12 top-10 font-syne font-black text-[120px] leading-none text-white/[0.02] select-none pointer-events-none">
+        05
+      </div>
 
       <div className="w-full max-w-7xl relative z-10">
         <div className="section-header text-left mb-8">

@@ -64,8 +64,8 @@ export default function TestimonialsSection() {
         gsap.fromTo(header,
           { y: 50, opacity: 0, filter: 'blur(8px)' },
           {
-            y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out',
-            scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' }
+            y: 0, opacity: 1, filter: 'blur(0px)', ease: 'power2.out',
+            scrollTrigger: { trigger: header, start: 'top 92%', end: 'top 70%', scrub: 0.8 }
           }
         );
       }
@@ -73,9 +73,9 @@ export default function TestimonialsSection() {
       if (wrapper) {
         gsap.fromTo(wrapper,
           {
-            y: 80,
-            rotateX: 18,
-            scale: 0.9,
+            y: 90,
+            rotateX: 20,
+            scale: 0.88,
             opacity: 0,
             filter: 'blur(12px)',
             transformOrigin: '50% 0%'
@@ -86,10 +86,8 @@ export default function TestimonialsSection() {
             scale: 1,
             opacity: 1,
             filter: 'blur(0px)',
-            duration: 1.0,
-            delay: 0.15,
-            ease: 'power4.out',
-            scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' }
+            ease: 'power3.out',
+            scrollTrigger: { trigger: wrapper, start: 'top 92%', end: 'top 65%', scrub: 0.8 }
           }
         );
       }

@@ -228,19 +228,45 @@ export default function ProjectsShowcase() {
       }, 0);
     }
 
-    // Dynamic 3D depth curve as each card scrolls into center focus
+    // Header scroll-linked entrance as section comes into view
+    const header = container.querySelector('.projects-header');
+    if (header) {
+      gsap.fromTo(header,
+        { y: 50, opacity: 0, filter: 'blur(10px)' },
+        {
+          y: 0,
+          opacity: 1,
+          filter: 'blur(0px)',
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: container,
+            start: 'top 90%',
+            end: 'top 60%',
+            scrub: 0.8,
+          }
+        }
+      );
+    }
+
+    // Dynamic 3D depth and perspective curvature as each card scrolls into center focus
     const cardWrappers = track.querySelectorAll('.project-card-wrapper');
     cardWrappers.forEach((card) => {
       gsap.fromTo(card,
-        { scale: 0.94, filter: 'blur(2px)' },
+        {
+          scale: 0.9,
+          rotateY: 16,
+          filter: 'blur(6px)',
+          transformOrigin: 'center center'
+        },
         {
           scale: 1,
+          rotateY: 0,
           filter: 'blur(0px)',
           ease: 'power1.out',
           scrollTrigger: {
             trigger: card,
             containerAnimation: tl,
-            start: 'left 95%',
+            start: 'left 98%',
             end: 'center 50%',
             scrub: true,
           }
@@ -270,7 +296,7 @@ export default function ProjectsShowcase() {
         <div className="w-full flex flex-col justify-between h-full py-12 md:py-16 relative z-10">
           
           {/* Header block (fixed top) */}
-          <div className="w-full px-6 md:px-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+          <div className="projects-header w-full px-6 md:px-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
             <div className="text-left">
               <span className="font-mono text-fuchsia-400 text-xs font-bold tracking-widest uppercase mb-1 inline-flex items-center gap-2">
                 // 03. SHOWCASE <span className="animate-twinkle-delay-1 text-fuchsia-300">✦</span>
