@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { playClickSound, playHoverSound } from '../utils/audio';
 
 const skillCategories = [
   { id: 'all', name: 'All Skills' },
@@ -242,59 +243,30 @@ export default function SkillsSection() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
-          start: 'top 88%',
-          end: 'top 45%',
+          start: 'top 90%',
+          end: 'top 50%',
           scrub: 1,
           invalidateOnRefresh: true,
         }
       });
 
       tl.fromTo(header, 
-        { y: 60, opacity: 0, filter: 'blur(10px)' }, 
-        { y: 0, opacity: 1, filter: 'blur(0px)', ease: 'power3.out' },
+        { x: -120, opacity: 0 }, 
+        { x: 0, opacity: 1, ease: 'power2.out' },
         0
       );
 
       tl.fromTo(tabs, 
-        { y: 40, opacity: 0, scale: 0.94, filter: 'blur(8px)' }, 
-        { y: 0, opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'power3.out' },
-        0.08
+        { x: 120, opacity: 0 }, 
+        { x: 0, opacity: 1, ease: 'power2.out' },
+        0.1
       );
 
       tl.fromTo(grid, 
-        { 
-          y: 90, 
-          rotateX: 18, 
-          scale: 0.9, 
-          opacity: 0, 
-          filter: 'blur(12px)',
-          transformOrigin: '50% 0%'
-        }, 
-        { 
-          y: 0, 
-          rotateX: 0, 
-          scale: 1, 
-          opacity: 1, 
-          filter: 'blur(0px)', 
-          ease: 'power3.out' 
-        },
-        0.16
+        { y: 80, opacity: 0, scale: 0.96 }, 
+        { y: 0, opacity: 1, scale: 1, ease: 'power2.out' },
+        0.2
       );
-
-      // Parallax on oversized background number
-      const bgNumber = el.querySelector('.skills-bg-number');
-      if (bgNumber) {
-        gsap.to(bgNumber, {
-          y: -140,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1.2,
-          }
-        });
-      }
     }, containerRef);
 
     return () => ctx.revert();
@@ -310,25 +282,6 @@ export default function SkillsSection() {
     };
   }, [activeTab]);
 
-  const handleCardMouseMove = (e) => {
-    if (window.matchMedia('(pointer: coarse)').matches) return;
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    card.style.setProperty('--card-x', `${x}px`);
-    card.style.setProperty('--card-y', `${y}px`);
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -8;
-    const rotateY = ((x - centerX) / centerX) * 8;
-    card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-  };
-
-  const handleCardMouseLeave = (e) => {
-    e.currentTarget.style.transform = `perspective(600px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-  };
-
   const activeSkills = activeTab === 'all' 
     ? SKILLS_DATA 
     : SKILLS_DATA.filter(s => s.type === activeTab);
@@ -338,7 +291,7 @@ export default function SkillsSection() {
       <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] bg-fuchsia-500/30 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-0 left-[-10%] w-[600px] h-[600px] bg-cyan-500/30 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="skills-bg-number absolute right-12 top-10 font-syne font-black text-[120px] leading-none text-white/[0.02] select-none pointer-events-none">
+      <div className="absolute right-12 top-10 font-syne font-black text-[120px] leading-none text-white/[0.02] select-none pointer-events-none">
         02
       </div>
 
@@ -368,21 +321,25 @@ export default function SkillsSection() {
                 aria-controls="skills-panel"
                 id={`tab-${cat.id}`}
                 data-cursor="FILTER"
-                onClick={() => setActiveTab(cat.id)}
+                onMouseEnter={() => playHoverSound()}
+                onClick={() => {
+                  playClickSound();
+                  setActiveTab(cat.id);
+                }}
                 className={`font-syne text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border transition-all duration-300 relative z-10 cursor-pointer ${
                   isActive 
                     ? 'text-white font-bold border-cyan-400/40' 
                     : 'border-white/5 text-white/40 hover:text-white hover:border-white/20 bg-transparent'
                 }`}
               >
+                {cat.name}
                 {isActive && (
                   <motion.div
                     layoutId="activeSkillTabIndicator"
-                    className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 border border-cyan-400/60 rounded-full -z-10 shadow-[0_0_15px_rgba(var(--cyan-rgb),0.4)]"
-                    transition={{ type: 'spring', stiffness: 420, damping: 30 }}
+                    className="absolute inset-0 bg-cyan-500/20 border border-cyan-400/60 rounded-full shadow-[0_0_20px_rgba(var(--cyan-rgb),0.5)] -z-10"
+                    transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                   />
                 )}
-                {cat.name}
               </button>
             );
           })}
@@ -405,21 +362,18 @@ export default function SkillsSection() {
                 transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 key={skill.name}
                 data-cursor="SKILL"
-                onMouseMove={handleCardMouseMove}
-                onMouseLeave={handleCardMouseLeave}
-                className="group relative h-[105px] sm:h-[116px] p-3 sm:p-3.5 rounded-2xl border border-white/10 bg-black/50 hover:bg-white/[0.06] hover:border-cyan-400/50 transition-all duration-200 cursor-default flex flex-col items-center justify-center gap-2 text-center select-none shadow-[0_4px_16px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_28px_rgba(var(--cyan-rgb),0.3)]"
-                style={{ transformStyle: 'preserve-3d' }}
+                className="group relative h-[108px] sm:h-[120px] p-3 sm:p-3.5 rounded-2xl border border-white/10 bg-black/50 hover:bg-white/[0.06] hover:border-cyan-400/50 transition-all duration-300 cursor-default flex flex-col items-center justify-between text-center select-none shadow-[0_4px_16px_rgba(0,0,0,0.4)] hover:-translate-y-1.5 hover:shadow-[0_8px_24px_rgba(var(--cyan-rgb),0.2)]"
               >
-                {/* Dynamic Radial Glow on Hover */}
+                {/* Radial Glow on Hover */}
                 <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
                   style={{
-                    background: `radial-gradient(150px circle at var(--card-x, 50%) var(--card-y, 40%), ${skill.glow}, transparent 70%)`
+                    background: `radial-gradient(130px circle at 50% 40%, ${skill.glow}, transparent 70%)`
                   }}
                 />
 
                 {/* Skill Logo */}
-                <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110" style={{ transform: 'translateZ(15px)' }}>
+                <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110 mt-1">
                   <img
                     src={skill.icon}
                     alt={`${skill.name} logo`}
@@ -429,13 +383,21 @@ export default function SkillsSection() {
                 </div>
 
                 {/* Skill Name & Category Sub-label */}
-                <div className="flex flex-col items-center relative z-10" style={{ transform: 'translateZ(10px)' }}>
+                <div className="flex flex-col items-center relative z-10 w-full mb-1">
                   <span className="font-syne font-bold text-xs sm:text-[13px] text-white/95 group-hover:text-white transition-colors duration-300 leading-tight">
                     {skill.name}
                   </span>
-                  <span className="font-mono text-[8px] sm:text-[9px] uppercase tracking-widest text-white/40 group-hover:text-cyan-300 transition-colors mt-0.5 leading-none">
-                    {skill.category}
-                  </span>
+                  <div className="flex items-center justify-between w-full px-1 mt-1">
+                    <span className="font-mono text-[8px] sm:text-[9px] uppercase tracking-widest text-white/40 group-hover:text-cyan-300 transition-colors leading-none">
+                      {skill.category}
+                    </span>
+                    {/* Micro-telemetry proficiency indicator */}
+                    <div className="flex gap-0.5 items-center opacity-40 group-hover:opacity-100 transition-opacity">
+                      <div className="w-1.5 h-[2px] rounded-full bg-cyan-400" />
+                      <div className="w-1.5 h-[2px] rounded-full bg-cyan-400" />
+                      <div className="w-1.5 h-[2px] rounded-full bg-cyan-400" />
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}

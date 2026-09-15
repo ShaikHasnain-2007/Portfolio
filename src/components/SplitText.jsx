@@ -16,14 +16,16 @@ export default function SplitText({ text, className = '', itemClassName = '', ty
     if (items.length === 0) return;
 
     const animation = gsap.fromTo(items,
-      { yPercent: 100, opacity: 0 },
+      { yPercent: 110, opacity: 0, rotateZ: 4, filter: 'blur(8px)' },
       {
         yPercent: 0,
         opacity: 1,
-        duration: 0.8,
+        rotateZ: 0,
+        filter: 'blur(0px)',
+        duration: 0.9,
         stagger: stagger,
         delay: delay,
-        ease: 'power3.out',
+        ease: 'power4.out',
         scrollTrigger: {
           trigger: el,
           start: 'top 88%',

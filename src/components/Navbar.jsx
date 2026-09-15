@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MagneticElement from './MagneticElement';
+import { isAudioEnabled, setAudioEnabled, playClickSound, playHoverSound } from '../utils/audio';
 
 const NAV_ITEMS = [
   { label: 'About', target: 'about' },
@@ -32,6 +33,7 @@ export default function Navbar() {
   const [isVisible, setIsVisible] = useState(() => {
     return typeof window !== 'undefined' ? window.scrollY > 50 : false;
   });
+  const [audioActive, setAudioActive] = useState(() => isAudioEnabled());
   const lastScrollYRef = useRef(0);
   
   const [theme, setTheme] = useState(() => {
@@ -165,6 +167,7 @@ export default function Navbar() {
   }, []);
 
   const handleNavClick = (targetId) => {
+    playClickSound();
     setIsMobileMenuOpen(false);
     const targetEl = document.getElementById(targetId);
     if (targetEl) {
@@ -217,6 +220,7 @@ export default function Navbar() {
                 <button
                   key={item.target}
                   onClick={() => handleNavClick(item.target)}
+                  onMouseEnter={() => playHoverSound()}
                   data-cursor="NAV"
                   className={`font-syne text-xs uppercase tracking-widest transition-all duration-300 relative px-3.5 py-1.5 rounded-full cursor-pointer z-10 ${
                     isActive ? 'text-white font-bold' : 'text-white/70 hover:text-white'
@@ -235,8 +239,29 @@ export default function Navbar() {
             })}
           </nav>
 
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
             
+            {/* Audio Micro-Haptics Toggle */}
+            <MagneticElement>
+              <button
+                onClick={() => {
+                  const next = !audioActive;
+                  setAudioActive(next);
+                  setAudioEnabled(next);
+                }}
+                data-cursor="AUDIO"
+                title={audioActive ? "Mute Cyber Audio" : "Enable Cyber Audio"}
+                className={`p-2 rounded-full border transition-all duration-300 backdrop-blur-md flex items-center justify-center cursor-pointer ${
+                  audioActive 
+                    ? 'bg-cyan-500/20 border-cyan-400/50 text-cyan-300 shadow-[0_0_12px_rgba(var(--cyan-rgb),0.4)]' 
+                    : 'bg-white/5 border-white/10 text-white/40 hover:text-white/80'
+                }`}
+                aria-label={audioActive ? "Mute sound" : "Enable sound"}
+              >
+                {audioActive ? <Volume2 size={14} className="animate-pulse" /> : <VolumeX size={14} />}
+              </button>
+            </MagneticElement>
+
             <fieldset className="switcher" c-previous={previousOption} aria-label="Theme color switcher">
               <legend className="switcher__legend">Choose theme</legend>
               
@@ -248,7 +273,10 @@ export default function Navbar() {
                   value="cyberpunk"
                   c-option="1"
                   checked={activeOption === '1'}
-                  onChange={() => handleRadioChange('1')}
+                  onChange={() => {
+                    playClickSound();
+                    handleRadioChange('1');
+                  }}
                   aria-label="Switch to Signature theme"
                 />
                 <svg className="switcher__icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 36 36">
@@ -265,7 +293,10 @@ export default function Navbar() {
                   value="sunset"
                   c-option="2"
                   checked={activeOption === '2'}
-                  onChange={() => handleRadioChange('2')}
+                  onChange={() => {
+                    playClickSound();
+                    handleRadioChange('2');
+                  }}
                   aria-label="Switch to Sunset theme"
                 />
                 <svg className="switcher__icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 36 36">
@@ -281,7 +312,10 @@ export default function Navbar() {
                   value="matrix"
                   c-option="3"
                   checked={activeOption === '3'}
-                  onChange={() => handleRadioChange('3')}
+                  onChange={() => {
+                    playClickSound();
+                    handleRadioChange('3');
+                  }}
                   aria-label="Switch to Matrix theme"
                 />
                 <svg className="switcher__icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 36 36">

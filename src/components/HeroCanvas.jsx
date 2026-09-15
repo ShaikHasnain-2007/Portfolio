@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Linkedin, Mail, ChevronDown, Brain, Gamepad2, Code2, ArrowUpRight } from 'lucide-react';
+import { Linkedin, Mail, ChevronDown, Brain, Gamepad2, Code2 } from 'lucide-react';
 import SplitText from './SplitText';
 import FluidHeroBackground from './FluidHeroBackground';
 import MagneticElement from './MagneticElement';
+import { playClickSound } from '../utils/audio';
 import baseBgImg from './retouch_2026070720521920.jpg_202607082155.jpeg';
 import revealBgImg from './Make_man\'s_chest_wider_2K_202607082155.jpeg';
 
@@ -86,19 +87,6 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
   // Cycling role index
   const [activeRole, setActiveRole] = useState(0);
 
-  // Real-time IST clock for live status beacon
-  const [istTime, setIstTime] = useState('');
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const options = { timeZone: 'Asia/Kolkata', hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-      setIstTime(now.toLocaleTimeString('en-US', options));
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
   useEffect(() => {
     if (!startAnimations) return;
     const interval = setInterval(() => {
@@ -109,56 +97,6 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
 
   // Scramble developer name branding
   const scrambledBrandName = useTextScramble("Shaik Hasnain.", startAnimations, 35, 0.5);
-
-  // 3D Mouse Parallax on Hero Viewport
-  const handleHeroMouseMove = (e) => {
-    if (window.matchMedia('(pointer: coarse)').matches) return;
-    const container = containerRef.current;
-    if (!container) return;
-    const rect = container.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-
-    if (titleRef.current) {
-      gsap.to(titleRef.current, {
-        x: x * 20,
-        y: y * 20,
-        rotateX: -y * 6,
-        rotateY: x * 6,
-        duration: 0.5,
-        ease: 'power2.out'
-      });
-    }
-    if (descRef.current) {
-      gsap.to(descRef.current, {
-        x: -x * 15,
-        y: -y * 15,
-        duration: 0.5,
-        ease: 'power2.out'
-      });
-    }
-  };
-
-  const handleHeroMouseLeave = () => {
-    if (titleRef.current) {
-      gsap.to(titleRef.current, {
-        x: 0,
-        y: 0,
-        rotateX: 0,
-        rotateY: 0,
-        duration: 0.8,
-        ease: 'elastic.out(1.1, 0.4)'
-      });
-    }
-    if (descRef.current) {
-      gsap.to(descRef.current, {
-        x: 0,
-        y: 0,
-        duration: 0.8,
-        ease: 'elastic.out(1.1, 0.4)'
-      });
-    }
-  };
 
   // GSAP ScrollTrigger animation with gsap.context
   useEffect(() => {
@@ -234,11 +172,9 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
     <section
       id="hero"
       ref={containerRef}
-      onMouseMove={handleHeroMouseMove}
-      onMouseLeave={handleHeroMouseLeave}
-      className="relative w-full h-screen overflow-hidden bg-black select-none"
+      className="relative w-full h-screen overflow-hidden bg-black"
     >
-      {/* Render the fluid WebGL background */}
+      {/* Render the new fluid WebGL background at the bottom of the z-index stack */}
       <div className="absolute inset-0 z-0">
         <FluidHeroBackground
           baseBg={baseBgImg}
@@ -277,7 +213,6 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
                 href="https://linkedin.com/in/shaik-hasnain-55a072396"
                 target="_blank"
                 rel="noopener noreferrer"
-                data-cursor="LINK"
                 className="flex items-center gap-2 text-white/70 hover:text-cyan-400 transition-colors duration-300 group"
               >
                 <span className="hidden md:inline group-hover:underline">LinkedIn</span>
@@ -285,7 +220,6 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
               </a>
               <a
                 href="mailto:shaikhasnain2007@gmail.com"
-                data-cursor="CONTACT"
                 className="flex items-center gap-2 text-white/70 hover:text-fuchsia-400 transition-colors duration-300 group"
               >
                 <span className="hidden md:inline group-hover:underline">Email</span>
@@ -298,26 +232,7 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
           <div className="flex flex-col md:flex-row justify-between items-end w-full gap-8 md:gap-4 pb-8 md:pb-0">
 
             {/* Bottom-Left: Title & Dynamic Cycling Role Capsule */}
-            <div ref={titleRef} className="w-full md:max-w-2xl text-left" style={{ transformStyle: 'preserve-3d' }}>
-              
-              {/* Live Cyber Status Beacon */}
-              <div 
-                data-cursor="STATUS"
-                className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-black/60 border border-emerald-500/30 backdrop-blur-md mb-4 shadow-[0_0_15px_rgba(16,185,129,0.15)] group cursor-default select-none pointer-events-auto transition-all duration-300 hover:border-emerald-400/60"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                </span>
-                <span className="font-mono text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
-                  AVAILABLE FOR OPPORTUNITIES
-                </span>
-                <span className="text-white/20 text-[10px] hidden sm:inline">•</span>
-                <span className="font-mono text-[10px] text-white/60 tracking-wider hidden sm:inline">
-                  SRM AP <span className="text-emerald-400/80 font-bold">{istTime}</span> IST
-                </span>
-              </div>
-
+            <div ref={titleRef} className="w-full md:max-w-xl text-left">
               {/* Cycling Multi-Icon Role Capsule */}
               <div className="flex items-center gap-3 mb-4 pointer-events-auto select-none">
                 {/* Stacked Icon Rings */}
@@ -381,54 +296,54 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
                   className="text-cyan-400"
                 />
               </h1>
-
-              {/* Dual Magnetic Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 mt-5 pointer-events-auto">
-                <MagneticElement range={50}>
-                  <button
-                    onClick={() => {
-                      const el = document.getElementById('projects');
-                      if (el) window.lenis ? window.lenis.scrollTo(el) : el.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    data-cursor="EXPLORE"
-                    className="relative group overflow-hidden rounded-full p-[1px] font-syne text-xs uppercase font-bold tracking-widest cursor-pointer shadow-[0_0_20px_rgba(var(--cyan-rgb),0.35)] transition-transform duration-300 hover:scale-105 active:scale-95"
-                  >
-                    {/* Animated spinning gradient border beam */}
-                    <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#22d3ee_0%,#d946ef_50%,#22d3ee_100%)]" />
-                    <span className="relative flex items-center gap-2 rounded-full bg-black/90 px-6 py-3 text-white transition-colors group-hover:bg-black/70 backdrop-blur-xl">
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-white font-extrabold">
-                        Explore Creations
-                      </span>
-                      <ArrowUpRight size={15} className="text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </span>
-                  </button>
-                </MagneticElement>
-
-                <MagneticElement range={50}>
-                  <button
-                    onClick={() => {
-                      const el = document.getElementById('about');
-                      if (el) window.lenis ? window.lenis.scrollTo(el) : el.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    data-cursor="CONTACT"
-                    className="group flex items-center gap-2 rounded-full border border-white/20 bg-white/5 hover:border-fuchsia-400/60 hover:bg-fuchsia-500/10 px-6 py-3 font-syne text-xs uppercase font-bold tracking-widest text-white/80 hover:text-white transition-all duration-300 backdrop-blur-md cursor-pointer hover:scale-105 active:scale-95 shadow-[0_4px_16px_rgba(0,0,0,0.5)]"
-                  >
-                    <Mail size={14} className="text-fuchsia-400 group-hover:rotate-12 transition-transform" />
-                    <span>Contact Architect</span>
-                  </button>
-                </MagneticElement>
-              </div>
-
             </div>
 
-            {/* Bottom-Right: Description and Scroll Prompt */}
+            {/* Bottom-Right: Description, Magnetic Actions and Scroll Prompt */}
             <div ref={descRef} className="flex flex-col items-start md:items-end text-left md:text-right gap-4 max-w-sm">
               <p className="font-serif italic font-normal text-white/90 text-base md:text-lg leading-relaxed tracking-wide">
                 crafting high-performance intelligent interfaces and immersive graphics simulations where complex logic meets seamless visual art.
               </p>
 
+              {/* Magnetic Action Buttons */}
+              <div className="flex items-center gap-3 pointer-events-auto my-1">
+                <MagneticElement>
+                  <button
+                    onClick={() => {
+                      playClickSound();
+                      const target = document.getElementById('projects');
+                      if (target && window.lenis) window.lenis.scrollTo(target);
+                    }}
+                    data-cursor="EXPLORE"
+                    className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-syne text-[11px] font-bold uppercase tracking-widest transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] cursor-pointer flex items-center gap-1.5 hover:border-cyan-400/50 hover:text-cyan-300"
+                  >
+                    <span>Creations</span>
+                    <span>↗</span>
+                  </button>
+                </MagneticElement>
+
+                <MagneticElement>
+                  <button
+                    onClick={() => {
+                      playClickSound();
+                      const target = document.getElementById('about');
+                      if (target && window.lenis) window.lenis.scrollTo(target);
+                    }}
+                    data-cursor="ABOUT"
+                    className="px-4 py-2 rounded-full bg-black/60 hover:bg-black/80 border border-white/15 text-white/80 font-syne text-[11px] font-bold uppercase tracking-widest transition-all duration-300 backdrop-blur-md cursor-pointer hover:border-fuchsia-400/50 hover:text-fuchsia-300"
+                  >
+                    <span>Overview</span>
+                  </button>
+                </MagneticElement>
+              </div>
+
               {/* Scroll Indicator */}
-              <div className="flex items-center gap-2 text-cyan-400 text-xs tracking-widest uppercase font-bold animate-pulse">
+              <div 
+                onClick={() => {
+                  const target = document.getElementById('about');
+                  if (target && window.lenis) window.lenis.scrollTo(target);
+                }}
+                className="flex items-center gap-2 text-cyan-400 text-xs tracking-widest uppercase font-bold animate-pulse pointer-events-auto cursor-pointer"
+              >
                 <span className="md:hidden">Scroll</span>
                 <span className="hidden md:inline">Scroll Down</span>
                 <div className="p-2 border border-cyan-400/40 rounded-full flex items-center justify-center">

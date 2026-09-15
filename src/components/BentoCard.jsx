@@ -34,16 +34,22 @@ export default function BentoCard({ children, className = '', style = {}, speed 
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`bento-card spotlight-card specular-border border border-white/10 rounded-3xl bg-white/5 backdrop-blur-md shadow-lg overflow-hidden relative group transition-all duration-300 ${className}`}
-      style={style}
+      className={`bento-card spotlight-card border-beam-container specular-border border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-xl shadow-lg overflow-hidden relative group transition-all duration-300 ${className}`}
+      style={{
+        ...style,
+        transformStyle: 'preserve-3d',
+      }}
       data-speed={speed}
       {...props}
     >
+      {/* Iridescent Border Beam on Hover */}
+      <div className="border-beam border-beam-hover" />
+
       {/* Dynamic Cursor Spotlight Glow */}
       <div 
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-0"
         style={{
-          background: `radial-gradient(380px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(var(--cyan-rgb), 0.12), transparent 65%)`
+          background: `radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(var(--cyan-rgb), 0.15), transparent 65%)`
         }}
       />
       {children}

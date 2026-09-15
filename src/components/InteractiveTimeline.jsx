@@ -65,18 +65,6 @@ export default function InteractiveTimeline() {
       const items = el.querySelectorAll('.timeline-item');
       const lineProgress = lineProgressRef.current;
 
-      // Section Header continuous scrub entrance
-      const header = el.querySelector('.timeline-header');
-      if (header) {
-        gsap.fromTo(header,
-          { y: 50, opacity: 0, filter: 'blur(8px)' },
-          {
-            y: 0, opacity: 1, filter: 'blur(0px)', ease: 'power2.out',
-            scrollTrigger: { trigger: header, start: 'top 92%', end: 'top 68%', scrub: 0.8 }
-          }
-        );
-      }
-
       // Timeline Line Progress drawing animation on scroll
       gsap.to(lineProgress, {
         height: '100%',
@@ -89,7 +77,7 @@ export default function InteractiveTimeline() {
         }
       });
 
-      // Animate timeline nodes and cards with continuous scroll-driven scrub
+      // Animate timeline nodes and cards entering viewport quickly and smoothly
       items.forEach((item) => {
         const node = item.querySelector('.timeline-node');
         const card = item.querySelector('.timeline-card');
@@ -99,39 +87,28 @@ export default function InteractiveTimeline() {
           { 
             scale: 1, 
             opacity: 1, 
-            ease: 'back.out(2)',
+            duration: 0.35,
+            ease: 'back.out(1.8)',
             scrollTrigger: {
               trigger: item,
-              start: 'top 92%',
-              end: 'top 75%',
-              scrub: 0.5,
+              start: 'top 90%',
+              toggleActions: 'play none none none'
             }
           }
         );
 
         gsap.fromTo(card,
+          { y: 35, opacity: 0, scale: 0.97 },
           {
-            x: 60,
-            rotateY: -20,
-            rotateX: 10,
-            scale: 0.9,
-            opacity: 0,
-            filter: 'blur(10px)',
-            transformOrigin: 'left center'
-          },
-          {
-            x: 0,
-            rotateY: 0,
-            rotateX: 0,
-            scale: 1,
+            y: 0,
             opacity: 1,
-            filter: 'blur(0px)',
-            ease: 'power3.out',
+            scale: 1,
+            duration: 0.5,
+            ease: 'power2.out',
             scrollTrigger: {
               trigger: item,
-              start: 'top 92%',
-              end: 'top 70%',
-              scrub: 0.8,
+              start: 'top 90%',
+              toggleActions: 'play none none none'
             }
           }
         );
@@ -140,25 +117,6 @@ export default function InteractiveTimeline() {
 
     return () => ctx.revert();
   }, []);
-
-  const handleCardMouseMove = (e) => {
-    if (window.matchMedia('(pointer: coarse)').matches) return;
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    card.style.setProperty('--card-x', `${x}px`);
-    card.style.setProperty('--card-y', `${y}px`);
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -6;
-    const rotateY = ((x - centerX) / centerX) * 6;
-    card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-  };
-
-  const handleCardMouseLeave = (e) => {
-    e.currentTarget.style.transform = `perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-  };
 
   return (
     <section id="timeline" ref={containerRef} className="relative w-full bg-transparent py-24 px-4 md:px-12 flex flex-col items-center">
@@ -169,7 +127,7 @@ export default function InteractiveTimeline() {
       <div className="w-full max-w-4xl relative z-10">
         
         {/* Section Header */}
-        <div className="timeline-header text-left mb-20">
+        <div className="text-left mb-20">
           <span className="font-mono text-cyan-400 text-xs font-bold tracking-widest uppercase mb-2 inline-flex items-center gap-2">
             // 04. CHRONOLOGY <span className="animate-twinkle-delay-2 text-cyan-300">✦</span>
           </span>
@@ -212,10 +170,12 @@ export default function InteractiveTimeline() {
                   {/* Glass Card Container */}
                   <div
                     data-cursor="TIMELINE"
-                    onMouseMove={handleCardMouseMove}
-                    onMouseLeave={handleCardMouseLeave}
-                    className="timeline-card w-full bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 hover:border-cyan-400/50 hover:shadow-[0_12px_36px_rgba(var(--cyan-rgb),0.25)] transition-transform duration-200 ease-out relative group overflow-hidden"
-                    style={{ transformStyle: 'preserve-3d' }}
+                    onMouseMove={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      e.currentTarget.style.setProperty('--card-x', `${e.clientX - rect.left}px`);
+                      e.currentTarget.style.setProperty('--card-y', `${e.clientY - rect.top}px`);
+                    }}
+                    className="timeline-card w-full bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 hover:border-cyan-400/50 hover:-translate-y-1.5 hover:shadow-[0_12px_36px_rgba(var(--cyan-rgb),0.25)] transition-all duration-300 relative group overflow-hidden"
                   >
                     {/* Dynamic spotlight cursor tracking gradient */}
                     <div 

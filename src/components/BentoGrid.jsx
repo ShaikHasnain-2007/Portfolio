@@ -20,67 +20,48 @@ export default function BentoGrid() {
   
 
 
-  // GSAP scroll trigger 3D perspective unfold and blur-to-sharp entrance per card
+  // GSAP scroll trigger 3D perspective unblur assembly
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (!gridRef.current) return;
       const wrappers = gridRef.current.querySelectorAll('.bento-wrapper');
-      if (!wrappers || wrappers.length < 6) return;
+      if (!wrappers || wrappers.length === 0) return;
 
       const isMobile = window.innerWidth < 768;
+      gridRef.current.style.perspective = '1200px';
 
-      // Animate each bento card wrapper dynamically as it enters the viewport with continuous scrub
-      wrappers.forEach((wrapper, idx) => {
-        const isOdd = idx % 2 !== 0;
-        const xOffset = isMobile ? 0 : (isOdd ? 25 : -25);
-        const rotX = isMobile ? 12 : 18;
-        const rotY = isMobile ? 0 : (isOdd ? 5 : -5);
+      // Create GSAP scroll trigger timeline
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: gridRef.current,
+          start: 'top 85%',
+          end: 'top 20%',
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+        }
+      });
 
-        gsap.fromTo(wrapper,
+      wrappers.forEach((wrapper, index) => {
+        const staggerDelay = (index % 3) * 0.07 + Math.floor(index / 3) * 0.12;
+        tl.fromTo(wrapper,
           {
-            y: 85,
-            x: xOffset,
-            rotateX: rotX,
-            rotateY: rotY,
-            scale: 0.88,
+            y: isMobile ? 35 : 65,
             opacity: 0,
-            filter: 'blur(12px)',
-            transformOrigin: '50% 0%'
+            scale: 0.93,
+            rotateX: isMobile ? 0 : 10,
+            filter: 'blur(8px)',
           },
           {
             y: 0,
-            x: 0,
-            rotateX: 0,
-            rotateY: 0,
-            scale: 1,
             opacity: 1,
+            scale: 1,
+            rotateX: 0,
             filter: 'blur(0px)',
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: wrapper,
-              start: 'top 96%',
-              end: 'top 65%',
-              scrub: 0.8,
-              invalidateOnRefresh: true,
-            }
-          }
+            ease: 'power2.out',
+          },
+          staggerDelay
         );
       });
-
-      // Parallax on oversized background number 01
-      const bgNumber = document.querySelector('.bento-bg-number');
-      if (bgNumber) {
-        gsap.to(bgNumber, {
-          y: -120,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: gridRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1.2,
-          }
-        });
-      }
     }, gridRef);
 
     return () => ctx.revert();
@@ -287,7 +268,7 @@ export default function BentoGrid() {
       <div className="absolute bottom-1/4 right-[-10%] w-[600px] h-[600px] bg-fuchsia-500/35 rounded-full blur-[130px] pointer-events-none" />
 
       {/* Decorative oversized section index */}
-      <div className="bento-bg-number absolute left-12 top-10 font-syne font-black text-[120px] leading-none text-white/[0.02] select-none pointer-events-none">
+      <div className="absolute left-12 top-10 font-syne font-black text-[120px] leading-none text-white/[0.02] select-none pointer-events-none">
         01
       </div>
 

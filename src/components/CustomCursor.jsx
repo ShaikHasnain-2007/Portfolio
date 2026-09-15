@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { playClickSound, playHoverSound } from '../utils/audio';
 
 export default function CustomCursor() {
   const dotRef = useRef(null);
@@ -83,6 +84,7 @@ export default function CustomCursor() {
       const dataCursorVal = cursorTarget ? cursorTarget.getAttribute('data-cursor') : null;
 
       if (dataCursorVal && badgeText) {
+        playHoverSound();
         badgeText.textContent = dataCursorVal;
         gsap.to(badge, {
           scale: 1,
@@ -126,6 +128,7 @@ export default function CustomCursor() {
         (target.classList && target.classList.contains('cursor-pointer'));
 
       if (isHoverable) {
+        playHoverSound();
         gsap.to(ring, {
           scale: 1.6,
           borderColor: 'var(--color-fuchsia-hex)',
@@ -154,6 +157,7 @@ export default function CustomCursor() {
 
     // Click ripple / shockwave effect
     const onMouseDown = () => {
+      playClickSound();
       gsap.to(dot, { scale: 0.6, duration: 0.15 });
       gsap.fromTo(ring, 
         { scale: 0.9, opacity: 1 },
