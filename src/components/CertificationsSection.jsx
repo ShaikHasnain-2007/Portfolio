@@ -77,14 +77,11 @@ export default function CertificationsSection() {
     const ctx = gsap.context(() => {
       const cards = el.querySelectorAll('.cert-card');
       gsap.fromTo(cards,
-        { y: 50, opacity: 0, scale: 0.94, filter: 'blur(8px)' },
+        { y: 60, opacity: 0, scale: 0.95 },
         {
-          y: 0, 
-          opacity: 1, 
-          scale: 1,
-          filter: 'blur(0px)',
-          duration: 0.85,
-          stagger: 0.08,
+          y: 0, opacity: 1, scale: 1,
+          duration: 0.8,
+          stagger: 0.1,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: el,
@@ -96,13 +93,6 @@ export default function CertificationsSection() {
     }, el);
     return () => ctx.revert();
   }, []);
-
-  const handleCardMouseMove = (e) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-  };
 
   return (
     <section ref={containerRef} className="relative w-full bg-transparent py-20 px-4 md:px-12 flex flex-col items-center">
@@ -129,24 +119,18 @@ export default function CertificationsSection() {
             return (
               <div
                 key={i}
-                data-cursor="AWARD"
-                onMouseMove={handleCardMouseMove}
-                className="cert-card group relative border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-xl p-6 flex flex-col justify-between overflow-hidden transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05] hover:-translate-y-2 hover:shadow-[0_16px_36px_rgba(0,0,0,0.6)] border-beam-container"
+                className="cert-card group relative border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-xl p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 hover:border-white/20 hover:bg-white/[0.05]"
               >
-                {/* Iridescent Border Beam on Hover */}
-                <div className="border-beam border-beam-hover" />
-
-                {/* Dynamic Spotlight Follow */}
                 <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: `radial-gradient(320px circle at var(--mouse-x, 50%) var(--mouse-y, 30%), ${isCyan ? 'rgba(var(--cyan-rgb),0.25)' : 'rgba(var(--fuchsia-rgb),0.25)'}, transparent 65%)`
+                    background: `radial-gradient(300px circle at 50% 30%, ${isCyan ? 'rgba(var(--cyan-rgb),0.3)' : 'rgba(var(--fuchsia-rgb),0.3)'}, transparent 60%)`
                   }}
                 />
 
                 <div className="relative z-10">
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${isCyan ? 'bg-cyan-400/10 border border-cyan-400/20 text-cyan-400' : 'bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400'}`}>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isCyan ? 'bg-cyan-400/10 border border-cyan-400/20 text-cyan-400' : 'bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400'}`}>
                       <IconComp size={18} />
                     </div>
                     <span className={`text-[9px] font-bold font-syne uppercase tracking-widest px-3 py-1 rounded-full border ${isCyan ? 'text-cyan-400 bg-cyan-400/10 border-cyan-400/20' : 'text-fuchsia-400 bg-fuchsia-500/10 border-fuchsia-500/20'}`}>
@@ -163,7 +147,7 @@ export default function CertificationsSection() {
                   </p>
                 </div>
 
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
             );
           })}

@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { playClickSound, playHoverSound } from '../utils/audio';
 
 const skillCategories = [
   { id: 'all', name: 'All Skills' },
@@ -320,26 +319,14 @@ export default function SkillsSection() {
                 aria-selected={isActive}
                 aria-controls="skills-panel"
                 id={`tab-${cat.id}`}
-                data-cursor="FILTER"
-                onMouseEnter={() => playHoverSound()}
-                onClick={() => {
-                  playClickSound();
-                  setActiveTab(cat.id);
-                }}
-                className={`font-syne text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border transition-all duration-300 relative z-10 cursor-pointer ${
+                onClick={() => setActiveTab(cat.id)}
+                className={`font-syne text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border transition-all duration-300 relative ${
                   isActive 
-                    ? 'text-white font-bold border-cyan-400/40' 
+                    ? 'border-cyan-400/50 text-white bg-cyan-500/10 font-bold shadow-[0_0_25px_rgba(var(--cyan-rgb),0.4)]' 
                     : 'border-white/5 text-white/40 hover:text-white hover:border-white/20 bg-transparent'
                 }`}
               >
                 {cat.name}
-                {isActive && (
-                  <motion.div
-                    layoutId="activeSkillTabIndicator"
-                    className="absolute inset-0 bg-cyan-500/20 border border-cyan-400/60 rounded-full shadow-[0_0_20px_rgba(var(--cyan-rgb),0.5)] -z-10"
-                    transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                  />
-                )}
               </button>
             );
           })}
@@ -352,17 +339,16 @@ export default function SkillsSection() {
           aria-labelledby={`tab-${activeTab}`} 
           className="skills-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 sm:gap-3.5 w-full items-start"
         >
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence>
             {activeSkills.map((skill) => (
               <motion.div
                 layout
-                initial={{ opacity: 0, scale: 0.88, y: 15 }}
+                initial={{ opacity: 0, scale: 0.9, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.88, y: -10 }}
-                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                exit={{ opacity: 0, scale: 0.9, y: 15 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
                 key={skill.name}
-                data-cursor="SKILL"
-                className="group relative h-[108px] sm:h-[120px] p-3 sm:p-3.5 rounded-2xl border border-white/10 bg-black/50 hover:bg-white/[0.06] hover:border-cyan-400/50 transition-all duration-300 cursor-default flex flex-col items-center justify-between text-center select-none shadow-[0_4px_16px_rgba(0,0,0,0.4)] hover:-translate-y-1.5 hover:shadow-[0_8px_24px_rgba(var(--cyan-rgb),0.2)]"
+                className="group relative h-[105px] sm:h-[116px] p-3 sm:p-3.5 rounded-2xl border border-white/10 bg-black/50 hover:bg-white/[0.05] hover:border-cyan-400/40 transition-all duration-300 cursor-default flex flex-col items-center justify-center gap-2 text-center select-none shadow-[0_4px_16px_rgba(0,0,0,0.4)] hover:-translate-y-1"
               >
                 {/* Radial Glow on Hover */}
                 <div 
@@ -373,7 +359,7 @@ export default function SkillsSection() {
                 />
 
                 {/* Skill Logo */}
-                <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110 mt-1">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110">
                   <img
                     src={skill.icon}
                     alt={`${skill.name} logo`}
@@ -383,21 +369,13 @@ export default function SkillsSection() {
                 </div>
 
                 {/* Skill Name & Category Sub-label */}
-                <div className="flex flex-col items-center relative z-10 w-full mb-1">
+                <div className="flex flex-col items-center relative z-10">
                   <span className="font-syne font-bold text-xs sm:text-[13px] text-white/95 group-hover:text-white transition-colors duration-300 leading-tight">
                     {skill.name}
                   </span>
-                  <div className="flex items-center justify-between w-full px-1 mt-1">
-                    <span className="font-mono text-[8px] sm:text-[9px] uppercase tracking-widest text-white/40 group-hover:text-cyan-300 transition-colors leading-none">
-                      {skill.category}
-                    </span>
-                    {/* Micro-telemetry proficiency indicator */}
-                    <div className="flex gap-0.5 items-center opacity-40 group-hover:opacity-100 transition-opacity">
-                      <div className="w-1.5 h-[2px] rounded-full bg-cyan-400" />
-                      <div className="w-1.5 h-[2px] rounded-full bg-cyan-400" />
-                      <div className="w-1.5 h-[2px] rounded-full bg-cyan-400" />
-                    </div>
-                  </div>
+                  <span className="font-mono text-[8px] sm:text-[9px] uppercase tracking-widest text-white/40 group-hover:text-cyan-300 transition-colors mt-0.5 leading-none">
+                    {skill.category}
+                  </span>
                 </div>
               </motion.div>
             ))}

@@ -1,8 +1,7 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { Github, Cpu, Gamepad2, HeartHandshake, Server, ShieldCheck, Glasses } from 'lucide-react';
 import { gsap } from 'gsap';
 import MagneticElement from './MagneticElement';
-import { playClickSound } from '../utils/audio';
 
 const projects = [
   {
@@ -110,15 +109,12 @@ function ProjectCard({ project }) {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="group relative border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-xl p-5 md:p-7 flex flex-col justify-between overflow-hidden transition-all duration-300 spotlight-card border-beam-container h-full"
+      className="group relative border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-xl p-5 md:p-7 flex flex-col justify-between overflow-hidden transition-all duration-300 spotlight-card h-full"
       style={{
         boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.37)`,
         transformStyle: 'preserve-3d',
       }}
     >
-      {/* Iridescent Border Beam on Hover */}
-      <div className="border-beam border-beam-hover" />
-
       {/* Glow Backing Effect */}
       <div 
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
@@ -178,8 +174,6 @@ function ProjectCard({ project }) {
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => playClickSound()}
-              data-cursor="CODE"
               className="flex items-center gap-2 text-white/70 hover:text-cyan-400 font-bold font-syne text-[10px] uppercase tracking-widest transition-colors duration-300 cursor-pointer"
             >
               <Github size={12} />
@@ -195,47 +189,11 @@ function ProjectCard({ project }) {
 export default function ProjectsShowcase() {
   const containerRef = useRef(null);
   const trackRef = useRef(null);
-  const progressBarRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const activeIndexRef = useRef(0);
 
   useEffect(() => {
     const container = containerRef.current;
     const track = trackRef.current;
-    const progressBar = progressBarRef.current;
     if (!container || !track) return;
-
-    const cardWrappers = track.querySelectorAll('.project-card-wrapper');
-
-    const updateCardsDepth = () => {
-      const centerX = window.innerWidth / 2;
-      let closestIdx = 0;
-      let minDistance = Infinity;
-
-      cardWrappers.forEach((wrapper, i) => {
-        const rect = wrapper.getBoundingClientRect();
-        const cardCenter = rect.left + rect.width / 2;
-        const distFromCenter = Math.abs(centerX - cardCenter);
-        const maxDist = window.innerWidth * 0.7;
-        const normalized = Math.min(distFromCenter / maxDist, 1);
-
-        if (distFromCenter < minDistance) {
-          minDistance = distFromCenter;
-          closestIdx = i;
-        }
-
-        // Depth-of-field carousel scaling: 1.0 (center) to 0.94 (edges)
-        const scale = 1.0 - normalized * 0.06;
-        const opacity = 1.0 - normalized * 0.3;
-        wrapper.style.transform = `scale(${scale})`;
-        wrapper.style.opacity = `${opacity}`;
-      });
-
-      if (activeIndexRef.current !== closestIdx) {
-        activeIndexRef.current = closestIdx;
-        setActiveIndex(closestIdx);
-      }
-    };
 
     // Calculate translation distance on trigger match
     const getTranslateX = () => {
@@ -252,21 +210,13 @@ export default function ProjectsShowcase() {
         pin: true,
         scrub: 1,
         invalidateOnRefresh: true,
-        onUpdate: updateCardsDepth,
       }
     });
 
     tl.to(track, {
       x: getTranslateX,
       ease: 'none'
-    }, 0);
-
-    if (progressBar) {
-      tl.to(progressBar, {
-        scaleX: 1,
-        ease: 'none'
-      }, 0);
-    }
+    });
 
     return () => {
       if (tl.scrollTrigger) tl.scrollTrigger.kill();
@@ -314,8 +264,7 @@ export default function ProjectsShowcase() {
               {projects.map((proj, idx) => (
                 <div
                   key={idx}
-                  data-cursor="PROJECT"
-                  className="project-card-wrapper w-[85vw] sm:w-[420px] md:w-[480px] flex-shrink-0 h-[52vh] min-h-[420px] max-h-[500px] transition-[transform,opacity] duration-200"
+                  className="project-card-wrapper w-[85vw] sm:w-[420px] md:w-[480px] flex-shrink-0 h-[52vh] min-h-[420px] max-h-[500px]"
                 >
                   <ProjectCard project={proj} />
                 </div>
@@ -323,23 +272,13 @@ export default function ProjectsShowcase() {
             </div>
           </div>
 
-          {/* Bottom stats & dynamic scrub progress indicator */}
-          <div className="w-full px-6 md:px-16 flex justify-between items-center text-white/40 text-[10px] font-bold font-syne tracking-widest uppercase">
-            <span className="flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-              Scroll down to explore horizontal gallery
-            </span>
-            <div className="flex gap-3 items-center">
-              <span className="text-cyan-400 font-mono text-xs font-bold">0{activeIndex + 1}</span>
-              {/* Scrub Progress Bar */}
-              <div className="w-28 sm:w-44 md:w-60 h-[3px] bg-white/10 rounded-full overflow-hidden relative">
-                <div
-                  ref={progressBarRef}
-                  className="h-full w-full bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-cyan-400 origin-left rounded-full shadow-[0_0_8px_rgba(var(--cyan-rgb),0.8)]"
-                  style={{ transform: 'scaleX(0)' }}
-                />
-              </div>
-              <span className="text-white/60 font-mono text-xs">06</span>
+          {/* Bottom stats indicators */}
+          <div className="w-full px-6 md:px-16 flex justify-between items-center text-white/30 text-[10px] font-bold font-syne tracking-widest uppercase">
+            <span>Scroll to explore projects</span>
+            <div className="flex gap-2 items-center">
+              <span>01</span>
+              <div className="w-12 h-px bg-white/10" />
+              <span>04</span>
             </div>
           </div>
 

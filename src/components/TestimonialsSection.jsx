@@ -2,8 +2,6 @@ import { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote, ChevronLeft, ChevronRight } from 'lucide-react';
-import MagneticElement from './MagneticElement';
-import { playClickSound, playHoverSound } from '../utils/audio';
 
 const testimonials = [
   {
@@ -80,9 +78,9 @@ export default function TestimonialsSection() {
   const current = testimonials[activeIndex];
 
   const variants = {
-    enter: (dir) => ({ x: dir > 0 ? 120 : -120, opacity: 0, scale: 0.94, filter: 'blur(6px)' }),
-    center: { x: 0, opacity: 1, scale: 1, filter: 'blur(0px)' },
-    exit: (dir) => ({ x: dir > 0 ? -120 : 120, opacity: 0, scale: 0.94, filter: 'blur(6px)' }),
+    enter: (dir) => ({ x: dir > 0 ? 200 : -200, opacity: 0, scale: 0.95 }),
+    center: { x: 0, opacity: 1, scale: 1 },
+    exit: (dir) => ({ x: dir > 0 ? -200 : 200, opacity: 0, scale: 0.95 }),
   };
 
   return (
@@ -112,13 +110,9 @@ export default function TestimonialsSection() {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              data-cursor="TESTIMONIAL"
-              className="w-full border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-xl p-8 md:p-10 relative overflow-hidden group border-beam-container shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-xl p-8 md:p-10 relative overflow-hidden"
             >
-              {/* Iridescent Border Beam on Hover */}
-              <div className="border-beam border-beam-hover" />
-
               {/* Quote glow */}
               <div className={`absolute top-0 right-0 w-40 h-40 rounded-full blur-[80px] pointer-events-none ${current.color === 'cyan' ? 'bg-cyan-500/10' : 'bg-fuchsia-500/10'}`} />
 
@@ -144,58 +138,33 @@ export default function TestimonialsSection() {
         {/* Navigation */}
         <div className="flex items-center justify-between mt-8">
           {/* Dots */}
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2">
             {testimonials.map((_, i) => (
               <button
                 key={i}
-                data-cursor="SELECT"
-                onMouseEnter={() => playHoverSound()}
-                onClick={() => {
-                  playClickSound();
-                  setDirection(i > activeIndex ? 1 : -1);
-                  setActiveIndex(i);
-                }}
-                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                  i === activeIndex 
-                    ? 'bg-cyan-400 w-8 shadow-[0_0_8px_rgba(var(--cyan-rgb),0.8)]' 
-                    : 'bg-white/20 hover:bg-white/40 w-2'
-                }`}
+                onClick={() => { setDirection(i > activeIndex ? 1 : -1); setActiveIndex(i); }}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${i === activeIndex ? 'bg-cyan-400 w-6' : 'bg-white/20 hover:bg-white/40'}`}
                 aria-label={`Go to testimonial ${i + 1}`}
               />
             ))}
           </div>
 
-          {/* Arrows with Magnetic Pull */}
-          <div className="flex gap-3">
-            <MagneticElement>
-              <button
-                onClick={() => {
-                  playClickSound();
-                  goTo(-1);
-                }}
-                onMouseEnter={() => playHoverSound()}
-                data-cursor="PREV"
-                className="w-10 h-10 rounded-full border border-white/10 bg-white/5 hover:border-cyan-400/40 hover:bg-cyan-500/10 flex items-center justify-center text-white/60 hover:text-cyan-400 transition-all duration-300 cursor-pointer shadow-md"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft size={16} />
-              </button>
-            </MagneticElement>
-
-            <MagneticElement>
-              <button
-                onClick={() => {
-                  playClickSound();
-                  goTo(1);
-                }}
-                onMouseEnter={() => playHoverSound()}
-                data-cursor="NEXT"
-                className="w-10 h-10 rounded-full border border-white/10 bg-white/5 hover:border-cyan-400/40 hover:bg-cyan-500/10 flex items-center justify-center text-white/60 hover:text-cyan-400 transition-all duration-300 cursor-pointer shadow-md"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </MagneticElement>
+          {/* Arrows */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => goTo(-1)}
+              className="w-10 h-10 rounded-full border border-white/10 bg-white/5 hover:border-cyan-400/40 hover:bg-cyan-500/5 flex items-center justify-center text-white/60 hover:text-cyan-400 transition-all duration-300"
+              aria-label="Previous testimonial"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button
+              onClick={() => goTo(1)}
+              className="w-10 h-10 rounded-full border border-white/10 bg-white/5 hover:border-cyan-400/40 hover:bg-cyan-500/5 flex items-center justify-center text-white/60 hover:text-cyan-400 transition-all duration-300"
+              aria-label="Next testimonial"
+            >
+              <ChevronRight size={16} />
+            </button>
           </div>
         </div>
       </div>

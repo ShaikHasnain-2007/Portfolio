@@ -4,8 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Linkedin, Mail, ChevronDown, Brain, Gamepad2, Code2 } from 'lucide-react';
 import SplitText from './SplitText';
 import FluidHeroBackground from './FluidHeroBackground';
-import MagneticElement from './MagneticElement';
-import { playClickSound } from '../utils/audio';
 import baseBgImg from './retouch_2026070720521920.jpg_202607082155.jpeg';
 import revealBgImg from './Make_man\'s_chest_wider_2K_202607082155.jpeg';
 
@@ -298,52 +296,14 @@ export default function HeroCanvas({ onProgress, onReady, startAnimations }) {
               </h1>
             </div>
 
-            {/* Bottom-Right: Description, Magnetic Actions and Scroll Prompt */}
+            {/* Bottom-Right: Description and Scroll Prompt */}
             <div ref={descRef} className="flex flex-col items-start md:items-end text-left md:text-right gap-4 max-w-sm">
               <p className="font-serif italic font-normal text-white/90 text-base md:text-lg leading-relaxed tracking-wide">
                 crafting high-performance intelligent interfaces and immersive graphics simulations where complex logic meets seamless visual art.
               </p>
 
-              {/* Magnetic Action Buttons */}
-              <div className="flex items-center gap-3 pointer-events-auto my-1">
-                <MagneticElement>
-                  <button
-                    onClick={() => {
-                      playClickSound();
-                      const target = document.getElementById('projects');
-                      if (target && window.lenis) window.lenis.scrollTo(target);
-                    }}
-                    data-cursor="EXPLORE"
-                    className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-syne text-[11px] font-bold uppercase tracking-widest transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] cursor-pointer flex items-center gap-1.5 hover:border-cyan-400/50 hover:text-cyan-300"
-                  >
-                    <span>Creations</span>
-                    <span>↗</span>
-                  </button>
-                </MagneticElement>
-
-                <MagneticElement>
-                  <button
-                    onClick={() => {
-                      playClickSound();
-                      const target = document.getElementById('about');
-                      if (target && window.lenis) window.lenis.scrollTo(target);
-                    }}
-                    data-cursor="ABOUT"
-                    className="px-4 py-2 rounded-full bg-black/60 hover:bg-black/80 border border-white/15 text-white/80 font-syne text-[11px] font-bold uppercase tracking-widest transition-all duration-300 backdrop-blur-md cursor-pointer hover:border-fuchsia-400/50 hover:text-fuchsia-300"
-                  >
-                    <span>Overview</span>
-                  </button>
-                </MagneticElement>
-              </div>
-
               {/* Scroll Indicator */}
-              <div 
-                onClick={() => {
-                  const target = document.getElementById('about');
-                  if (target && window.lenis) window.lenis.scrollTo(target);
-                }}
-                className="flex items-center gap-2 text-cyan-400 text-xs tracking-widest uppercase font-bold animate-pulse pointer-events-auto cursor-pointer"
-              >
+              <div className="flex items-center gap-2 text-cyan-400 text-xs tracking-widest uppercase font-bold animate-pulse">
                 <span className="md:hidden">Scroll</span>
                 <span className="hidden md:inline">Scroll Down</span>
                 <div className="p-2 border border-cyan-400/40 rounded-full flex items-center justify-center">

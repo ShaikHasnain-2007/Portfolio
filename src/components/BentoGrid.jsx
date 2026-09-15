@@ -20,48 +20,69 @@ export default function BentoGrid() {
   
 
 
-  // GSAP scroll trigger 3D perspective unblur assembly
+  // GSAP scroll trigger edge-assembly scroll-scrub animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (!gridRef.current) return;
       const wrappers = gridRef.current.querySelectorAll('.bento-wrapper');
-      if (!wrappers || wrappers.length === 0) return;
+      if (!wrappers || wrappers.length < 6) return;
 
       const isMobile = window.innerWidth < 768;
-      gridRef.current.style.perspective = '1200px';
+      const shiftX = isMobile ? window.innerWidth : 800;
+      const shiftY = isMobile ? window.innerHeight : 500;
 
       // Create GSAP scroll trigger timeline
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: gridRef.current,
-          start: 'top 85%',
-          end: 'top 20%',
-          scrub: 0.8,
+          start: 'top bottom', // Start animating as soon as the top of grid enters screen bottom
+          end: 'top 12%',      // Fully assembled when the top of the grid is near top
+          scrub: 1.2,          // Smooth scrubbing follow
           invalidateOnRefresh: true,
         }
       });
 
-      wrappers.forEach((wrapper, index) => {
-        const staggerDelay = (index % 3) * 0.07 + Math.floor(index / 3) * 0.12;
-        tl.fromTo(wrapper,
-          {
-            y: isMobile ? 35 : 65,
-            opacity: 0,
-            scale: 0.93,
-            rotateX: isMobile ? 0 : 10,
-            filter: 'blur(8px)',
-          },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            rotateX: 0,
-            filter: 'blur(0px)',
-            ease: 'power2.out',
-          },
-          staggerDelay
-        );
-      });
+      // Card 1 (Gallery) -> Left Edge
+      tl.fromTo(wrappers[0],
+        { x: -shiftX, opacity: 0, scale: 0.8, rotate: isMobile ? 0 : -8 },
+        { x: 0, opacity: 1, scale: 1, rotate: 0, ease: 'power2.out' },
+        0
+      );
+
+      // Card 2 (Intro) -> Right Edge
+      tl.fromTo(wrappers[1],
+        { x: shiftX, opacity: 0, scale: 0.8, rotate: isMobile ? 0 : 8 },
+        { x: 0, opacity: 1, scale: 1, rotate: 0, ease: 'power2.out' },
+        0
+      );
+
+      // Card 3 (Tools) -> Left Edge
+      tl.fromTo(wrappers[2],
+        { x: -shiftX, opacity: 0, scale: 0.8 },
+        { x: 0, opacity: 1, scale: 1, ease: 'power2.out' },
+        0.15
+      );
+
+      // Card 4 (Profile) -> Bottom Edge
+      tl.fromTo(wrappers[3],
+        { y: shiftY, opacity: 0, scale: 0.8, rotate: isMobile ? 0 : 5 },
+        { y: 0, opacity: 1, scale: 1, rotate: 0, ease: 'power2.out' },
+        0.1
+      );
+
+      // Card 5 (Video) -> Right Edge
+      tl.fromTo(wrappers[4],
+        { x: shiftX, opacity: 0, scale: 0.8 },
+        { x: 0, opacity: 1, scale: 1, ease: 'power2.out' },
+        0.15
+      );
+
+      // Card 6 (Heatmap) -> Bottom Edge
+      tl.fromTo(wrappers[5],
+        { y: shiftY, opacity: 0, scale: 0.9 },
+        { y: 0, opacity: 1, scale: 1, ease: 'power2.out' },
+        0.2
+      );
     }, gridRef);
 
     return () => ctx.revert();

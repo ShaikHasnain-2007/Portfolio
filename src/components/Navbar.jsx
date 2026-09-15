@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { Menu, X, ArrowUpRight, Volume2, VolumeX } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MagneticElement from './MagneticElement';
-import { isAudioEnabled, setAudioEnabled, playClickSound, playHoverSound } from '../utils/audio';
 
 const NAV_ITEMS = [
   { label: 'About', target: 'about' },
@@ -33,7 +32,6 @@ export default function Navbar() {
   const [isVisible, setIsVisible] = useState(() => {
     return typeof window !== 'undefined' ? window.scrollY > 50 : false;
   });
-  const [audioActive, setAudioActive] = useState(() => isAudioEnabled());
   const lastScrollYRef = useRef(0);
   
   const [theme, setTheme] = useState(() => {
@@ -167,7 +165,6 @@ export default function Navbar() {
   }, []);
 
   const handleNavClick = (targetId) => {
-    playClickSound();
     setIsMobileMenuOpen(false);
     const targetEl = document.getElementById(targetId);
     if (targetEl) {
@@ -220,18 +217,16 @@ export default function Navbar() {
                 <button
                   key={item.target}
                   onClick={() => handleNavClick(item.target)}
-                  onMouseEnter={() => playHoverSound()}
-                  data-cursor="NAV"
-                  className={`font-syne text-xs uppercase tracking-widest transition-all duration-300 relative px-3.5 py-1.5 rounded-full cursor-pointer z-10 ${
-                    isActive ? 'text-white font-bold' : 'text-white/70 hover:text-white'
+                  className={`font-syne text-xs uppercase tracking-widest transition-all duration-300 relative py-1.5 cursor-pointer ${
+                    isActive ? 'text-cyan-400 font-bold' : 'text-white/70 hover:text-white'
                   }`}
                 >
                   {item.label}
                   {isActive && (
                     <motion.div
-                      layoutId="activeNavCapsule"
-                      className="absolute inset-0 bg-white/10 border border-cyan-400/40 rounded-full shadow-[0_0_15px_rgba(var(--cyan-rgb),0.3)] -z-10"
-                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                      layoutId="activeIndicator"
+                      className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-fuchsia-500 rounded-full shadow-[0_0_8px_rgba(56,189,248,0.8)]"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
                 </button>
@@ -239,33 +234,12 @@ export default function Navbar() {
             })}
           </nav>
 
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-4">
             
-            {/* Audio Micro-Haptics Toggle */}
-            <MagneticElement>
-              <button
-                onClick={() => {
-                  const next = !audioActive;
-                  setAudioActive(next);
-                  setAudioEnabled(next);
-                }}
-                data-cursor="AUDIO"
-                title={audioActive ? "Mute Cyber Audio" : "Enable Cyber Audio"}
-                className={`p-2 rounded-full border transition-all duration-300 backdrop-blur-md flex items-center justify-center cursor-pointer ${
-                  audioActive 
-                    ? 'bg-cyan-500/20 border-cyan-400/50 text-cyan-300 shadow-[0_0_12px_rgba(var(--cyan-rgb),0.4)]' 
-                    : 'bg-white/5 border-white/10 text-white/40 hover:text-white/80'
-                }`}
-                aria-label={audioActive ? "Mute sound" : "Enable sound"}
-              >
-                {audioActive ? <Volume2 size={14} className="animate-pulse" /> : <VolumeX size={14} />}
-              </button>
-            </MagneticElement>
-
             <fieldset className="switcher" c-previous={previousOption} aria-label="Theme color switcher">
               <legend className="switcher__legend">Choose theme</legend>
               
-              <label className="switcher__option" title="Signature Theme" data-cursor="THEME">
+              <label className="switcher__option" title="Signature Theme">
                 <input
                   className="switcher__input"
                   type="radio"
@@ -273,10 +247,7 @@ export default function Navbar() {
                   value="cyberpunk"
                   c-option="1"
                   checked={activeOption === '1'}
-                  onChange={() => {
-                    playClickSound();
-                    handleRadioChange('1');
-                  }}
+                  onChange={() => handleRadioChange('1')}
                   aria-label="Switch to Signature theme"
                 />
                 <svg className="switcher__icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 36 36">
@@ -285,7 +256,7 @@ export default function Navbar() {
                 </svg>
               </label>
 
-              <label className="switcher__option" title="Sunset Theme" data-cursor="THEME">
+              <label className="switcher__option" title="Sunset Theme">
                 <input
                   className="switcher__input"
                   type="radio"
@@ -293,10 +264,7 @@ export default function Navbar() {
                   value="sunset"
                   c-option="2"
                   checked={activeOption === '2'}
-                  onChange={() => {
-                    playClickSound();
-                    handleRadioChange('2');
-                  }}
+                  onChange={() => handleRadioChange('2')}
                   aria-label="Switch to Sunset theme"
                 />
                 <svg className="switcher__icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 36 36">
@@ -304,7 +272,7 @@ export default function Navbar() {
                 </svg>
               </label>
 
-              <label className="switcher__option" title="Matrix Theme" data-cursor="THEME">
+              <label className="switcher__option" title="Matrix Theme">
                 <input
                   className="switcher__input"
                   type="radio"
@@ -312,10 +280,7 @@ export default function Navbar() {
                   value="matrix"
                   c-option="3"
                   checked={activeOption === '3'}
-                  onChange={() => {
-                    playClickSound();
-                    handleRadioChange('3');
-                  }}
+                  onChange={() => handleRadioChange('3')}
                   aria-label="Switch to Matrix theme"
                 />
                 <svg className="switcher__icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 36 36">
@@ -327,7 +292,6 @@ export default function Navbar() {
             <MagneticElement>
               <button
                 onClick={() => handleNavClick('contact')}
-                data-cursor="CONTACT"
                 className="liquid-glass-btn group flex items-center gap-1.5 font-syne text-[10px] font-bold uppercase tracking-widest px-4 py-2.5 rounded-full text-white hover:text-cyan-400 active:scale-95 cursor-pointer"
               >
                 <span>Get In Touch</span>

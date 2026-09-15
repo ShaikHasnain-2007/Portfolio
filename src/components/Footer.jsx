@@ -1,54 +1,8 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { ArrowUp } from 'lucide-react';
-import { gsap } from 'gsap';
-import MagneticElement from './MagneticElement';
 
 export default function Footer() {
-  const footerRef = useRef(null);
   const textRef = useRef(null);
-
-  useEffect(() => {
-    const el = footerRef.current;
-    if (!el) return;
-
-    const ctx = gsap.context(() => {
-      const topCol = el.querySelector('.footer-top');
-      const largeName = el.querySelector('.footer-name');
-      const bottomBar = el.querySelector('.footer-bottom');
-
-      if (topCol) {
-        gsap.fromTo(topCol,
-          { y: 50, opacity: 0, filter: 'blur(8px)' },
-          {
-            y: 0, opacity: 1, filter: 'blur(0px)', ease: 'power2.out',
-            scrollTrigger: { trigger: topCol, start: 'top 95%', end: 'top 75%', scrub: 0.8 }
-          }
-        );
-      }
-
-      if (largeName) {
-        gsap.fromTo(largeName,
-          { scale: 0.88, opacity: 0.02, letterSpacing: '0.02em', filter: 'blur(10px)' },
-          {
-            scale: 1.05, opacity: 0.08, letterSpacing: '0.12em', filter: 'blur(0px)', ease: 'none',
-            scrollTrigger: { trigger: largeName, start: 'top 98%', end: 'bottom 85%', scrub: 1.0 }
-          }
-        );
-      }
-
-      if (bottomBar) {
-        gsap.fromTo(bottomBar,
-          { y: 20, opacity: 0 },
-          {
-            y: 0, opacity: 1, ease: 'power2.out',
-            scrollTrigger: { trigger: bottomBar, start: 'top 98%', end: 'bottom 95%', scrub: 0.8 }
-          }
-        );
-      }
-    }, el);
-
-    return () => ctx.revert();
-  }, []);
 
   const handleMouseMove = (e) => {
     const el = textRef.current;
@@ -82,8 +36,8 @@ export default function Footer() {
   };
 
   return (
-    <footer ref={footerRef} className="relative w-full bg-transparent border-t border-white/5 pt-20 pb-10 px-6 md:px-12 flex flex-col items-center z-10 select-text">
-      <div className="footer-top w-full max-w-7xl flex flex-col md:flex-row justify-between items-start gap-12 pb-12 border-b border-white/5">
+    <footer className="relative w-full bg-transparent border-t border-white/5 pt-20 pb-10 px-6 md:px-12 flex flex-col items-center z-10 select-text">
+      <div className="w-full max-w-7xl flex flex-col md:flex-row justify-between items-start gap-12 pb-12 border-b border-white/5">
         
         {/* Left Column: Branding */}
         <div className="text-left max-w-sm">
@@ -101,28 +55,24 @@ export default function Footer() {
             <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-cyan-400">NAVIGATION</span>
             <button
               onClick={() => scrollToSection('about')}
-              data-cursor="NAV"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300 w-fit cursor-pointer text-left"
             >
               About
             </button>
             <button
               onClick={() => scrollToSection('skills')}
-              data-cursor="NAV"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300 w-fit cursor-pointer text-left"
             >
               Skills
             </button>
             <button
               onClick={() => scrollToSection('projects')}
-              data-cursor="NAV"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300 w-fit cursor-pointer text-left"
             >
               Projects
             </button>
             <button
               onClick={() => scrollToSection('timeline')}
-              data-cursor="NAV"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300 w-fit cursor-pointer text-left"
             >
               Timeline
@@ -136,7 +86,6 @@ export default function Footer() {
               href="https://linkedin.com/in/shaik-hasnain-55a072396"
               target="_blank"
               rel="noopener noreferrer"
-              data-cursor="LINK"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300"
             >
               LinkedIn
@@ -145,7 +94,6 @@ export default function Footer() {
               href="https://github.com/ShaikHasnain-2007"
               target="_blank"
               rel="noopener noreferrer"
-              data-cursor="CODE"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300"
             >
               GitHub
@@ -154,7 +102,6 @@ export default function Footer() {
               href="https://www.instagram.com/shaik_hasnain99"
               target="_blank"
               rel="noopener noreferrer"
-              data-cursor="LINK"
               className="font-satoshi text-sm text-white/60 hover:text-white transition-colors duration-300"
             >
               Instagram
@@ -164,18 +111,15 @@ export default function Footer() {
 
         {/* Right Column: Scroll To Top button */}
         <div className="self-end md:self-start">
-          <MagneticElement>
-            <button
-              onClick={scrollToTop}
-              data-cursor="TOP"
-              className="group flex items-center gap-2 font-mono text-xs uppercase font-bold tracking-widest text-white/50 hover:text-cyan-400 transition-colors duration-300 cursor-pointer"
-            >
-              <span>Back To Top</span>
-              <div className="p-2.5 bg-white/5 border border-white/10 group-hover:border-cyan-400/40 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-105">
-                <ArrowUp size={14} className="group-hover:-translate-y-0.5 transition-transform text-cyan-400" />
-              </div>
-            </button>
-          </MagneticElement>
+          <button
+            onClick={scrollToTop}
+            className="group flex items-center gap-2 font-mono text-xs uppercase font-bold tracking-widest text-white/50 hover:text-cyan-400 transition-colors duration-300"
+          >
+            <span>Back To Top</span>
+            <div className="p-2.5 bg-white/5 border border-white/10 group-hover:border-cyan-400/40 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+              <ArrowUp size={14} className="group-hover:-translate-y-0.5 transition-transform text-cyan-400" />
+            </div>
+          </button>
         </div>
 
       </div>
@@ -184,7 +128,7 @@ export default function Footer() {
       <div 
         ref={textRef}
         onMouseMove={handleMouseMove}
-        className="footer-name w-full flex justify-center items-center mt-12 mb-6 select-none overflow-hidden cursor-default"
+        className="w-full flex justify-center items-center mt-12 mb-6 select-none overflow-hidden cursor-default"
       >
         <div className="font-syne font-black text-[11.5vw] leading-none tracking-tight text-white/[0.04] uppercase spotlight-text text-center w-full mx-auto">
           HASNAIN
@@ -192,7 +136,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Sub-bar: Copyright and Tech tag */}
-      <div className="footer-bottom w-full max-w-7xl flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left mt-6">
+      <div className="w-full max-w-7xl flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left mt-6">
         <p className="font-satoshi text-xs text-white/40">
           &copy; {new Date().getFullYear()} Shaik Hasnain. All rights reserved. Deployed to production.
         </p>
