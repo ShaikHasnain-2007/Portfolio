@@ -79,8 +79,8 @@ export default function AIChatWidget() {
         botResponse = "AEGIS is an enterprise-grade governance and compliance system designed with scalable full-stack architecture, relational database management, and role-based access security.";
       } else if (query.includes('arc') || query.includes('webxr') || query.includes('vr') || query.includes('ar') || query.includes('spatial') || query.includes('meta quest')) {
         botResponse = "Shaik builds immersive spatial computing and WebXR virtual environments (like ARC-LABS), featuring interactive 3D scene graphs, Three.js rendering, and live testing on Meta Quest headsets.";
-      } else if (query.includes('unity') || query.includes('zombie') || query.includes('fps') || query.includes('game')) {
-        botResponse = PRESETS[1].a;
+      } else if (query.includes('unity') || query.includes('zombie') || query.includes('fps') || query.includes('game') || query.includes('mini') || query.includes('defender')) {
+        botResponse = "Shaik is passionate about game engineering! He developed a 3D Unity Zombie FPS with custom C# AI pathfinding, and also created 'Neon Defender', a playable retro vector arcade shooter directly embedded in this portfolio's Bento Grid! Try playing it right in the Bento section.";
       } else if (query.includes('deloitte') || query.includes('mastercard') || query.includes('cyber') || query.includes('security')) {
         botResponse = "Shaik has completed Cybersecurity Job Simulations with both Deloitte (practical security tasks, threat analysis, secure software) and Mastercard (phishing awareness campaigns, simulation metrics).";
       } else if (query.includes('adobe') || query.includes('quizoff') || query.includes('my1sthack') || query.includes('hackathon') || query.includes('winter') || query.includes('voca')) {
