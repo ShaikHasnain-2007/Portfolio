@@ -1,19 +1,78 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
-    <linearGradient id="neon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#22d3ee" />
-      <stop offset="100%" stop-color="#d946ef" />
+    <!-- Vibrant Cyberpunk Neon Gradients -->
+    <linearGradient id="pylon-left" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#3B82F6" />
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <stop offset="0%" stop-color="#22d3ee" />
-      <feGaussianBlur stdDeviation="5" result="blur" />
+    <linearGradient id="pylon-right" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D946EF" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <linearGradient id="core-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#D946EF" />
+    </linearGradient>
+    <linearGradient id="ring-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#D946EF" stop-opacity="0.8" />
+    </linearGradient>
+
+    <!-- Neon Glow Filter -->
+    <filter id="neon-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
       <feMerge>
         <feMergeNode in="blur" />
         <feMergeNode in="SourceGraphic" />
       </feMerge>
     </filter>
   </defs>
-  <!-- Futuristic Hexagon or H-Shape -->
-  <polygon points="50,5 90,27 90,73 50,95 10,73 10,27" fill="none" stroke="url(#neon-grad)" stroke-width="4" filter="url(#glow)" />
-  <text x="50" y="62" font-family="'Syne', 'sans-serif'" font-weight="900" font-size="34" fill="#fff" text-anchor="middle" letter-spacing="1">SH</text>
+
+  <!-- Deep Obsidian Protective Disc (Guarantees contrast on all dark & light browser tabs) -->
+  <circle cx="50" cy="50" r="48" fill="#030712" />
+  
+  <!-- Outer Cybernetic HUD Perimeter -->
+  <circle cx="50" cy="50" r="46" fill="none" stroke="url(#ring-glow)" stroke-width="1.8" stroke-dasharray="14 8 26 8" />
+
+  <!-- Left Cybernetic Apex Pylon (Negative space H-Wing) -->
+  <path
+    d="M 25,24 L 39,15 L 39,85 L 25,76 Z"
+    fill="url(#pylon-left)"
+    filter="url(#neon-glow)"
+  />
+
+  <!-- Right Cybernetic Apex Pylon (Negative space H-Wing) -->
+  <path
+    d="M 61,15 L 75,24 L 75,76 L 61,85 Z"
+    fill="url(#pylon-right)"
+    filter="url(#neon-glow)"
+  />
+
+  <!-- High-Energy Center Data Bridge / Cross-Nexus -->
+  <path
+    d="M 39,46 L 61,46 L 61,54 L 39,54 Z"
+    fill="#00F0FF"
+    opacity="0.6"
+  />
+
+  <!-- Central Quantum Singularity (Hovering Hyper-Diamond) -->
+  <polygon
+    points="50,33 63,50 50,67 37,50"
+    fill="#030712"
+    stroke="url(#ring-glow)"
+    stroke-width="2.5"
+  />
+  <polygon
+    points="50,39 58,50 50,61 42,50"
+    fill="url(#core-glow)"
+    filter="url(#neon-glow)"
+  />
+
+  <!-- Quantum Core Sparkle Dot -->
+  <circle cx="50" cy="50" r="2.5" fill="#FFFFFF" />
+
+  <!-- Micro Orbit Data Points -->
+  <circle cx="50" cy="18" r="2" fill="#00F0FF" filter="url(#neon-glow)" />
+  <circle cx="50" cy="82" r="2" fill="#D946EF" filter="url(#neon-glow)" />
 </svg>

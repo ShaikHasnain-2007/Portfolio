@@ -198,13 +198,16 @@ export default function Navbar() {
           
           <button 
             onClick={() => handleNavClick('about')}
-            className="group flex items-center gap-2 font-syne text-sm font-extrabold tracking-widest uppercase cursor-pointer text-left text-white transition-opacity"
+            className="group flex items-center gap-2.5 font-syne text-sm font-extrabold tracking-widest uppercase cursor-pointer text-left text-white transition-opacity"
             aria-label="Go to about section"
           >
-            <span className="relative flex h-2.5 w-2.5 items-center justify-center">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-60"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-cyan-400"></span>
-            </span>
+            <div className="w-6 h-6 relative flex items-center justify-center shrink-0">
+              <img
+                src="/favicon.svg"
+                alt="Shaik Hasnain Logo"
+                className="w-full h-full object-contain group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]"
+              />
+            </div>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-fuchsia-500 group-hover:brightness-125 transition-all">
               SHAIK.
             </span>
