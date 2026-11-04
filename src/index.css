@@ -102,8 +102,13 @@
   --color-cyan-ring-border: rgba(74, 222, 128, 0.5);
 }
 
-body, button, a, span, h1, h2, h3, h4, div, section, svg, circle, path {
-  transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, stroke 0.4s ease, fill 0.4s ease;
+/* Targeted transitions for theme switching and interactive elements without blocking scroll */
+[data-theme] {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+button, a {
+  transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {

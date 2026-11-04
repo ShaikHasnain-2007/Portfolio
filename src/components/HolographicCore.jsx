@@ -5,7 +5,7 @@ import { Sparkles, Move3d, Activity, Cpu } from 'lucide-react';
 export default function HolographicCore() {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
-  const [telemetry, setTelemetry] = useState({ rotX: 0, rotY: 0, active: true });
+  const telemetryTextRef = useRef(null);
   const [isInteracting, setIsInteracting] = useState(false);
 
   useEffect(() => {
@@ -306,16 +306,14 @@ export default function HolographicCore() {
 
       renderer.render(scene, camera);
 
-      // Throttled Telemetry update (approx every 6 frames)
+      // Throttled Telemetry update directly via DOM ref (eliminates 10 React re-renders/sec)
       telemetryThrottle++;
-      if (telemetryThrottle % 6 === 0) {
+      if (telemetryThrottle % 6 === 0 && telemetryTextRef.current) {
         const degX = Math.round(((coreGroup.rotation.x * 180) / Math.PI) % 360);
         const degY = Math.round(((coreGroup.rotation.y * 180) / Math.PI) % 360);
-        setTelemetry({
-          rotX: degX < 0 ? degX + 360 : degX,
-          rotY: degY < 0 ? degY + 360 : degY,
-          active: true
-        });
+        const posX = degX < 0 ? degX + 360 : degX;
+        const posY = degY < 0 ? degY + 360 : degY;
+        telemetryTextRef.current.textContent = `X: ${posX}° | Y: ${posY}°`;
       }
     };
 
@@ -433,8 +431,8 @@ export default function HolographicCore() {
               <Cpu size={10} className="text-cyan-400" />
               <span>SPATIAL MATRIX: 2,200 NODES</span>
             </div>
-            <span className="font-mono text-[9px] text-cyan-400/80 font-bold tracking-widest">
-              X: {telemetry.rotX}° | Y: {telemetry.rotY}°
+            <span ref={telemetryTextRef} className="font-mono text-[9px] text-cyan-400/80 font-bold tracking-widest">
+              X: 0° | Y: 0°
             </span>
           </div>
 

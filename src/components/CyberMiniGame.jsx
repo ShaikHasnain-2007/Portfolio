@@ -1,9 +1,216 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { Play, RotateCcw, Trophy, Shield, Crosshair, Zap, Gamepad2 } from 'lucide-react';
+import { Play, RotateCcw, Trophy, Shield, Crosshair, Zap, Gamepad2, Volume2, VolumeX } from 'lucide-react';
+
+class CyberAudioEngine {
+  constructor() {
+    this.ctx = null;
+    this.isMuted = false;
+  }
+
+  init() {
+    if (!this.ctx && typeof window !== 'undefined') {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        this.ctx = new AudioCtx();
+      }
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
+    }
+  }
+
+  playLaser() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const t = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(880, t);
+      osc.frequency.exponentialRampToValueAtTime(140, t + 0.08);
+
+      gain.gain.setValueAtTime(0.09, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(t);
+      osc.stop(t + 0.08);
+    } catch {
+    }
+  }
+
+  playHit() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const t = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(1200, t);
+      osc.frequency.exponentialRampToValueAtTime(450, t + 0.04);
+
+      gain.gain.setValueAtTime(0.08, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(t);
+      osc.stop(t + 0.04);
+    } catch {
+    }
+  }
+
+  playExplosion() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const t = this.ctx.currentTime;
+
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(160, t);
+      osc.frequency.exponentialRampToValueAtTime(32, t + 0.2);
+
+      gain.gain.setValueAtTime(0.18, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(t);
+      osc.stop(t + 0.2);
+
+      const bufferSize = Math.floor(this.ctx.sampleRate * 0.12);
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
+      }
+
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = buffer;
+      const noiseFilter = this.ctx.createBiquadFilter();
+      noiseFilter.type = 'lowpass';
+      noiseFilter.frequency.setValueAtTime(1200, t);
+      noiseFilter.frequency.linearRampToValueAtTime(250, t + 0.12);
+
+      const noiseGain = this.ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.12, t);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(this.ctx.destination);
+
+      noise.start(t);
+      noise.stop(t + 0.12);
+    } catch {
+    }
+  }
+
+  playShieldHit() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const t = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(220, t);
+      osc.frequency.setValueAtTime(140, t + 0.05);
+      osc.frequency.setValueAtTime(260, t + 0.1);
+
+      gain.gain.setValueAtTime(0.15, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(t);
+      osc.stop(t + 0.18);
+    } catch {
+    }
+  }
+
+  playStart() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+      notes.forEach((freq, idx) => {
+        const t = this.ctx.currentTime + idx * 0.055;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+
+        gain.gain.setValueAtTime(0.1, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.075);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(t);
+        osc.stop(t + 0.075);
+      });
+    } catch {
+    }
+  }
+
+  playGameOver() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const notes = [440, 370, 311, 220]; // Descending minor progression
+      notes.forEach((freq, idx) => {
+        const t = this.ctx.currentTime + idx * 0.085;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(freq, t);
+
+        gain.gain.setValueAtTime(0.12, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.11);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(t);
+        osc.stop(t + 0.11);
+      });
+    } catch {
+    }
+  }
+}
 
 export default function CyberMiniGame() {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
+  const audioEngineRef = useRef(null);
 
   // React HUD states
   const [gameState, setGameState] = useState('start'); // 'start' | 'playing' | 'gameover'
@@ -16,6 +223,32 @@ export default function CyberMiniGame() {
     }
   });
   const [playerHp, setPlayerHp] = useState(3);
+  const [isMuted, setIsMuted] = useState(() => {
+    try {
+      return localStorage.getItem('hasnain_cyber_sfx_muted') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  if (!audioEngineRef.current) {
+    audioEngineRef.current = new CyberAudioEngine();
+    audioEngineRef.current.isMuted = isMuted;
+  }
+
+  const toggleMute = () => {
+    const nextMuted = !isMuted;
+    setIsMuted(nextMuted);
+    if (audioEngineRef.current) {
+      audioEngineRef.current.isMuted = nextMuted;
+      if (!nextMuted) {
+        audioEngineRef.current.playHit();
+      }
+    }
+    try {
+      localStorage.setItem('hasnain_cyber_sfx_muted', nextMuted ? 'true' : 'false');
+    } catch { /* ignore */ }
+  };
 
   // Engine refs to avoid stale closures in requestAnimationFrame
   const engineRef = useRef({
@@ -41,6 +274,7 @@ export default function CyberMiniGame() {
 
   // Start game handler
   const startGame = useCallback(() => {
+    audioEngineRef.current?.playStart();
     const engine = engineRef.current;
     const w = engine.width;
     const h = engine.height;
@@ -79,21 +313,31 @@ export default function CyberMiniGame() {
     const ctx = canvas.getContext('2d');
     const engine = engineRef.current;
 
-    // Resize canvas to match container DPI
-    const resizeCanvas = () => {
-      const rect = container.getBoundingClientRect();
+    // Resize canvas to match container layout and device pixel ratio
+    const applyResize = (newW, newH) => {
+      const w = Math.floor(newW) || container.clientWidth || 400;
+      const h = Math.floor(newH) || container.clientHeight || 340;
+      if (w <= 0 || h <= 0) return;
+
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = Math.floor(rect.width) || 400;
-      const h = Math.floor(rect.height) || 340;
+      const targetW = Math.floor(w * dpr);
+      const targetH = Math.floor(h * dpr);
 
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
+      if (canvas.width !== targetW || canvas.height !== targetH) {
+        canvas.width = targetW;
+        canvas.height = targetH;
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
 
-      ctx.scale(dpr, dpr);
       engine.width = w;
       engine.height = h;
+
+      if (engine.ship) {
+        engine.ship.x = Math.max(15, Math.min(engine.ship.x, w - 15));
+        engine.ship.y = Math.max(15, Math.min(engine.ship.y, h - 15));
+      }
 
       // Seed background stars
       if (engine.stars.length === 0) {
@@ -109,14 +353,37 @@ export default function CyberMiniGame() {
       }
     };
 
-    resizeCanvas();
-    const resizeObserver = new ResizeObserver(resizeCanvas);
-    resizeObserver.observe(container);
+    const handleResize = () => {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      if (w > 0 && h > 0) {
+        applyResize(w, h);
+      }
+    };
 
-    // Visibility Observer: pause when offscreen to consume 0% idle CPU
+    handleResize();
+    const tInit = setTimeout(handleResize, 100);
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (entries && entries[0] && entries[0].contentRect) {
+        const { width, height } = entries[0].contentRect;
+        if (width > 0 && height > 0) {
+          applyResize(width, height);
+          return;
+        }
+      }
+      handleResize();
+    });
+    resizeObserver.observe(container);
+    window.addEventListener('resize', handleResize);
+
     const visObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         engine.isVisible = entry.isIntersecting;
+        if (entry.isIntersecting && !animationFrameId) {
+          lastTime = performance.now();
+          animationFrameId = requestAnimationFrame(gameLoop);
+        }
       });
     }, { threshold: 0.05 });
     visObserver.observe(container);
@@ -143,14 +410,18 @@ export default function CyberMiniGame() {
 
     const handlePointerMove = (e) => {
       const rect = canvas.getBoundingClientRect();
-      engine.mouse.x = e.clientX - rect.left;
-      engine.mouse.y = e.clientY - rect.top;
+      const scaleX = rect.width > 0 ? (engine.width / rect.width) : 1;
+      const scaleY = rect.height > 0 ? (engine.height / rect.height) : 1;
+      engine.mouse.x = (e.clientX - rect.left) * scaleX;
+      engine.mouse.y = (e.clientY - rect.top) * scaleY;
     };
 
     const handlePointerDown = (e) => {
       const rect = canvas.getBoundingClientRect();
-      engine.mouse.x = e.clientX - rect.left;
-      engine.mouse.y = e.clientY - rect.top;
+      const scaleX = rect.width > 0 ? (engine.width / rect.width) : 1;
+      const scaleY = rect.height > 0 ? (engine.height / rect.height) : 1;
+      engine.mouse.x = (e.clientX - rect.left) * scaleX;
+      engine.mouse.y = (e.clientY - rect.top) * scaleY;
       engine.mouse.isDown = true;
     };
 
@@ -168,15 +439,19 @@ export default function CyberMiniGame() {
     const handleTouchMove = (e) => {
       if (!e.touches[0]) return;
       const rect = canvas.getBoundingClientRect();
-      engine.mouse.x = e.touches[0].clientX - rect.left;
-      engine.mouse.y = e.touches[0].clientY - rect.top;
+      const scaleX = rect.width > 0 ? (engine.width / rect.width) : 1;
+      const scaleY = rect.height > 0 ? (engine.height / rect.height) : 1;
+      engine.mouse.x = (e.touches[0].clientX - rect.left) * scaleX;
+      engine.mouse.y = (e.touches[0].clientY - rect.top) * scaleY;
     };
 
     const handleTouchStart = (e) => {
       if (!e.touches[0]) return;
       const rect = canvas.getBoundingClientRect();
-      engine.mouse.x = e.touches[0].clientX - rect.left;
-      engine.mouse.y = e.touches[0].clientY - rect.top;
+      const scaleX = rect.width > 0 ? (engine.width / rect.width) : 1;
+      const scaleY = rect.height > 0 ? (engine.height / rect.height) : 1;
+      engine.mouse.x = (e.touches[0].clientX - rect.left) * scaleX;
+      engine.mouse.y = (e.touches[0].clientY - rect.top) * scaleY;
       engine.mouse.isDown = true;
     };
 
@@ -247,9 +522,18 @@ export default function CyberMiniGame() {
     };
 
     const gameLoop = (now) => {
+      if (!engine.isVisible) {
+        animationFrameId = null;
+        return;
+      }
       animationFrameId = requestAnimationFrame(gameLoop);
 
-      if (!engine.isVisible) return;
+      // Reconcile dimensions if container layout size shifted
+      const curW = container.clientWidth;
+      const curH = container.clientHeight;
+      if (curW > 0 && curH > 0 && (curW !== engine.width || curH !== engine.height)) {
+        applyResize(curW, curH);
+      }
 
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
@@ -402,6 +686,7 @@ export default function CyberMiniGame() {
         // Auto/Click Laser Firing (rate limit: 160ms)
         if (engine.mouse.isDown && now - engine.lastShot > 160) {
           engine.lastShot = now;
+          audioEngineRef.current?.playLaser();
           const bulletSpeed = 9;
 
           // Dual lasers from ship wings
@@ -455,6 +740,7 @@ export default function CyberMiniGame() {
 
               if (ast.hp <= 0) {
                 // Destroy asteroid
+                audioEngineRef.current?.playExplosion();
                 addSparks(ast.x, ast.y, 16, ast.color);
                 engine.screenShake = 3;
 
@@ -481,6 +767,8 @@ export default function CyberMiniGame() {
                 });
 
                 engine.asteroids.splice(aIdx, 1);
+              } else {
+                audioEngineRef.current?.playHit();
               }
               break;
             }
@@ -526,6 +814,7 @@ export default function CyberMiniGame() {
             ship.invulnerable = now + 1500; // 1.5s shield cooldown
             engine.screenShake = 9;
             addSparks(ship.x, ship.y, 22, '#EF4444');
+            audioEngineRef.current?.playShieldHit();
 
             if (engine.playerHp <= 0) {
               // Game Over
@@ -533,6 +822,7 @@ export default function CyberMiniGame() {
               setGameState('gameover');
               addSparks(ship.x, ship.y, 35, '#EF4444');
               addSparks(ship.x, ship.y, 25, '#00F0FF');
+              audioEngineRef.current?.playGameOver();
             }
           }
 
@@ -619,9 +909,11 @@ export default function CyberMiniGame() {
     animationFrameId = requestAnimationFrame(gameLoop);
 
     return () => {
+      clearTimeout(tInit);
       cancelAnimationFrame(animationFrameId);
       resizeObserver.disconnect();
       visObserver.disconnect();
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
       canvas.removeEventListener('mousemove', handlePointerMove);
@@ -657,6 +949,16 @@ export default function CyberMiniGame() {
               HI: {highScore}
             </span>
           </div>
+
+          <button
+            onClick={toggleMute}
+            type="button"
+            aria-label={isMuted ? "Unmute audio SFX" : "Mute audio SFX"}
+            className="flex items-center justify-center w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-cyan-400 transition-all cursor-pointer pointer-events-auto backdrop-blur-md shadow-sm active:scale-95"
+            title={isMuted ? "SFX Muted (Click to Unmute)" : "SFX Enabled (Click to Mute)"}
+          >
+            {isMuted ? <VolumeX size={12} className="text-rose-400/80" /> : <Volume2 size={12} className="text-cyan-400" />}
+          </button>
         </div>
 
         {/* Shield / HP Pips */}

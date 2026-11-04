@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import defaultBaseBg from './retouch_2026070720521920.jpg_202607082155.jpeg';
-import defaultRevealBg from './Make_man\'s_chest_wider_2K_202607082155.jpeg';
+import defaultBaseBg from './Yellow.jpeg';
+import defaultRevealBg from './Blue.jpeg';
 
 export default function FluidHeroBackground({
   baseBg = defaultBaseBg,

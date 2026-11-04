@@ -31,13 +31,13 @@ export default function BentoGrid() {
       const shiftX = isMobile ? window.innerWidth : 800;
       const shiftY = isMobile ? window.innerHeight : 500;
 
-      // Create GSAP scroll trigger timeline
+      // Create GSAP scroll trigger timeline with direct scrubbing (no double-lag with Lenis)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: gridRef.current,
-          start: 'top bottom', // Start animating as soon as the top of grid enters screen bottom
-          end: 'top 12%',      // Fully assembled when the top of the grid is near top
-          scrub: 1.2,          // Smooth scrubbing follow
+          start: 'top 95%',    // Starts just as top enters
+          end: 'top 35%',      // Quickly assembles and locks in place
+          scrub: 0.25,         // Fast, direct follow
           invalidateOnRefresh: true,
         }
       });
@@ -85,7 +85,15 @@ export default function BentoGrid() {
       );
     }, gridRef);
 
-    return () => ctx.revert();
+    // Refresh ScrollTrigger to recalculate newly expanded layout
+    const refreshTimer = setTimeout(() => {
+      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => ScrollTrigger.refresh());
+    }, 150);
+
+    return () => {
+      clearTimeout(refreshTimer);
+      ctx.revert();
+    };
   }, []);
 
   // Form submit handler to submit messages using Web3Forms

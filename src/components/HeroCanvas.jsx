@@ -4,8 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Linkedin, Mail, ChevronDown, Brain, Gamepad2, Code2 } from 'lucide-react';
 import SplitText from './SplitText';
 import FluidHeroBackground from './FluidHeroBackground';
-import baseBgImg from './retouch_2026070720521920.jpg_202607082155.jpeg';
-import revealBgImg from './Make_man\'s_chest_wider_2K_202607082155.jpeg';
+import baseBgImg from './Yellow.jpeg';
+import revealBgImg from './Blue.jpeg';
 
 const ROLES = [
   { title: "AI & ML Engineer", icon: Brain },

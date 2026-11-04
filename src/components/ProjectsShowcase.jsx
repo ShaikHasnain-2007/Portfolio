@@ -208,7 +208,7 @@ export default function ProjectsShowcase() {
         start: 'top top',
         end: () => "+=" + (track.scrollWidth - window.innerWidth),
         pin: true,
-        scrub: 1,
+        scrub: 0.2, // Instant 1:1 responsive scroll without lag
         invalidateOnRefresh: true,
       }
     });
@@ -218,7 +218,13 @@ export default function ProjectsShowcase() {
       ease: 'none'
     });
 
+    // Refresh ScrollTrigger to ensure pin spacer and dimensions match rendered DOM
+    const refreshTimer = setTimeout(() => {
+      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => ScrollTrigger.refresh());
+    }, 200);
+
     return () => {
+      clearTimeout(refreshTimer);
       if (tl.scrollTrigger) tl.scrollTrigger.kill();
       tl.kill();
     };
@@ -249,9 +255,15 @@ export default function ProjectsShowcase() {
                 Selected <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-fuchsia-500">Creations</span>
               </h2>
             </div>
-            <p className="font-serif italic text-base md:text-lg text-white/75 max-w-md leading-relaxed text-left tracking-wide">
-              A selective snapshot of products built during hackathons, academic research, and nights dedicated to building smart interfaces and virtual simulations.
-            </p>
+            <div className="flex flex-col md:items-end gap-2 text-left md:text-right max-w-md">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-cyan-300 text-[11px] font-mono tracking-wider w-fit">
+                <span className="animate-pulse">●</span>
+                <span>HORIZONTAL SCROLL AREA ➔</span>
+              </div>
+              <p className="font-serif italic text-sm md:text-base text-white/75 leading-relaxed tracking-wide">
+                A selective snapshot of products built during hackathons, academic research, and smart interface experiments.
+              </p>
+            </div>
           </div>
 
           {/* Horizontal Track Area */}

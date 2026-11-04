@@ -65,7 +65,9 @@ export default function CustomCursor() {
 
     gsap.ticker.add(tick);
 
-    // Event delegation for hover tags
+    let isHovered = false;
+
+    // Event delegation for hover tags with state deduplication
     const handleMouseOver = (e) => {
       const target = e.target;
       if (!target) return;
@@ -82,29 +84,35 @@ export default function CustomCursor() {
         target.closest('.spotlight-card') ||
         target.classList.contains('cursor-pointer');
 
-      if (isHoverable) {
+      if (isHoverable && !isHovered) {
+        isHovered = true;
         gsap.to(ring, {
           scale: 1.6,
-          borderColor: 'var(--color-fuchsia-hex)', // Fuchsia on hover
+          borderColor: 'var(--color-fuchsia-hex)',
           backgroundColor: 'var(--color-fuchsia-hover-bg)',
-          duration: 0.3
+          duration: 0.25,
+          overwrite: 'auto'
         });
         gsap.to(dot, {
           scale: 1.5,
-          backgroundColor: 'var(--color-cyan-hex)', // Cyan on hover
-          duration: 0.3
+          backgroundColor: 'var(--color-cyan-hex)',
+          duration: 0.25,
+          overwrite: 'auto'
         });
-      } else {
+      } else if (!isHoverable && isHovered) {
+        isHovered = false;
         gsap.to(ring, {
           scale: 1.0,
-          borderColor: 'var(--color-cyan-ring-border)', // Cyan border
+          borderColor: 'var(--color-cyan-ring-border)',
           backgroundColor: 'transparent',
-          duration: 0.3
+          duration: 0.25,
+          overwrite: 'auto'
         });
         gsap.to(dot, {
           scale: 1.0,
           backgroundColor: 'var(--color-cyan-hex)',
-          duration: 0.3
+          duration: 0.25,
+          overwrite: 'auto'
         });
       }
     };

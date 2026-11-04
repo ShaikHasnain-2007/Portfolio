@@ -139,29 +139,29 @@ export default function App() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 0.45,
+      easing: (t) => 1 - Math.pow(1 - t, 3), // Natural cubic ease-out: responsive start, settles crisply
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
+      syncTouch: false, // Keep native touch and precision trackpad physics
+      wheelMultiplier: 1.0, // 1:1 natural wheel distance
+      touchMultiplier: 1.0,
     });
     lenisRef.current = lenis;
     window.lenis = lenis;
 
     lenis.stop();
 
-    lenis.on('scroll', () => {
-      ScrollTrigger.update();
-    });
+    lenis.on('scroll', ScrollTrigger.update);
 
     const gsapTicker = (time) => {
       lenis.raf(time * 1000);
     };
     gsap.ticker.add(gsapTicker);
 
-    gsap.ticker.lagSmoothing(0);
+    // Keep natural lag smoothing to absorb frame spikes without stuttering
+    gsap.ticker.lagSmoothing(500, 33);
 
     const handleLoad = () => {
       setIsWindowLoaded(true);
@@ -181,9 +181,15 @@ export default function App() {
   useEffect(() => {
     if (preloaderFinished && lenisRef.current) {
       lenisRef.current.start();
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 200);
+      // Staged refreshes to account for lazy-loaded sections expanding the DOM
+      const t1 = setTimeout(() => ScrollTrigger.refresh(), 100);
+      const t2 = setTimeout(() => ScrollTrigger.refresh(), 500);
+      const t3 = setTimeout(() => ScrollTrigger.refresh(), 1200);
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+        clearTimeout(t3);
+      };
     }
   }, [preloaderFinished]);
 

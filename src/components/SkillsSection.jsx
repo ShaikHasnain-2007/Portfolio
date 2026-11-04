@@ -242,9 +242,9 @@ export default function SkillsSection() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
-          start: 'top 90%',
-          end: 'top 50%',
-          scrub: 1,
+          start: 'top 85%',
+          end: 'top 55%',
+          scrub: 0.25,
           invalidateOnRefresh: true,
         }
       });
